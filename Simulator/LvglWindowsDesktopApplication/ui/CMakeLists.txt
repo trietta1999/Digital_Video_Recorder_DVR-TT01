@@ -1,0 +1,20 @@
+SET(SOURCES screens/ui_Main.c
+    screens/ui_VideoInput.c
+    screens/ui_Keyboard.c
+    ui.c
+    components/ui_comp_hook.c
+    ui_helpers.c
+    ui_events.cpp
+    images/ui_img_record_png.c
+    images/ui_img_pause_png.c
+    images/ui_img_play_png.c
+    images/ui_img_stop_png.c
+    images/ui_img_storage_png.c
+    images/ui_img_edit_note_png.c
+    images/ui_img_docs_apps_script_png.c
+    images/ui_img_format_list_bulleted_add_png.c
+    images/ui_img_space_bar_png.c
+    images/ui_img_shift_lock_png.c
+    images/ui_img_backspace_png.c)
+
+add_library(ui ${SOURCES})

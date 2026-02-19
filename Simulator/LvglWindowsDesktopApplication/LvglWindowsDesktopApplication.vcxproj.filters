@@ -788,56 +788,50 @@
       <Filter>lvgl\src\widgets\win</Filter>
     </ClInclude>
     <ClInclude Include="lv_conf.h" />
-    <ClInclude Include="..\..\ESP32\src\CommonLibrary.h">
-      <Filter>Library</Filter>
+    <ClInclude Include="ui\screens\ui_Keyboard.h">
+      <Filter>UI\UI_View\screens</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\CommonData.h">
+    <ClInclude Include="ui\screens\ui_Main.h">
+      <Filter>UI\UI_View\screens</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui.h">
+      <Filter>UI\UI_View</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_events.h">
+      <Filter>UI\UI_View</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_helpers.h">
+      <Filter>UI\UI_View</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\CommonData\CData.h">
       <Filter>Library\CommonData</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\CData.h">
+    <ClInclude Include="Library\CommonData\CommonData.h">
       <Filter>Library\CommonData</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\CommonDataType.h">
+    <ClInclude Include="Library\CommonData\CommonDataType.h">
       <Filter>Library\CommonData</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\CommonService.h">
-      <Filter>Library\CommonService</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\ui\ui.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\ui\ui_events.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\ui\ui_helpers.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\ui\screens\ui_Main.h">
-      <Filter>UI\screens</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\ui\screens\ui_Start.h">
-      <Filter>UI\screens</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\Entity.h">
+    <ClInclude Include="Library\CommonLibrary.h">
       <Filter>Library</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\Effect.h">
+    <ClInclude Include="Library\CommonService.h">
       <Filter>Library</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\FSM.h">
-      <Filter>Library</Filter>
+    <ClInclude Include="View\BaseScreen.h">
+      <Filter>UI\View\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\ui\screens\ui_Info.h">
-      <Filter>UI\screens</Filter>
+    <ClInclude Include="View\ScreenMapping.h">
+      <Filter>UI\View\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\SampleSound.h">
-      <Filter>Library\CommonService\Sound</Filter>
+    <ClInclude Include="View\MainScreen.h">
+      <Filter>UI\View</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ESP32\Sound.h">
-      <Filter>Library\CommonService\Sound</Filter>
+    <ClInclude Include="View\VideoInfoScreen.h">
+      <Filter>UI\View</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ESP32\src\ui\screens\ui_Music.h">
-      <Filter>UI\screens</Filter>
+    <ClInclude Include="ui\screens\ui_VideoInput.h">
+      <Filter>UI\UI_View\screens</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1452,211 +1446,106 @@
     <Filter Include="Library\CommonData">
       <UniqueIdentifier>{7f6f08a5-ed2c-4889-8bf2-1dc5ab66c3da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Library\CommonService">
-      <UniqueIdentifier>{56cd8a02-3b2a-4304-a4cd-a9c53a77970a}</UniqueIdentifier>
+    <Filter Include="UI\View">
+      <UniqueIdentifier>{15215cb8-d6d3-4f1a-b66f-417030e81e69}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI\images">
-      <UniqueIdentifier>{58f12438-7738-4c3a-9015-7e6d59235ac1}</UniqueIdentifier>
+    <Filter Include="UI\UI_View">
+      <UniqueIdentifier>{e6ee9f5f-0674-469e-953e-53a112a5d405}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI\screens">
-      <UniqueIdentifier>{2ff07c09-574c-4e07-951b-7022e10e4fe5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UI\components">
+    <Filter Include="UI\UI_View\components">
       <UniqueIdentifier>{f94f154d-a3ae-4d5e-a1c3-09417a967fed}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Library\CommonService\Sound">
-      <UniqueIdentifier>{731457b6-960e-4278-b48f-216d5b4a8cdd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UI\fonts">
+    <Filter Include="UI\UI_View\fonts">
       <UniqueIdentifier>{f972ba94-902c-450f-a9a3-32d9d999d418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UI_View\images">
+      <UniqueIdentifier>{58f12438-7738-4c3a-9015-7e6d59235ac1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UI_View\screens">
+      <UniqueIdentifier>{2ff07c09-574c-4e07-951b-7022e10e4fe5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\View\Common">
+      <UniqueIdentifier>{0f2ff517-59eb-44c0-b783-723328f8af6a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\ESP32\src\CommonLibrary.cpp">
+    <ClCompile Include="ui\components\ui_comp_hook.c">
+      <Filter>UI\UI_View\components</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_backspace_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_docs_apps_script_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_edit_note_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_format_list_bulleted_add_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_pause_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_play_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_record_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_shift_lock_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_space_bar_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_stop_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_storage_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\screens\ui_Keyboard.c">
+      <Filter>UI\UI_View\screens</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\screens\ui_Main.c">
+      <Filter>UI\UI_View\screens</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui.c">
+      <Filter>UI\UI_View</Filter>
+    </ClCompile>
+    <ClCompile Include="ui/**/*.cpp">
+      <Filter>UI\UI_View</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_helpers.c">
+      <Filter>UI\UI_View</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\CommonData\CommonData.cpp">
+      <Filter>Library\CommonData</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\CommonData\CommonDataType.cpp">
+      <Filter>Library\CommonData</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\CommonLibrary.cpp">
       <Filter>Library</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\CommonData.cpp">
-      <Filter>Library\CommonData</Filter>
+    <ClCompile Include="Library\CommonService.cpp">
+      <Filter>Library</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\CommonDataType.cpp">
-      <Filter>Library\CommonData</Filter>
+    <ClCompile Include="View\BaseScreen.cpp">
+      <Filter>UI\View\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\CommonService.cpp">
-      <Filter>Library\CommonService</Filter>
+    <ClCompile Include="View\ScreenMapping.cpp">
+      <Filter>UI\View\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\ui_events.cpp">
-      <Filter>UI</Filter>
+    <ClCompile Include="View\MainScreen.cpp">
+      <Filter>UI\View</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\CommonService.cpp">
-      <Filter>Library\CommonService</Filter>
+    <ClCompile Include="View\VideoInfoScreen.cpp">
+      <Filter>UI\View</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\ui.c">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\ui_events.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\ui_helpers.c">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\components\ui_comp_hook.c">
-      <Filter>UI\components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\screens\ui_Main.c">
-      <Filter>UI\screens</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\screens\ui_Start.c">
-      <Filter>UI\screens</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\screens\ui_Info.c">
-      <Filter>UI\screens</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_adrenaline_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_arrow_left_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_battery_full_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_battery_horiz_000_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_battery_horiz_050_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_battery_horiz_075_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_battery_low_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_beer_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_blank_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_burnerphone_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_cblank_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_cchargeback_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_cchargefront_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_charge_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_chargeback_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_cigarette_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_clive_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_dart_board_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_empty_bullet_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_empty_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_expiredmedicine_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_handcuffs_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_handsaw_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_help_center_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_inverter_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_live_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_lock_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_magnifyingglass_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_metal_bullet_box_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_metal_table_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_party_popper_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_picking_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_shotgun_block_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_shotgun_in_hand_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_shotgun_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_shotguncut_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_skull_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_volume_off_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_volume_up_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_wifi_off_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_wifi_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_cancel_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\screens\ui_Music.c">
-      <Filter>UI\screens</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_library_music_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_pause_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_play_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_skip_next_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\images\ui_img_skip_previous_png.c">
-      <Filter>UI\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ESP32\src\ui\fonts\ui_font_Arial24.c">
-      <Filter>UI\fonts</Filter>
+    <ClCompile Include="ui\screens\ui_VideoInput.c">
+      <Filter>UI\UI_View\screens</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
