@@ -7,8 +7,18 @@
 namespace system_data
 {
     extern CData<HWND> WindowHandle;
+    extern CData<SCREEN_NAME> CurrentKbScreen;
+    extern CData<SCREEN_NAME> CurrentScreen;
     extern CData<std::string> CurrentDate;
     extern CData<std::string> CurrentTime;
+    extern CData<KEYBOARD_TYPE> KeyboardType;
+}
+
+namespace temp_data
+{
+    extern CData<std::string> VideoID;
+    extern CData<std::string> VideoName;
+    extern CData<std::string> VideoDesc;
 }
 
 namespace debug_data

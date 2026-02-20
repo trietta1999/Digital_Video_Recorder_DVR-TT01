@@ -833,6 +833,9 @@
     <ClInclude Include="ui\screens\ui_VideoInput.h">
       <Filter>UI\UI_View\screens</Filter>
     </ClInclude>
+    <ClInclude Include="View\KeyboardScreen.h">
+      <Filter>UI\View</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\.typos.toml">
@@ -1546,6 +1549,21 @@
     </ClCompile>
     <ClCompile Include="ui\screens\ui_VideoInput.c">
       <Filter>UI\UI_View\screens</Filter>
+    </ClCompile>
+    <ClCompile Include="View\KeyboardScreen.cpp">
+      <Filter>UI\View</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_input_done_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_input_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_keyboard_off_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_keyboard_png.c">
+      <Filter>UI\UI_View\images</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

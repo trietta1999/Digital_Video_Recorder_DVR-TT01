@@ -12,6 +12,7 @@ extern "C" {
 
 void OnLoaded(lv_event_t * e);
 void CommonButtonOnClick(lv_event_t * e);
+void CommonButtonOnLongPress(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

@@ -11,8 +11,12 @@ images/ui_img_play_png.c
 images/ui_img_stop_png.c
 images/ui_img_storage_png.c
 images/ui_img_edit_note_png.c
-images/ui_img_docs_apps_script_png.c
-images/ui_img_format_list_bulleted_add_png.c
+images/ui_img_input_png.c
 images/ui_img_space_bar_png.c
+images/ui_img_input_done_png.c
 images/ui_img_shift_lock_png.c
 images/ui_img_backspace_png.c
+images/ui_img_docs_apps_script_png.c
+images/ui_img_format_list_bulleted_add_png.c
+images/ui_img_keyboard_png.c
+images/ui_img_keyboard_off_png.c

@@ -88,6 +88,8 @@ static void DebugConsoleProcess()
 
 static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+    keyboard_lib::HardwareKeyboardProcess(uMsg, wParam, (lv_event_code_t)lParam);
+
     switch (uMsg)
     {
     case WM_QUIT:

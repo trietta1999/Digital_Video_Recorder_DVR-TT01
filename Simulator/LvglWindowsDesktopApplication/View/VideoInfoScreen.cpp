@@ -3,41 +3,32 @@
 #include "ScreenMapping.h"
 #include "VideoInfoScreen.h"
 
-static lv_timer_t* timerDateTime = nullptr;
+std::vector<std::pair<lv_obj_t*, SCREEN_NAME>> VideoInfoScreen::listKbScreenName = {};
 
 VideoInfoScreen::VideoInfoScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
     ListButtonCallback = {
-        { ui_btnVideoInputCancel, OnClickCancel, LV_EVENT_CLICKED },
-        { ui_btnVideoInputOK    , OnClickOK    , LV_EVENT_CLICKED },
+        { ui_btnVideoInputCancel, OnClickCancel   , LV_EVENT_CLICKED       },
+        { ui_btnVideoInputOK    , OnClickOK       , LV_EVENT_CLICKED       },
+        { ui_btnVideoId         , OnClickInput    , LV_EVENT_SHORT_CLICKED },
+        { ui_btnVideoName       , OnClickInput    , LV_EVENT_SHORT_CLICKED },
+        { ui_btnVideoInputDesc  , OnClickInput    , LV_EVENT_SHORT_CLICKED },
+        { ui_btnVideoId         , OnLongPressInput, LV_EVENT_LONG_PRESSED  },
+        { ui_btnVideoName       , OnLongPressInput, LV_EVENT_LONG_PRESSED  },
+        { ui_btnVideoInputDesc  , OnLongPressInput, LV_EVENT_LONG_PRESSED  },
     };
 
     ListDataUpdateCallback = {
-        //{ []() { return system_data::CurrentDate.GetState(); }, UpdateDate },
-        //{ []() { return system_data::CurrentTime.GetState(); }, UpdateTime },
+        { []() { return temp_data::VideoID.GetState(); }  , UpdateVideoInfo },
+        { []() { return temp_data::VideoName.GetState(); }, UpdateVideoInfo },
+        { []() { return temp_data::VideoDesc.GetState(); }, UpdateVideoInfo },
     };
 
-    // Get datetime
-    timerDateTime = lv_timer_create([](lv_timer_t* timer) {
-        SYSTEMTIME systime;
-        char buff1[MAX_PATH] = { 0 };
-        char buff2[MAX_PATH] = { 0 };
-
-        GetLocalTime(&systime);
-
-        sprintf(buff1, "%02d.%02d.%04d", systime.wDay, systime.wMonth, systime.wYear);
-        sprintf(buff2, "%02d.%02d.%02d", systime.wHour, systime.wMinute, systime.wSecond);
-
-        system_data::CurrentDate.SetValue(buff1);
-        system_data::CurrentTime.SetValue(buff2);
-
-        }, TIMECYCLE_1SEC, nullptr);
-}
-
-VideoInfoScreen::~VideoInfoScreen()
-{
-    lv_timer_del(timerDateTime);
-    timerDateTime = nullptr;
+    listKbScreenName = {
+        { ui_btnVideoId       , SCREEN_NAME::VIDEO_ID_KBSCREEN   },
+        { ui_btnVideoName     , SCREEN_NAME::VIDEO_NAME_KBSCREEN },
+        { ui_btnVideoInputDesc, SCREEN_NAME::VIDEO_DESC_KBSCREEN },
+    };
 }
 
 void VideoInfoScreen::OnClickCancel(lv_obj_t* obj)
@@ -50,12 +41,35 @@ void VideoInfoScreen::OnClickOK(lv_obj_t* obj)
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::MAIN_SCREEN);
 }
 
-//void VideoInfoScreen::UpdateDate()
-//{
-//    lv_label_set_text(ui_lblDate, system_data::CurrentDate.GetValue().c_str());
-//}
-//
-//void VideoInfoScreen::UpdateTime()
-//{
-//    lv_label_set_text(ui_lblTime, system_data::CurrentTime.GetValue().c_str());
-//}
+void VideoInfoScreen::OnClickInput(lv_obj_t* obj)
+{
+    for (const auto& item : listKbScreenName)
+    {
+        if (item.first == obj)
+        {
+            ScreenMapping::GetInstance().ChangeScreen(item.second);
+            break;
+        }
+    }
+}
+
+void VideoInfoScreen::OnLongPressInput(lv_obj_t* obj)
+{
+    //ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::VIDEO_NAME_KBSCREEN);
+}
+
+void VideoInfoScreen::UpdateVideoInfo()
+{
+    if (temp_data::VideoID.GetState())
+    {
+        lv_label_set_text(ui_lblVideoId, temp_data::VideoID.GetValue().c_str());
+    }
+    if (temp_data::VideoName.GetState())
+    {
+        lv_label_set_text(ui_lblVideoName, temp_data::VideoName.GetValue().c_str());
+    }
+    if (temp_data::VideoDesc.GetState())
+    {
+        lv_label_set_text(ui_lblVideoInputDesc, temp_data::VideoDesc.GetValue().c_str());
+    }
+}

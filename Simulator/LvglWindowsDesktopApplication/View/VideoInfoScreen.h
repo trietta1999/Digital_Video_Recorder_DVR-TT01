@@ -7,14 +7,17 @@ class VideoInfoScreen : public BaseScreen
 {
 public:
     VideoInfoScreen(SCREEN_NAME screen);
-    ~VideoInfoScreen();
+    ~VideoInfoScreen() = default;
 
 private:
+    static std::vector<std::pair<lv_obj_t*, SCREEN_NAME>> listKbScreenName;
+
     static void OnClickCancel(lv_obj_t* obj);
     static void OnClickOK(lv_obj_t* obj);
+    static void OnClickInput(lv_obj_t* obj);
+    static void OnLongPressInput(lv_obj_t* obj);
 
-    //static void UpdateDate();
-    //static void UpdateTime();
+    static void UpdateVideoInfo();
 };
 
 #endif // _VIDEOINFO_SCREEN_H

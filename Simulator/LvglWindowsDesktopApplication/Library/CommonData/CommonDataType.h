@@ -17,6 +17,8 @@
 #define debug_println(a) std::cout << std::string(a) << "\n"
 
 #define TIMECYCLE_1SEC 1000
+#define TIMECYCLE_500MS 500
+#define TIMECYCLE_10MS 100
 
 //#define MAX_SIZE 1000
 //#define BUFFER_SIZE sizeof(char) * MAX_SIZE
@@ -61,19 +63,7 @@
 enum
 {
     WM_USER_MIN = WM_USER,
-    WM_SET_CLIENT_HANDLE, // Save client handle
-    WM_REQUEST,           // Request/get from other message
-    WM_REQUEST_WITH_DATA, // Request/get from other message with data
-    WM_RESPONSE,          // Response message from host to client
-    WM_CLIENT_RESPONSE,   // Response message from client to host
-    WM_SET_CLIENTSTATE,   // Notify to set ON/OFF status to selected clients
-    WM_TIMER_GET,         // Client get timer from host
-    WM_STRIKENUM_GET,     // Client get strike count from host
-    WM_STRIKESTATE_SET,   // Client notify host to set strike status
-    WM_SUCCESSSTATE_SET,  // Client notify host to set client success status
-    WM_SYSINIT_GET,       // Client get init system data from host
-    WM_STOP_ALL,          // Notify for stoping all client
-    WM_STOP_COMPLETE,     // Notify for all client stopped to Host
+    WM_KB_KEYDOWN, // Save client handle
 };
 
 //#define STRIKE_NUM_MAX 3
@@ -105,13 +95,34 @@ enum
         CREATE(e, VIDEO_INPUT_SCREEN) \
         CREATE(e, KEYBOARD_SCREEN) \
 
+#define DEF_KBSCREEN_NAME(e, CREATE) \
+        CREATE(e, VIDEO_ID_KBSCREEN) \
+        CREATE(e, VIDEO_NAME_KBSCREEN) \
+        CREATE(e, VIDEO_DESC_KBSCREEN) \
+
+#define DEF_KEYBOARD_TYPE(e, CREATE) \
+        CREATE(e, INTERNAL_NUMPAD) \
+        CREATE(e, STANDARD_NUMPAD) \
+        CREATE(e, STANDARD_KEYBOARD) \
+
 enum class SCREEN_NAME
 {
-    MIN,
+    MIN_SCREEN,
     DEF_SCREEN_NAME(SCREEN_NAME, TO_ENUM)
-    MAX
+    MAX_SCREEN,
+    MIN_KBSCREEN,
+    DEF_KBSCREEN_NAME(SCREEN_NAME, TO_ENUM)
+    MAX_KBSCREEN,
+};
+
+enum class KEYBOARD_TYPE
+{
+    MIN,
+    DEF_KEYBOARD_TYPE(KEYBOARD_TYPE, TO_ENUM)
+    MAX,
 };
 
 EXTERN_MAP_ENUM_STR(SCREEN_NAME)
+EXTERN_MAP_ENUM_STR(KEYBOARD_TYPE)
 
 #endif // !_COMMON_DATATYPE_H

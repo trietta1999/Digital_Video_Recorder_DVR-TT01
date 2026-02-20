@@ -4,15 +4,21 @@
 // Project name: DVR-TT01
 
 #include "ui.h"
-#include "CommonData.h"
 #include "ScreenMapping.h"
-
-void CommonButtonOnClick(lv_event_t* e)
-{
-    ScreenMapping::GetInstance().SetEvent(*e);
-}
 
 void OnLoaded(lv_event_t* e)
 {
     // Your code here
+}
+
+void CommonButtonOnClick(lv_event_t* e)
+{
+    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED);
+    ScreenMapping::GetInstance().SetEvent(*e);
+}
+
+void CommonButtonOnLongPress(lv_event_t * e)
+{
+    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED);
+    ScreenMapping::GetInstance().SetEvent(*e);
 }

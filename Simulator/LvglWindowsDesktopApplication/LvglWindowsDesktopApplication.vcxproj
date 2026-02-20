@@ -317,6 +317,7 @@
     <ClInclude Include="ui\ui_events.h" />
     <ClInclude Include="ui\ui_helpers.h" />
     <ClInclude Include="View\BaseScreen.h" />
+    <ClInclude Include="View\KeyboardScreen.h" />
     <ClInclude Include="View\MainScreen.h" />
     <ClInclude Include="View\ScreenMapping.h" />
     <ClInclude Include="View\VideoInfoScreen.h" />
@@ -709,6 +710,10 @@
     <ClCompile Include="ui\images\ui_img_docs_apps_script_png.c" />
     <ClCompile Include="ui\images\ui_img_edit_note_png.c" />
     <ClCompile Include="ui\images\ui_img_format_list_bulleted_add_png.c" />
+    <ClCompile Include="ui\images\ui_img_input_done_png.c" />
+    <ClCompile Include="ui\images\ui_img_input_png.c" />
+    <ClCompile Include="ui\images\ui_img_keyboard_off_png.c" />
+    <ClCompile Include="ui\images\ui_img_keyboard_png.c" />
     <ClCompile Include="ui\images\ui_img_pause_png.c" />
     <ClCompile Include="ui\images\ui_img_play_png.c" />
     <ClCompile Include="ui\images\ui_img_record_png.c" />
@@ -722,6 +727,7 @@
     <ClCompile Include="ui\ui.c" />
     <ClCompile Include="ui\ui_helpers.c" />
     <ClCompile Include="View\BaseScreen.cpp" />
+    <ClCompile Include="View\KeyboardScreen.cpp" />
     <ClCompile Include="View\MainScreen.cpp" />
     <ClCompile Include="View\ScreenMapping.cpp" />
     <ClCompile Include="View\VideoInfoScreen.cpp" />
