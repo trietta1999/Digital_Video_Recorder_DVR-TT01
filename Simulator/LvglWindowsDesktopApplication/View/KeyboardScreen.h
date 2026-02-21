@@ -17,6 +17,8 @@ private:
     static void OnClickOK(lv_obj_t* obj);
     static void OnClickKey(lv_obj_t* obj);
     static void OnLongPressKey(lv_obj_t* obj);
+    static void OnLongPressRepeatKey(lv_obj_t* obj);
+    static void OnReleaseKey(lv_obj_t* obj);
 
     static void SetKbData(SCREEN_NAME screen, void* data);
 };

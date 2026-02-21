@@ -38,11 +38,11 @@ LV_IMG_DECLARE(ui_img_storage_png);    // assets/storage.png
 LV_IMG_DECLARE(ui_img_edit_note_png);    // assets/edit_note.png
 LV_IMG_DECLARE(ui_img_input_png);    // assets/input.png
 LV_IMG_DECLARE(ui_img_space_bar_png);    // assets/space_bar.png
-LV_IMG_DECLARE(ui_img_input_done_png);    // assets/input_done.png
 LV_IMG_DECLARE(ui_img_shift_lock_png);    // assets/shift_lock.png
 LV_IMG_DECLARE(ui_img_backspace_png);    // assets/backspace.png
 LV_IMG_DECLARE(ui_img_docs_apps_script_png);    // assets/docs_apps_script.png
 LV_IMG_DECLARE(ui_img_format_list_bulleted_add_png);    // assets/format_list_bulleted_add.png
+LV_IMG_DECLARE(ui_img_input_done_png);    // assets/input_done.png
 LV_IMG_DECLARE(ui_img_keyboard_png);    // assets/keyboard.png
 LV_IMG_DECLARE(ui_img_keyboard_off_png);    // assets/keyboard_off.png
 

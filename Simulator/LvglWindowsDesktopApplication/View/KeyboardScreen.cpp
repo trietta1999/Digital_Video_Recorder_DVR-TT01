@@ -7,37 +7,52 @@
 std::unordered_map<SCREEN_NAME, std::pair<std::string, std::function<std::string(void)>>> KeyboardScreen::mapKbInit = {};
 std::vector<std::pair<lv_obj_t*, int>> KeyboardScreen::listVkCode = {};
 static lv_timer_t* timerUpdateInput = nullptr;
+static lv_obj_t* dummyConfirmKey = nullptr;
 
 KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
+    dummyConfirmKey = lv_button_create(nullptr);
+
     system_data::KeyboardType.SetValue(KEYBOARD_TYPE::INTERNAL_NUMPAD); //@todo: wait setting
+    system_data::T9ConfirmTimeout.SetValue(750); //@todo: wait setting
 
     ListButtonCallback = {
-        { ui_btnKeyboardCancel      , OnClickCancel , LV_EVENT_CLICKED       },
-        { ui_btnKeyboardOK          , OnClickOK     , LV_EVENT_CLICKED       },
-        { ui_btnKeyboardKey0        , OnClickKey    , LV_EVENT_SHORT_CLICKED },
-        { ui_btnKeyboardKey1        , OnClickKey    , LV_EVENT_SHORT_CLICKED },
-        { ui_btnKeyboardKey2        , OnClickKey    , LV_EVENT_SHORT_CLICKED },
-        { ui_btnKeyboardKey3        , OnClickKey    , LV_EVENT_SHORT_CLICKED },
-        { ui_btnKeyboardKey4        , OnClickKey    , LV_EVENT_SHORT_CLICKED },
-        { ui_btnKeyboardKey5        , OnClickKey    , LV_EVENT_SHORT_CLICKED },
-        { ui_btnKeyboardKey6        , OnClickKey    , LV_EVENT_SHORT_CLICKED },
-        { ui_btnKeyboardKey7        , OnClickKey    , LV_EVENT_SHORT_CLICKED },
-        { ui_btnKeyboardKey8        , OnClickKey    , LV_EVENT_SHORT_CLICKED },
-        { ui_btnKeyboardKey9        , OnClickKey    , LV_EVENT_SHORT_CLICKED },
-        { ui_btnKeyboardKeyShift    , OnClickKey    , LV_EVENT_SHORT_CLICKED },
-        { ui_btnKeyboardKeyBackspace, OnClickKey    , LV_EVENT_SHORT_CLICKED },
-        { ui_btnKeyboardKey0        , OnLongPressKey, LV_EVENT_LONG_PRESSED  },
-        { ui_btnKeyboardKey1        , OnLongPressKey, LV_EVENT_LONG_PRESSED  },
-        { ui_btnKeyboardKey2        , OnLongPressKey, LV_EVENT_LONG_PRESSED  },
-        { ui_btnKeyboardKey3        , OnLongPressKey, LV_EVENT_LONG_PRESSED  },
-        { ui_btnKeyboardKey4        , OnLongPressKey, LV_EVENT_LONG_PRESSED  },
-        { ui_btnKeyboardKey5        , OnLongPressKey, LV_EVENT_LONG_PRESSED  },
-        { ui_btnKeyboardKey6        , OnLongPressKey, LV_EVENT_LONG_PRESSED  },
-        { ui_btnKeyboardKey7        , OnLongPressKey, LV_EVENT_LONG_PRESSED  },
-        { ui_btnKeyboardKey8        , OnLongPressKey, LV_EVENT_LONG_PRESSED  },
-        { ui_btnKeyboardKey9        , OnLongPressKey, LV_EVENT_LONG_PRESSED  },
-        { ui_btnKeyboardKeyBackspace, OnLongPressKey, LV_EVENT_LONG_PRESSED  },
+        { ui_btnKeyboardCancel      , OnClickCancel       , LV_EVENT_CLICKED             },
+        { ui_btnKeyboardOK          , OnClickOK           , LV_EVENT_CLICKED             },
+        { ui_btnKeyboardKey0        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKey1        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKey2        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKey3        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKey4        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKey5        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKey6        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKey7        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKey8        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKey9        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKeyShift    , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKeyBackspace, OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { dummyConfirmKey           , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKey0        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
+        { ui_btnKeyboardKey1        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
+        { ui_btnKeyboardKey2        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
+        { ui_btnKeyboardKey3        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
+        { ui_btnKeyboardKey4        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
+        { ui_btnKeyboardKey5        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
+        { ui_btnKeyboardKey6        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
+        { ui_btnKeyboardKey7        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
+        { ui_btnKeyboardKey8        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
+        { ui_btnKeyboardKey9        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
+        { ui_btnKeyboardKeyBackspace, OnLongPressRepeatKey, LV_EVENT_LONG_PRESSED_REPEAT },
+        { ui_btnKeyboardKey0        , OnReleaseKey        , LV_EVENT_RELEASED            },
+        { ui_btnKeyboardKey1        , OnReleaseKey        , LV_EVENT_RELEASED            },
+        { ui_btnKeyboardKey2        , OnReleaseKey        , LV_EVENT_RELEASED            },
+        { ui_btnKeyboardKey3        , OnReleaseKey        , LV_EVENT_RELEASED            },
+        { ui_btnKeyboardKey4        , OnReleaseKey        , LV_EVENT_RELEASED            },
+        { ui_btnKeyboardKey5        , OnReleaseKey        , LV_EVENT_RELEASED            },
+        { ui_btnKeyboardKey6        , OnReleaseKey        , LV_EVENT_RELEASED            },
+        { ui_btnKeyboardKey7        , OnReleaseKey        , LV_EVENT_RELEASED            },
+        { ui_btnKeyboardKey8        , OnReleaseKey        , LV_EVENT_RELEASED            },
+        { ui_btnKeyboardKey9        , OnReleaseKey        , LV_EVENT_RELEASED            },
     };
 
     ListDataUpdateCallback = {};
@@ -61,6 +76,7 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_btnKeyboardKey9        , VK_NUMPAD9 },
         { ui_btnKeyboardKeyShift    , VK_SHIFT   },
         { ui_btnKeyboardKeyBackspace, VK_BACK    },
+        { dummyConfirmKey           , VK_CONVERT },
     };
 
     // Copy list VK code library
@@ -127,9 +143,9 @@ void KeyboardScreen::OnClickOK(lv_obj_t* obj)
 
 void KeyboardScreen::OnClickKey(lv_obj_t* obj)
 {
-    if (obj == ui_btnKeyboardKey0)
+    if (obj == dummyConfirmKey)
     {
-        // Clear temp input when click confirm key
+        // Clear temp input
         lv_textarea_set_text(ui_txtKeyboardTempInput, "");
     }
     else if (obj == ui_btnKeyboardKeyBackspace)
@@ -166,6 +182,7 @@ void KeyboardScreen::OnClickKey(lv_obj_t* obj)
         if (item.first == obj)
         {
             keyboard_lib::SendKeyMessage(item.second, LV_EVENT_SHORT_CLICKED);
+            ::SetTimer(system_data::WindowHandle.GetValue(), TID_KEYDOWN, system_data::T9ConfirmTimeout.GetValue(), keyboard_lib::AutoConfirmKey);
             break;
         }
     }
@@ -173,12 +190,6 @@ void KeyboardScreen::OnClickKey(lv_obj_t* obj)
 
 void KeyboardScreen::OnLongPressKey(lv_obj_t* obj)
 {
-    if (obj == ui_btnKeyboardKeyBackspace)
-    {
-        // Clear temp input
-        lv_textarea_set_text(ui_txtKeyboardTempInput, "");
-    }
-
     // Send message to WINPROC
     for (const auto& item : listVkCode)
     {
@@ -188,6 +199,20 @@ void KeyboardScreen::OnLongPressKey(lv_obj_t* obj)
             break;
         }
     }
+}
+
+void KeyboardScreen::OnLongPressRepeatKey(lv_obj_t* obj)
+{
+    if (obj == ui_btnKeyboardKeyBackspace)
+    {
+        // Delete the latest character
+        lv_textarea_delete_char(ui_txtKeyboardInput);
+    }
+}
+
+void KeyboardScreen::OnReleaseKey(lv_obj_t* obj)
+{
+
 }
 
 void KeyboardScreen::SetKbData(SCREEN_NAME screen, void* data)

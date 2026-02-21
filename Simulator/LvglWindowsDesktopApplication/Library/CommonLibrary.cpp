@@ -24,33 +24,41 @@ namespace keyboard_lib
     };
 
     std::vector<std::pair<std::string, TextType_t>> listCombineChar = {
-        { "1"   , { ' ', ' ' } },
-        { "2"   , { 'a', 'A' } },
-        { "22"  , { 'b', 'B' } },
-        { "222" , { 'c', 'C' } },
-        { "3"   , { 'd', 'D' } },
-        { "33"  , { 'e', 'E' } },
-        { "333" , { 'f', 'F' } },
-        { "4"   , { 'g', 'G' } },
-        { "44"  , { 'h', 'H' } },
-        { "444" , { 'i', 'I' } },
-        { "5"   , { 'j', 'J' } },
-        { "55"  , { 'k', 'K' } },
-        { "555" , { 'l', 'L' } },
-        { "6"   , { 'm', 'M' } },
-        { "66"  , { 'n', 'N' } },
-        { "666" , { 'o', 'O' } },
-        { "7"   , { 'p', 'P' } },
-        { "77"  , { 'q', 'Q' } },
-        { "777" , { 'r', 'R' } },
-        { "7777", { 's', 'S' } },
-        { "8"   , { 't', 'T' } },
-        { "88"  , { 'u', 'U' } },
-        { "888" , { 'v', 'V' } },
-        { "9"   , { 'w', 'W' } },
-        { "99"  , { 'x', 'X' } },
-        { "999" , { 'y', 'Y' } },
-        { "9999", { 'z', 'Z' } },
+        { "0"     , { ' ', ' ' } },
+        { "00"    , { '(', '(' } },
+        { "000"   , { ')', ')' } },
+        { "1"     , { '.', '.' } },
+        { "11"    , { '_', '_' } },
+        { "111"   , { '-', '-' } },
+        { "1111"  , { '#', '#' } },
+        { "11111" , { '[', '[' } },
+        { "111111", { ']', ']' } },
+        { "2"     , { 'a', 'A' } },
+        { "22"    , { 'b', 'B' } },
+        { "222"   , { 'c', 'C' } },
+        { "3"     , { 'd', 'D' } },
+        { "33"    , { 'e', 'E' } },
+        { "333"   , { 'f', 'F' } },
+        { "4"     , { 'g', 'G' } },
+        { "44"    , { 'h', 'H' } },
+        { "444"   , { 'i', 'I' } },
+        { "5"     , { 'j', 'J' } },
+        { "55"    , { 'k', 'K' } },
+        { "555"   , { 'l', 'L' } },
+        { "6"     , { 'm', 'M' } },
+        { "66"    , { 'n', 'N' } },
+        { "666"   , { 'o', 'O' } },
+        { "7"     , { 'p', 'P' } },
+        { "77"    , { 'q', 'Q' } },
+        { "777"   , { 'r', 'R' } },
+        { "7777"  , { 's', 'S' } },
+        { "8"     , { 't', 'T' } },
+        { "88"    , { 'u', 'U' } },
+        { "888"   , { 'v', 'V' } },
+        { "9"     , { 'w', 'W' } },
+        { "99"    , { 'x', 'X' } },
+        { "999"   , { 'y', 'Y' } },
+        { "9999"  , { 'z', 'Z' } },
     };
 
     static std::string buff = "";
@@ -60,6 +68,7 @@ namespace keyboard_lib
     static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
     static bool isLongPress = false;
     static unsigned long long keydownTime = 0;
+    static unsigned long long keydownTimeRepeat = 0;
 
     void SendKeyMessage(int keycode, lv_event_code_t event)
     {
@@ -71,7 +80,7 @@ namespace keyboard_lib
         if (event == LV_EVENT_SHORT_CLICKED)
         {
             // Confirm key
-            if (keycode == VK_NUMPAD0)
+            if (keycode == VK_CONVERT)
             {
                 // Match number buffer to character
                 for (const auto& item : listCombineChar)
@@ -160,7 +169,27 @@ namespace keyboard_lib
         return listVkCode;
     }
 
-    void HardwareKeyboardProcess(int uMsg, int wParam, lv_event_code_t lParam)
+    void CALLBACK AutoConfirmKey(HWND hwnd, UINT uMsg, UINT_PTR timerId, DWORD dwTime)
+    {
+        KillTimer(hwnd, TID_KEYDOWN);
+
+        lv_event_t e = { 0 };
+
+        // Match VK code with real button on screen keypad
+        for (const auto& item : keyboard_lib::GetListVkCode())
+        {
+            if (item.second == VK_CONVERT)
+            {
+                e.current_target = item.first;
+                break;
+            }
+        }
+
+        e.code = LV_EVENT_SHORT_CLICKED;
+        ScreenMapping::GetInstance().SetEvent(e);
+    }
+
+    void HardwareKeyboardProcess(HWND hwnd, int uMsg, int wParam, lv_event_code_t lParam)
     {
         if (system_data::CurrentKbScreen.GetValue() != SCREEN_NAME::MIN_KBSCREEN)
         {
@@ -188,12 +217,34 @@ namespace keyboard_lib
                         }
                     }
 
-                    if (!isRepeat) {
-                        //e.code = LV_EVENT_SHORT_CLICKED;
-                        //ScreenMapping::GetInstance().SetEvent(e);
+                    if (!isRepeat)
+                    {
                         keydownTime = ::GetTickCount64();
+                        keydownTimeRepeat = ::GetTickCount64();
                     }
-                    else {
+                    else
+                    {
+                        if ((keydownTimeRepeat != 0) && (::GetTickCount64() - keydownTimeRepeat >= TIMECYCLE_100MS))
+                        {
+                            if (wParam == VK_BACK)
+                            {
+                                // Match VK code with real button on screen keypad
+                                for (const auto& item : keyboard_lib::GetListVkCode())
+                                {
+                                    if (item.second == wParam)
+                                    {
+                                        e.current_target = item.first;
+                                        break;
+                                    }
+                                }
+
+                                e.code = LV_EVENT_LONG_PRESSED_REPEAT;
+                                ScreenMapping::GetInstance().SetEvent(e);
+
+                                keydownTimeRepeat = ::GetTickCount64();
+                            }
+                        }
+
                         if (!isLongPress)
                         {
                             isLongPress = true;
@@ -205,6 +256,8 @@ namespace keyboard_lib
                 break;
                 case WM_KEYUP:
                 {
+                    keydownTimeRepeat = 0;
+
                     if (::GetTickCount64() - keydownTime <= TIMECYCLE_500MS)
                     {
                         // Match VK code with real button on screen keypad
@@ -219,11 +272,14 @@ namespace keyboard_lib
 
                         e.code = LV_EVENT_SHORT_CLICKED;
                         ScreenMapping::GetInstance().SetEvent(e);
+
+                        ::SetTimer(hwnd, TID_KEYDOWN, system_data::T9ConfirmTimeout.GetValue(), AutoConfirmKey);
                     }
 
                     isLongPress = false;
                 }
                 break;
+
                 default:
                     break;
                 }

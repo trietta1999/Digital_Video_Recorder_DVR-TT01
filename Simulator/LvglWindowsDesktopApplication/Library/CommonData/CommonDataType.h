@@ -18,7 +18,11 @@
 
 #define TIMECYCLE_1SEC 1000
 #define TIMECYCLE_500MS 500
+#define TIMECYCLE_200MS 200
+#define TIMECYCLE_100MS 100
 #define TIMECYCLE_10MS 100
+
+#define TID_KEYDOWN 1
 
 //#define MAX_SIZE 1000
 //#define BUFFER_SIZE sizeof(char) * MAX_SIZE
@@ -63,7 +67,7 @@
 enum
 {
     WM_USER_MIN = WM_USER,
-    WM_KB_KEYDOWN, // Save client handle
+    WM_KB_KEYDOWN,
 };
 
 //#define STRIKE_NUM_MAX 3

@@ -12493,7 +12493,7 @@
                       {
                         "nid": 1030,
                         "strtype": "LABEL/Text",
-                        "strval": "1",
+                        "strval": "1\\n._-#[]",
                         "InheritedType": 10
                       },
                       {
@@ -12532,210 +12532,6 @@
                       }
                     ],
                     "saved_objtypeKey": "LABEL"
-                  },
-                  {
-                    "guid": "GUID58299371-835645S7338546",
-                    "deepid": 369517905,
-                    "dont_export": false,
-                    "locked": false,
-                    "properties": [
-                      {
-                        "nid": 10,
-                        "strtype": "OBJECT/Name",
-                        "strval": "Image3",
-                        "InheritedType": 10
-                      },
-                      {
-                        "nid": 20,
-                        "strtype": "OBJECT/Layout",
-                        "InheritedType": 1
-                      },
-                      {
-                        "Flow": 0,
-                        "Wrap": false,
-                        "Reversed": false,
-                        "MainAlignment": 0,
-                        "CrossAlignment": 0,
-                        "TrackAlignment": 0,
-                        "LayoutType": 0,
-                        "nid": 30,
-                        "strtype": "OBJECT/Layout_type",
-                        "strval": "No_layout",
-                        "InheritedType": 13
-                      },
-                      {
-                        "nid": 40,
-                        "strtype": "OBJECT/Transform",
-                        "InheritedType": 1
-                      },
-                      {
-                        "nid": 50,
-                        "flags": 17,
-                        "strtype": "OBJECT/Position",
-                        "intarray": [
-                          337,
-                          340
-                        ],
-                        "InheritedType": 7
-                      },
-                      {
-                        "nid": 60,
-                        "flags": 17,
-                        "strtype": "OBJECT/Size",
-                        "intarray": [
-                          120,
-                          50
-                        ],
-                        "InheritedType": 7
-                      },
-                      {
-                        "nid": 70,
-                        "strtype": "OBJECT/Align",
-                        "strval": "CENTER",
-                        "InheritedType": 3
-                      },
-                      {
-                        "nid": 90,
-                        "strtype": "OBJECT/Flags",
-                        "InheritedType": 1
-                      },
-                      {
-                        "nid": 110,
-                        "strtype": "OBJECT/Clickable",
-                        "strval": "False",
-                        "InheritedType": 2
-                      },
-                      {
-                        "nid": 130,
-                        "strtype": "OBJECT/Press_lock",
-                        "strval": "False",
-                        "InheritedType": 2
-                      },
-                      {
-                        "nid": 140,
-                        "strtype": "OBJECT/Click_focusable",
-                        "strval": "False",
-                        "InheritedType": 2
-                      },
-                      {
-                        "nid": 210,
-                        "strtype": "OBJECT/Gesture_bubble",
-                        "strval": "False",
-                        "InheritedType": 2
-                      },
-                      {
-                        "nid": 220,
-                        "strtype": "OBJECT/Snappable",
-                        "strval": "False",
-                        "InheritedType": 2
-                      },
-                      {
-                        "nid": 225,
-                        "strtype": "OBJECT/Scrolling",
-                        "InheritedType": 1
-                      },
-                      {
-                        "nid": 230,
-                        "strtype": "OBJECT/Scrollable",
-                        "strval": "False",
-                        "InheritedType": 2
-                      },
-                      {
-                        "nid": 240,
-                        "strtype": "OBJECT/Scroll_elastic",
-                        "strval": "False",
-                        "InheritedType": 2
-                      },
-                      {
-                        "nid": 250,
-                        "strtype": "OBJECT/Scroll_momentum",
-                        "strval": "False",
-                        "InheritedType": 2
-                      },
-                      {
-                        "nid": 270,
-                        "strtype": "OBJECT/Scroll_chain",
-                        "strval": "False",
-                        "InheritedType": 2
-                      },
-                      {
-                        "nid": 300,
-                        "strtype": "OBJECT/Scrollbar_mode",
-                        "strval": "AUTO",
-                        "InheritedType": 3
-                      },
-                      {
-                        "nid": 310,
-                        "strtype": "OBJECT/Scroll_direction",
-                        "strval": "ALL",
-                        "InheritedType": 3
-                      },
-                      {
-                        "nid": 314,
-                        "strtype": "OBJECT/Scroll_snap_x",
-                        "strval": "NONE",
-                        "InheritedType": 3
-                      },
-                      {
-                        "nid": 315,
-                        "strtype": "OBJECT/Scroll_snap_y",
-                        "strval": "NONE",
-                        "InheritedType": 3
-                      },
-                      {
-                        "nid": 320,
-                        "flags": 1048576,
-                        "strtype": "OBJECT/States",
-                        "InheritedType": 1
-                      },
-                      {
-                        "nid": 1010,
-                        "strtype": "IMAGE/Image",
-                        "InheritedType": 1
-                      },
-                      {
-                        "nid": 1020,
-                        "strtype": "IMAGE/Asset",
-                        "strval": "assets/space_bar.png",
-                        "InheritedType": 5
-                      },
-                      {
-                        "nid": 1030,
-                        "strtype": "IMAGE/Pivot",
-                        "intarray": [
-                          0,
-                          0
-                        ],
-                        "InheritedType": 7
-                      },
-                      {
-                        "nid": 1040,
-                        "strtype": "IMAGE/Rotation",
-                        "InheritedType": 6
-                      },
-                      {
-                        "nid": 1050,
-                        "strtype": "IMAGE/Scale",
-                        "integer": 256,
-                        "InheritedType": 6
-                      },
-                      {
-                        "nid": 1060,
-                        "strtype": "IMAGE/Inner_align",
-                        "strval": "LEFT_MID",
-                        "InheritedType": 3
-                      },
-                      {
-                        "part": "lv.PART.MAIN",
-                        "childs": [],
-                        "nid": 1070,
-                        "strtype": "IMAGE/Style_main",
-                        "strval": "lv.PART.MAIN, Rectangle, Image, Transform",
-                        "InheritedType": 11
-                      }
-                    ],
-                    "saved_objtypeKey": "IMAGE",
-                    "tree_closed": true
                   }
                 ],
                 "dont_export": false,
@@ -13050,6 +12846,71 @@
                           },
                           {
                             "nid": 1002017,
+                            "strtype": "CALL FUNCTION/Dont_export_function",
+                            "strval": "False",
+                            "InheritedType": 2
+                          }
+                        ],
+                        "InheritedType": 10
+                      }
+                    ],
+                    "InheritedType": 4
+                  },
+                  {
+                    "disabled": false,
+                    "nid": 1002215,
+                    "strtype": "_event/EventHandler",
+                    "strval": "RELEASED",
+                    "childs": [
+                      {
+                        "nid": 1002216,
+                        "strtype": "_event/name",
+                        "strval": "Event44",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002217,
+                        "strtype": "_event/condition_C",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002218,
+                        "strtype": "_event/condition_P",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002219,
+                        "strtype": "_event/action",
+                        "strval": "CALL FUNCTION",
+                        "childs": [
+                          {
+                            "nid": 1002220,
+                            "strtype": "CALL FUNCTION/Name",
+                            "strval": "CALL FUNCTION",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002221,
+                            "strtype": "CALL FUNCTION/Call",
+                            "strval": "<{Function_name}>( event_struct )",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002222,
+                            "strtype": "CALL FUNCTION/CallC",
+                            "strval": "<{Function_name}>( e );",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002223,
+                            "strtype": "CALL FUNCTION/Function_name",
+                            "strval": "CommonButtonOnRelease",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002224,
                             "strtype": "CALL FUNCTION/Dont_export_function",
                             "strval": "False",
                             "InheritedType": 2
@@ -13598,6 +13459,71 @@
                       }
                     ],
                     "InheritedType": 4
+                  },
+                  {
+                    "disabled": false,
+                    "nid": 1002225,
+                    "strtype": "_event/EventHandler",
+                    "strval": "RELEASED",
+                    "childs": [
+                      {
+                        "nid": 1002226,
+                        "strtype": "_event/name",
+                        "strval": "Event45",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002227,
+                        "strtype": "_event/condition_C",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002228,
+                        "strtype": "_event/condition_P",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002229,
+                        "strtype": "_event/action",
+                        "strval": "CALL FUNCTION",
+                        "childs": [
+                          {
+                            "nid": 1002230,
+                            "strtype": "CALL FUNCTION/Name",
+                            "strval": "CALL FUNCTION",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002231,
+                            "strtype": "CALL FUNCTION/Call",
+                            "strval": "<{Function_name}>( event_struct )",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002232,
+                            "strtype": "CALL FUNCTION/CallC",
+                            "strval": "<{Function_name}>( e );",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002233,
+                            "strtype": "CALL FUNCTION/Function_name",
+                            "strval": "CommonButtonOnRelease",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002234,
+                            "strtype": "CALL FUNCTION/Dont_export_function",
+                            "strval": "False",
+                            "InheritedType": 2
+                          }
+                        ],
+                        "InheritedType": 10
+                      }
+                    ],
+                    "InheritedType": 4
                   }
                 ],
                 "saved_objtypeKey": "BUTTON"
@@ -14128,6 +14054,71 @@
                           },
                           {
                             "nid": 1002044,
+                            "strtype": "CALL FUNCTION/Dont_export_function",
+                            "strval": "False",
+                            "InheritedType": 2
+                          }
+                        ],
+                        "InheritedType": 10
+                      }
+                    ],
+                    "InheritedType": 4
+                  },
+                  {
+                    "disabled": false,
+                    "nid": 1002235,
+                    "strtype": "_event/EventHandler",
+                    "strval": "RELEASED",
+                    "childs": [
+                      {
+                        "nid": 1002236,
+                        "strtype": "_event/name",
+                        "strval": "Event46",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002237,
+                        "strtype": "_event/condition_C",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002238,
+                        "strtype": "_event/condition_P",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002239,
+                        "strtype": "_event/action",
+                        "strval": "CALL FUNCTION",
+                        "childs": [
+                          {
+                            "nid": 1002240,
+                            "strtype": "CALL FUNCTION/Name",
+                            "strval": "CALL FUNCTION",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002241,
+                            "strtype": "CALL FUNCTION/Call",
+                            "strval": "<{Function_name}>( event_struct )",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002242,
+                            "strtype": "CALL FUNCTION/CallC",
+                            "strval": "<{Function_name}>( e );",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002243,
+                            "strtype": "CALL FUNCTION/Function_name",
+                            "strval": "CommonButtonOnRelease",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002244,
                             "strtype": "CALL FUNCTION/Dont_export_function",
                             "strval": "False",
                             "InheritedType": 2
@@ -14676,6 +14667,71 @@
                       }
                     ],
                     "InheritedType": 4
+                  },
+                  {
+                    "disabled": false,
+                    "nid": 1002245,
+                    "strtype": "_event/EventHandler",
+                    "strval": "RELEASED",
+                    "childs": [
+                      {
+                        "nid": 1002246,
+                        "strtype": "_event/name",
+                        "strval": "Event47",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002247,
+                        "strtype": "_event/condition_C",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002248,
+                        "strtype": "_event/condition_P",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002249,
+                        "strtype": "_event/action",
+                        "strval": "CALL FUNCTION",
+                        "childs": [
+                          {
+                            "nid": 1002250,
+                            "strtype": "CALL FUNCTION/Name",
+                            "strval": "CALL FUNCTION",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002251,
+                            "strtype": "CALL FUNCTION/Call",
+                            "strval": "<{Function_name}>( event_struct )",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002252,
+                            "strtype": "CALL FUNCTION/CallC",
+                            "strval": "<{Function_name}>( e );",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002253,
+                            "strtype": "CALL FUNCTION/Function_name",
+                            "strval": "CommonButtonOnRelease",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002254,
+                            "strtype": "CALL FUNCTION/Dont_export_function",
+                            "strval": "False",
+                            "InheritedType": 2
+                          }
+                        ],
+                        "InheritedType": 10
+                      }
+                    ],
+                    "InheritedType": 4
                   }
                 ],
                 "saved_objtypeKey": "BUTTON"
@@ -15206,6 +15262,71 @@
                           },
                           {
                             "nid": 1002064,
+                            "strtype": "CALL FUNCTION/Dont_export_function",
+                            "strval": "False",
+                            "InheritedType": 2
+                          }
+                        ],
+                        "InheritedType": 10
+                      }
+                    ],
+                    "InheritedType": 4
+                  },
+                  {
+                    "disabled": false,
+                    "nid": 1002255,
+                    "strtype": "_event/EventHandler",
+                    "strval": "RELEASED",
+                    "childs": [
+                      {
+                        "nid": 1002256,
+                        "strtype": "_event/name",
+                        "strval": "Event48",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002257,
+                        "strtype": "_event/condition_C",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002258,
+                        "strtype": "_event/condition_P",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002259,
+                        "strtype": "_event/action",
+                        "strval": "CALL FUNCTION",
+                        "childs": [
+                          {
+                            "nid": 1002260,
+                            "strtype": "CALL FUNCTION/Name",
+                            "strval": "CALL FUNCTION",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002261,
+                            "strtype": "CALL FUNCTION/Call",
+                            "strval": "<{Function_name}>( event_struct )",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002262,
+                            "strtype": "CALL FUNCTION/CallC",
+                            "strval": "<{Function_name}>( e );",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002263,
+                            "strtype": "CALL FUNCTION/Function_name",
+                            "strval": "CommonButtonOnRelease",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002264,
                             "strtype": "CALL FUNCTION/Dont_export_function",
                             "strval": "False",
                             "InheritedType": 2
@@ -15754,6 +15875,71 @@
                       }
                     ],
                     "InheritedType": 4
+                  },
+                  {
+                    "disabled": false,
+                    "nid": 1002265,
+                    "strtype": "_event/EventHandler",
+                    "strval": "RELEASED",
+                    "childs": [
+                      {
+                        "nid": 1002266,
+                        "strtype": "_event/name",
+                        "strval": "Event49",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002267,
+                        "strtype": "_event/condition_C",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002268,
+                        "strtype": "_event/condition_P",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002269,
+                        "strtype": "_event/action",
+                        "strval": "CALL FUNCTION",
+                        "childs": [
+                          {
+                            "nid": 1002270,
+                            "strtype": "CALL FUNCTION/Name",
+                            "strval": "CALL FUNCTION",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002271,
+                            "strtype": "CALL FUNCTION/Call",
+                            "strval": "<{Function_name}>( event_struct )",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002272,
+                            "strtype": "CALL FUNCTION/CallC",
+                            "strval": "<{Function_name}>( e );",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002273,
+                            "strtype": "CALL FUNCTION/Function_name",
+                            "strval": "CommonButtonOnRelease",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002274,
+                            "strtype": "CALL FUNCTION/Dont_export_function",
+                            "strval": "False",
+                            "InheritedType": 2
+                          }
+                        ],
+                        "InheritedType": 10
+                      }
+                    ],
+                    "InheritedType": 4
                   }
                 ],
                 "saved_objtypeKey": "BUTTON"
@@ -16284,6 +16470,71 @@
                           },
                           {
                             "nid": 1002084,
+                            "strtype": "CALL FUNCTION/Dont_export_function",
+                            "strval": "False",
+                            "InheritedType": 2
+                          }
+                        ],
+                        "InheritedType": 10
+                      }
+                    ],
+                    "InheritedType": 4
+                  },
+                  {
+                    "disabled": false,
+                    "nid": 1002275,
+                    "strtype": "_event/EventHandler",
+                    "strval": "RELEASED",
+                    "childs": [
+                      {
+                        "nid": 1002276,
+                        "strtype": "_event/name",
+                        "strval": "Event50",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002277,
+                        "strtype": "_event/condition_C",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002278,
+                        "strtype": "_event/condition_P",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002279,
+                        "strtype": "_event/action",
+                        "strval": "CALL FUNCTION",
+                        "childs": [
+                          {
+                            "nid": 1002280,
+                            "strtype": "CALL FUNCTION/Name",
+                            "strval": "CALL FUNCTION",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002281,
+                            "strtype": "CALL FUNCTION/Call",
+                            "strval": "<{Function_name}>( event_struct )",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002282,
+                            "strtype": "CALL FUNCTION/CallC",
+                            "strval": "<{Function_name}>( e );",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002283,
+                            "strtype": "CALL FUNCTION/Function_name",
+                            "strval": "CommonButtonOnRelease",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002284,
                             "strtype": "CALL FUNCTION/Dont_export_function",
                             "strval": "False",
                             "InheritedType": 2
@@ -16832,6 +17083,71 @@
                       }
                     ],
                     "InheritedType": 4
+                  },
+                  {
+                    "disabled": false,
+                    "nid": 1002285,
+                    "strtype": "_event/EventHandler",
+                    "strval": "RELEASED",
+                    "childs": [
+                      {
+                        "nid": 1002286,
+                        "strtype": "_event/name",
+                        "strval": "Event51",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002287,
+                        "strtype": "_event/condition_C",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002288,
+                        "strtype": "_event/condition_P",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002289,
+                        "strtype": "_event/action",
+                        "strval": "CALL FUNCTION",
+                        "childs": [
+                          {
+                            "nid": 1002290,
+                            "strtype": "CALL FUNCTION/Name",
+                            "strval": "CALL FUNCTION",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002291,
+                            "strtype": "CALL FUNCTION/Call",
+                            "strval": "<{Function_name}>( event_struct )",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002292,
+                            "strtype": "CALL FUNCTION/CallC",
+                            "strval": "<{Function_name}>( e );",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002293,
+                            "strtype": "CALL FUNCTION/Function_name",
+                            "strval": "CommonButtonOnRelease",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002294,
+                            "strtype": "CALL FUNCTION/Dont_export_function",
+                            "strval": "False",
+                            "InheritedType": 2
+                          }
+                        ],
+                        "InheritedType": 10
+                      }
+                    ],
+                    "InheritedType": 4
                   }
                 ],
                 "saved_objtypeKey": "BUTTON"
@@ -17371,6 +17687,71 @@
                       }
                     ],
                     "InheritedType": 4
+                  },
+                  {
+                    "disabled": false,
+                    "nid": 1002295,
+                    "strtype": "_event/EventHandler",
+                    "strval": "RELEASED",
+                    "childs": [
+                      {
+                        "nid": 1002296,
+                        "strtype": "_event/name",
+                        "strval": "Event52",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002297,
+                        "strtype": "_event/condition_C",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002298,
+                        "strtype": "_event/condition_P",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002299,
+                        "strtype": "_event/action",
+                        "strval": "CALL FUNCTION",
+                        "childs": [
+                          {
+                            "nid": 1002300,
+                            "strtype": "CALL FUNCTION/Name",
+                            "strval": "CALL FUNCTION",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002301,
+                            "strtype": "CALL FUNCTION/Call",
+                            "strval": "<{Function_name}>( event_struct )",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002302,
+                            "strtype": "CALL FUNCTION/CallC",
+                            "strval": "<{Function_name}>( e );",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002303,
+                            "strtype": "CALL FUNCTION/Function_name",
+                            "strval": "CommonButtonOnRelease",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002304,
+                            "strtype": "CALL FUNCTION/Dont_export_function",
+                            "strval": "False",
+                            "InheritedType": 2
+                          }
+                        ],
+                        "InheritedType": 10
+                      }
+                    ],
+                    "InheritedType": 4
                   }
                 ],
                 "saved_objtypeKey": "BUTTON"
@@ -17548,7 +17929,7 @@
                       {
                         "nid": 1030,
                         "strtype": "LABEL/Text",
-                        "strval": "0",
+                        "strval": "0 ()",
                         "InheritedType": 10
                       },
                       {
@@ -17589,7 +17970,7 @@
                     "saved_objtypeKey": "LABEL"
                   },
                   {
-                    "guid": "GUID15805873-429252S4330551",
+                    "guid": "GUID19168539-660029S23976552",
                     "deepid": 369517905,
                     "dont_export": false,
                     "locked": false,
@@ -17638,8 +18019,8 @@
                         "flags": 17,
                         "strtype": "OBJECT/Size",
                         "intarray": [
-                          95,
-                          95
+                          120,
+                          50
                         ],
                         "InheritedType": 7
                       },
@@ -17751,7 +18132,7 @@
                       {
                         "nid": 1020,
                         "strtype": "IMAGE/Asset",
-                        "strval": "assets/input_done.png",
+                        "strval": "assets/space_bar.png",
                         "InheritedType": 5
                       },
                       {
@@ -17809,7 +18190,7 @@
                   },
                   {
                     "Flow": 0,
-                    "Wrap": false,
+                    "Wrap": true,
                     "Reversed": false,
                     "MainAlignment": 0,
                     "CrossAlignment": 0,
@@ -18105,6 +18486,71 @@
                           },
                           {
                             "nid": 1002114,
+                            "strtype": "CALL FUNCTION/Dont_export_function",
+                            "strval": "False",
+                            "InheritedType": 2
+                          }
+                        ],
+                        "InheritedType": 10
+                      }
+                    ],
+                    "InheritedType": 4
+                  },
+                  {
+                    "disabled": false,
+                    "nid": 1002305,
+                    "strtype": "_event/EventHandler",
+                    "strval": "RELEASED",
+                    "childs": [
+                      {
+                        "nid": 1002306,
+                        "strtype": "_event/name",
+                        "strval": "Event53",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002307,
+                        "strtype": "_event/condition_C",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002308,
+                        "strtype": "_event/condition_P",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1002309,
+                        "strtype": "_event/action",
+                        "strval": "CALL FUNCTION",
+                        "childs": [
+                          {
+                            "nid": 1002310,
+                            "strtype": "CALL FUNCTION/Name",
+                            "strval": "CALL FUNCTION",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002311,
+                            "strtype": "CALL FUNCTION/Call",
+                            "strval": "<{Function_name}>( event_struct )",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002312,
+                            "strtype": "CALL FUNCTION/CallC",
+                            "strval": "<{Function_name}>( e );",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002313,
+                            "strtype": "CALL FUNCTION/Function_name",
+                            "strval": "CommonButtonOnRelease",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002314,
                             "strtype": "CALL FUNCTION/Dont_export_function",
                             "strval": "False",
                             "InheritedType": 2
@@ -18686,7 +19132,7 @@
                     "disabled": false,
                     "nid": 1002115,
                     "strtype": "_event/EventHandler",
-                    "strval": "LONG_PRESSED",
+                    "strval": "LONG_PRESSED_REPEAT",
                     "childs": [
                       {
                         "nid": 1002116,
@@ -18732,7 +19178,7 @@
                           {
                             "nid": 1002123,
                             "strtype": "CALL FUNCTION/Function_name",
-                            "strval": "CommonButtonOnLongPress",
+                            "strval": "CommonButtonOnLongPressRepeat",
                             "InheritedType": 10
                           },
                           {
@@ -18769,7 +19215,7 @@
                 "Flow": 0,
                 "Wrap": true,
                 "Reversed": false,
-                "MainAlignment": 0,
+                "MainAlignment": 1,
                 "CrossAlignment": 1,
                 "TrackAlignment": 1,
                 "LayoutType": 1,
@@ -18788,8 +19234,8 @@
                 "flags": 17,
                 "strtype": "OBJECT/Position",
                 "intarray": [
-                  -656,
-                  213
+                  -657,
+                  212
                 ],
                 "InheritedType": 7
               },
@@ -20335,7 +20781,7 @@
     "uiExportFolderPath": "D:\\Git\\Digital_Video_Recorder_DVR-TT01\\Simulator\\LvglWindowsDesktopApplication\\ui",
     "projectExportFolderPath": "D:\\Git\\Digital_Video_Recorder_DVR-TT01\\Project",
     "custom_variable_prefix": "uic",
-    "backup_cnt": 343,
+    "backup_cnt": 352,
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "9.1.0",
@@ -20353,7 +20799,7 @@
     "naming": "Name",
     "naming_force_lowercase": false,
     "naming_add_subcomponent": false,
-    "nidcnt": 1002215,
+    "nidcnt": 1002315,
     "BitDepth": 16,
     "Name": "SquareLine_Project"
   }

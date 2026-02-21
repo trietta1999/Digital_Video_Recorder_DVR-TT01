@@ -13,7 +13,8 @@ namespace keyboard_lib
     void SetShiftState(bool state);
     void SetListVkCode(const std::vector<std::pair<lv_obj_t*, int>>& list);
     const std::vector<std::pair<lv_obj_t*, int>>& GetListVkCode();
-    void HardwareKeyboardProcess(int uMsg, int wParam, lv_event_code_t lParam);
+    void CALLBACK AutoConfirmKey(HWND hwnd, UINT uMsg, UINT_PTR timerId, DWORD dwTime);
+    void HardwareKeyboardProcess(HWND hwnd, int uMsg, int wParam, lv_event_code_t lParam);
     void ResetAll();
 }
 

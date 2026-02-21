@@ -24,7 +24,6 @@ extern lv_obj_t * ui_pnlNumpad;
 extern void ui_event_btnKeyboardKey1(lv_event_t * e);
 extern lv_obj_t * ui_btnKeyboardKey1;
 extern lv_obj_t * ui_Label25;
-extern lv_obj_t * ui_Image3;
 extern void ui_event_btnKeyboardKey2(lv_event_t * e);
 extern lv_obj_t * ui_btnKeyboardKey2;
 extern lv_obj_t * ui_Label27;

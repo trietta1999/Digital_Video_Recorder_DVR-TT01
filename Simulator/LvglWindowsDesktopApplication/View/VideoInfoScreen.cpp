@@ -29,6 +29,8 @@ VideoInfoScreen::VideoInfoScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_btnVideoName     , SCREEN_NAME::VIDEO_NAME_KBSCREEN },
         { ui_btnVideoInputDesc, SCREEN_NAME::VIDEO_DESC_KBSCREEN },
     };
+
+    temp_data::VideoID.SetValue("aaaaaaaaaaaaa"); //@todo: wait setting
 }
 
 void VideoInfoScreen::OnClickCancel(lv_obj_t* obj)
