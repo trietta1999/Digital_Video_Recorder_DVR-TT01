@@ -13,6 +13,7 @@ namespace system_data
     extern CData<std::string> CurrentTime;
     extern CData<KEYBOARD_TYPE> KeyboardType;
     extern CData<short> T9ConfirmTimeout;
+    extern CData<std::pair<double, double>> StorageInfo;
 }
 
 namespace temp_data

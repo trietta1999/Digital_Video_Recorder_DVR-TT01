@@ -1,6 +1,7 @@
 ﻿#include "CommonLibrary.h"
 #include "CommonData.h"
 #include "ScreenMapping.h"
+#include "ConfigMap.h"
 
 namespace keyboard_lib
 {
@@ -292,6 +293,20 @@ namespace keyboard_lib
         inputChar = 0;
         combineChar = 0;
         buff.clear();
+    }
+}
+
+namespace config_lib
+{
+    std::wstring GetWStringConfig(std::wstring section, std::wstring key, std::wstring file)
+    {
+        wchar_t path[MAX_PATH] = { 0 };
+        wchar_t buff[MAX_PATH] = { 0 };
+
+        ::GetFullPathName(file.c_str(), MAX_PATH, path, NULL);
+        ::GetPrivateProfileString(section.c_str(), key.c_str(), L"", buff, MAX_PATH, path);
+
+        return buff;
     }
 }
 

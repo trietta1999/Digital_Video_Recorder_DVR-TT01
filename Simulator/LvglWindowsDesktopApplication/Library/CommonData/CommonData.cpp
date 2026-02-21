@@ -9,6 +9,7 @@ namespace system_data
     CData<std::string> CurrentTime;
     CData<KEYBOARD_TYPE> KeyboardType;
     CData<short> T9ConfirmTimeout;
+    CData<std::pair<double, double>> StorageInfo;
 }
 
 namespace temp_data
@@ -32,6 +33,7 @@ void CommonDataUpdateAll()
     system_data::CurrentTime.ResetState();
     system_data::KeyboardType.ResetState();
     system_data::T9ConfirmTimeout.ResetState();
+    system_data::StorageInfo.ResetState();
 
     temp_data::VideoID.ResetState();
     temp_data::VideoName.ResetState();

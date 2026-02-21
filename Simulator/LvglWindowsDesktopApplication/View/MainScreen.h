@@ -14,6 +14,7 @@ private:
 
     static void UpdateDate();
     static void UpdateTime();
+    static void UpdateStorage();
 };
 
 #endif // _MAIN_SCREEN_H

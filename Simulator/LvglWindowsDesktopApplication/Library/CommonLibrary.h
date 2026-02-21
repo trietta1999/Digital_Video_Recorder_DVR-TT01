@@ -18,6 +18,11 @@ namespace keyboard_lib
     void ResetAll();
 }
 
+namespace config_lib
+{
+    std::wstring GetWStringConfig(std::wstring section, std::wstring key, std::wstring file);
+}
+
 namespace common_lib
 {
     bool CheckInRangeNumber(int check, int min, int max);

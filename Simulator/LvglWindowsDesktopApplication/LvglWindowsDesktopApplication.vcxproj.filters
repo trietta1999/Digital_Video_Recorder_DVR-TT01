@@ -836,6 +836,9 @@
     <ClInclude Include="View\KeyboardScreen.h">
       <Filter>UI\View</Filter>
     </ClInclude>
+    <ClInclude Include="Library\ConfigMap.h">
+      <Filter>Library\Config</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\.typos.toml">
@@ -996,6 +999,9 @@
     </None>
     <None Include="$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\src\others\fragment\README.md">
       <Filter>lvgl\src\others\fragment</Filter>
+    </None>
+    <None Include="..\Build\system_conf.ini">
+      <Filter>Library\Config</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1469,6 +1475,9 @@
     </Filter>
     <Filter Include="UI\View\Common">
       <UniqueIdentifier>{0f2ff517-59eb-44c0-b783-723328f8af6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library\Config">
+      <UniqueIdentifier>{2514904a-9c35-4878-ba30-abdfd2bd71a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -15,3 +15,7 @@ def CommonButtonOnLongPress(event_struct):
 def CommonButtonOnRelease(event_struct):
     return
 
+
+def CommonButtonOnLongPressRepeat(event_struct):
+    return
+

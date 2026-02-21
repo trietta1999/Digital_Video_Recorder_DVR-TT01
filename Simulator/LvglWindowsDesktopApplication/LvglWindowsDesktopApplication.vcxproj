@@ -16,6 +16,7 @@
     <MileProjectProductName>LVGL</MileProjectProductName>
     <MileProjectVersion>9.0.0.0</MileProjectVersion>
     <MileProjectVersionTag Condition="false">Alpha 1</MileProjectVersionTag>
+    <WindowsTargetPlatformVersion>$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="..\Mile.Project.Windows\Mile.Project.Platform.x86.props" />
   <Import Project="..\Mile.Project.Windows\Mile.Project.Platform.x64.props" />
@@ -25,6 +26,9 @@
   <Import Project="..\LvglPlatform\LvglWindowsIconResource\LvglWindowsIconResource.props" />
   <PropertyGroup>
     <IncludePath>$(MSBuildThisFileDirectory);$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\;$(MSBuildThisFileDirectory)..\LvglPlatform\;ui;Library;Library/CommonData;View;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(MileProjectOutputPath)..\Build\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -309,6 +313,7 @@
     <ClInclude Include="Library\CommonData\CommonDataType.h" />
     <ClInclude Include="Library\CommonLibrary.h" />
     <ClInclude Include="Library\CommonService.h" />
+    <ClInclude Include="Library\ConfigMap.h" />
     <ClInclude Include="lv_conf.h" />
     <ClInclude Include="ui\screens\ui_Keyboard.h" />
     <ClInclude Include="ui\screens\ui_Main.h" />
@@ -376,6 +381,7 @@
     <None Include="$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\src\libs\lz4\LICENSE" />
     <None Include="$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\src\libs\thorvg\add_lvgl_if.sh" />
     <None Include="$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\src\others\fragment\README.md" />
+    <None Include="..\Build\system_conf.ini" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="LvglWindowsDesktopApplication.manifest" />
