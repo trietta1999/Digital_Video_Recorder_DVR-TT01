@@ -8,10 +8,14 @@ std::unordered_map<SCREEN_NAME, std::pair<std::string, std::function<std::string
 std::vector<std::pair<lv_obj_t*, int>> KeyboardScreen::listVkCode = {};
 static lv_timer_t* timerUpdateInput = nullptr;
 static lv_obj_t* dummyConfirmKey = nullptr;
+static lv_obj_t* dummyOkKey = nullptr;
+static lv_obj_t* dummyCancelKey = nullptr;
 
 KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
     dummyConfirmKey = lv_button_create(nullptr);
+    dummyOkKey = lv_button_create(nullptr);
+    dummyCancelKey = lv_button_create(nullptr);
 
     system_data::KeyboardType.SetValue(KEYBOARD_TYPE::INTERNAL_NUMPAD); //@todo: wait setting
     system_data::T9ConfirmTimeout.SetValue(750); //@todo: wait setting
@@ -32,6 +36,8 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_btnKeyboardKeyShift    , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
         { ui_btnKeyboardKeyBackspace, OnClickKey          , LV_EVENT_SHORT_CLICKED       },
         { dummyConfirmKey           , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { dummyOkKey                , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { dummyCancelKey            , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
         { ui_btnKeyboardKey0        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
         { ui_btnKeyboardKey1        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
         { ui_btnKeyboardKey2        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
@@ -77,6 +83,8 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_btnKeyboardKeyShift    , VK_SHIFT   },
         { ui_btnKeyboardKeyBackspace, VK_BACK    },
         { dummyConfirmKey           , VK_CONVERT },
+        { dummyOkKey                , VK_RETURN  },
+        { dummyCancelKey            , VK_ESCAPE  },
     };
 
     // Copy list VK code library
@@ -147,6 +155,14 @@ void KeyboardScreen::OnClickKey(lv_obj_t* obj)
     {
         // Clear temp input
         lv_textarea_set_text(ui_txtKeyboardTempInput, "");
+    }
+    else if (obj == dummyOkKey)
+    {
+        OnClickOK(obj);
+    }
+    else if (obj == dummyCancelKey)
+    {
+        OnClickCancel(obj);
     }
     else if (obj == ui_btnKeyboardKeyBackspace)
     {

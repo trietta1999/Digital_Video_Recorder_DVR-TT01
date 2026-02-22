@@ -59,9 +59,11 @@ extern lv_obj_t * ui_btnKeyboardKeyBackspace;
 extern lv_obj_t * ui_Container1;
 extern void ui_event_btnKeyboardCancel(lv_event_t * e);
 extern lv_obj_t * ui_btnKeyboardCancel;
+extern lv_obj_t * ui_Image3;
 extern lv_obj_t * ui_Label34;
 extern void ui_event_btnKeyboardOK(lv_event_t * e);
 extern lv_obj_t * ui_btnKeyboardOK;
+extern lv_obj_t * ui_Image6;
 extern lv_obj_t * ui_Label35;
 // CUSTOM VARIABLES
 

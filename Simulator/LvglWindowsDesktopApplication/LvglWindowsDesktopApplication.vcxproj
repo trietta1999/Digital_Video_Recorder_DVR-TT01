@@ -715,6 +715,8 @@
     <ClCompile Include="ui\images\ui_img_backspace_png.c" />
     <ClCompile Include="ui\images\ui_img_docs_apps_script_png.c" />
     <ClCompile Include="ui\images\ui_img_edit_note_png.c" />
+    <ClCompile Include="ui\images\ui_img_enter_png.c" />
+    <ClCompile Include="ui\images\ui_img_esc_png.c" />
     <ClCompile Include="ui\images\ui_img_format_list_bulleted_add_png.c" />
     <ClCompile Include="ui\images\ui_img_input_done_png.c" />
     <ClCompile Include="ui\images\ui_img_input_png.c" />

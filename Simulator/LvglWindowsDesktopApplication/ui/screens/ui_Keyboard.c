@@ -37,8 +37,10 @@ lv_obj_t * ui_btnKeyboardKeyShift = NULL;
 lv_obj_t * ui_btnKeyboardKeyBackspace = NULL;
 lv_obj_t * ui_Container1 = NULL;
 lv_obj_t * ui_btnKeyboardCancel = NULL;
+lv_obj_t * ui_Image3 = NULL;
 lv_obj_t * ui_Label34 = NULL;
 lv_obj_t * ui_btnKeyboardOK = NULL;
+lv_obj_t * ui_Image6 = NULL;
 lv_obj_t * ui_Label35 = NULL;
 // event funtions
 void ui_event_Keyboard(lv_event_t * e)
@@ -776,7 +778,7 @@ void ui_Keyboard_screen_init(void)
     lv_obj_set_style_pad_column(ui_Container1, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btnKeyboardCancel = lv_button_create(ui_Container1);
-    lv_obj_set_width(ui_btnKeyboardCancel, 230);
+    lv_obj_set_width(ui_btnKeyboardCancel, 280);
     lv_obj_set_height(ui_btnKeyboardCancel, 80);
     lv_obj_set_x(ui_btnKeyboardCancel, -47);
     lv_obj_set_y(ui_btnKeyboardCancel, 92);
@@ -796,6 +798,18 @@ void ui_Keyboard_screen_init(void)
     lv_obj_set_style_border_opa(ui_btnKeyboardCancel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_btnKeyboardCancel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_Image3 = lv_image_create(ui_btnKeyboardCancel);
+    lv_image_set_src(ui_Image3, &ui_img_esc_png);
+    lv_obj_set_width(ui_Image3, 70);
+    lv_obj_set_height(ui_Image3, 70);
+    lv_obj_set_x(ui_Image3, 337);
+    lv_obj_set_y(ui_Image3, 340);
+    lv_obj_set_align(ui_Image3, LV_ALIGN_CENTER);
+    lv_obj_remove_flag(ui_Image3, LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
+                       LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
+                       LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
+    lv_image_set_inner_align(ui_Image3, LV_IMAGE_ALIGN_STRETCH);
+
     ui_Label34 = lv_label_create(ui_btnKeyboardCancel);
     lv_obj_set_width(ui_Label34, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Label34, LV_SIZE_CONTENT);    /// 1
@@ -811,7 +825,7 @@ void ui_Keyboard_screen_init(void)
     lv_obj_set_style_text_font(ui_Label34, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btnKeyboardOK = lv_button_create(ui_Container1);
-    lv_obj_set_width(ui_btnKeyboardOK, 230);
+    lv_obj_set_width(ui_btnKeyboardOK, 280);
     lv_obj_set_height(ui_btnKeyboardOK, 80);
     lv_obj_set_x(ui_btnKeyboardOK, -47);
     lv_obj_set_y(ui_btnKeyboardOK, 92);
@@ -830,6 +844,18 @@ void ui_Keyboard_screen_init(void)
     lv_obj_set_style_border_color(ui_btnKeyboardOK, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_btnKeyboardOK, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_btnKeyboardOK, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Image6 = lv_image_create(ui_btnKeyboardOK);
+    lv_image_set_src(ui_Image6, &ui_img_enter_png);
+    lv_obj_set_width(ui_Image6, 70);
+    lv_obj_set_height(ui_Image6, 70);
+    lv_obj_set_x(ui_Image6, 337);
+    lv_obj_set_y(ui_Image6, 340);
+    lv_obj_set_align(ui_Image6, LV_ALIGN_CENTER);
+    lv_obj_remove_flag(ui_Image6, LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
+                       LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
+                       LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
+    lv_image_set_inner_align(ui_Image6, LV_IMAGE_ALIGN_STRETCH);
 
     ui_Label35 = lv_label_create(ui_btnKeyboardOK);
     lv_obj_set_width(ui_Label35, LV_SIZE_CONTENT);   /// 1
@@ -900,8 +926,10 @@ void ui_Keyboard_screen_destroy(void)
     ui_btnKeyboardKeyBackspace = NULL;
     ui_Container1 = NULL;
     ui_btnKeyboardCancel = NULL;
+    ui_Image3 = NULL;
     ui_Label34 = NULL;
     ui_btnKeyboardOK = NULL;
+    ui_Image6 = NULL;
     ui_Label35 = NULL;
 
 }

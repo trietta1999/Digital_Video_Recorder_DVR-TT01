@@ -1574,6 +1574,12 @@
     <ClCompile Include="ui\images\ui_img_keyboard_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
+    <ClCompile Include="ui\images\ui_img_enter_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_esc_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="LvglWindowsDesktopApplication.manifest" />
