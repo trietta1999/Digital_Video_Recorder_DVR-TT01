@@ -26,7 +26,7 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         ULARGE_INTEGER totalNumberOfBytes; // Total disk space
         ULARGE_INTEGER totalNumberOfFreeBytes; // Actual total free space
         double totalGB = 0;
-        double freeGB = 0;
+        double usedGB = 0;
         char buffDate[MAX_PATH] = { 0 };
         char buffTime[MAX_PATH] = { 0 };
         auto drive = config_lib::GetWStringConfig(SYSTEM_SECTION, STORAGE_DRIVE, SYSTEM_CONFIG);
@@ -37,7 +37,7 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         {
             // Convert Bytes to GB (1 GB = 1024 * 1024 * 1024 Bytes)
             totalGB = (double)totalNumberOfBytes.QuadPart / (1024 * 1024 * 1024);
-            freeGB = (double)freeBytesAvailableToUser.QuadPart / (1024 * 1024 * 1024);
+            usedGB = totalGB - (double)freeBytesAvailableToUser.QuadPart / (1024 * 1024 * 1024);
         }
 
         sprintf(buffDate, "%02d.%02d.%04d", systime.wDay, systime.wMonth, systime.wYear);
@@ -45,7 +45,7 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
 
         system_data::CurrentDate.SetValue(buffDate);
         system_data::CurrentTime.SetValue(buffTime);
-        system_data::StorageInfo.SetValue({ freeGB, totalGB });
+        system_data::StorageInfo.SetValue({ usedGB, totalGB });
         }, TIMECYCLE_1SEC, nullptr);
 }
 
