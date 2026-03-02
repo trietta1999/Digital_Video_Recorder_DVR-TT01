@@ -29,25 +29,23 @@ VideoInfoScreen::VideoInfoScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_btnVideoName     , SCREEN_NAME::VIDEO_NAME_KBSCREEN },
         { ui_btnVideoInputDesc, SCREEN_NAME::VIDEO_DESC_KBSCREEN },
     };
-
-    temp_data::VideoID.SetValue("aaaaaaaaaaaaa"); //@todo: wait setting
 }
 
-void VideoInfoScreen::OnClickCancel(lv_obj_t* obj)
+void VideoInfoScreen::OnClickCancel(lv_event_t* event)
 {
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::MAIN_SCREEN);
 }
 
-void VideoInfoScreen::OnClickOK(lv_obj_t* obj)
+void VideoInfoScreen::OnClickOK(lv_event_t* event)
 {
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::MAIN_SCREEN);
 }
 
-void VideoInfoScreen::OnClickInput(lv_obj_t* obj)
+void VideoInfoScreen::OnClickInput(lv_event_t* event)
 {
     for (const auto& item : listKbScreenName)
     {
-        if (item.first == obj)
+        if (item.first == event->current_target)
         {
             ScreenMapping::GetInstance().ChangeScreen(item.second);
             break;
@@ -55,7 +53,7 @@ void VideoInfoScreen::OnClickInput(lv_obj_t* obj)
     }
 }
 
-void VideoInfoScreen::OnLongPressInput(lv_obj_t* obj)
+void VideoInfoScreen::OnLongPressInput(lv_event_t* event)
 {
     //ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::VIDEO_NAME_KBSCREEN);
 }

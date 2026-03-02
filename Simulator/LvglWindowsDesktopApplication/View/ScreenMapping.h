@@ -9,7 +9,7 @@ class ScreenMapping
 private:
     ScreenMapping();
 
-    std::unordered_map<SCREEN_NAME, std::pair<std::function<BaseScreen*(void)>, std::function<void(void)>>> mapScreenInfo;
+    std::unordered_map<SCREEN_NAME, std::pair<std::function<BaseScreen* (void)>, std::function<void(void)>>> mapScreenInfo;
     std::pair<SCREEN_NAME, BaseScreen*> currentScreenInfo;
     lv_event_t event;
 
@@ -17,6 +17,7 @@ public:
     static ScreenMapping& GetInstance();
 
     void SetEvent(lv_event_t event);
+    const lv_event_t& GetEvent() { return event; }
     void ChangeScreen(SCREEN_NAME screen);
     void HandleScreen();
 };

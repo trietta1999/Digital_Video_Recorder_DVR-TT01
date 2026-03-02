@@ -12,6 +12,9 @@ SET(SOURCES screens/ui_Main.c
     images/ui_img_storage_png.c
     images/ui_img_edit_note_png.c
     images/ui_img_input_png.c
+    images/ui_img_all_match_png.c
+    images/ui_img_arrow_back_png.c
+    images/ui_img_arrow_forward_png.c
     images/ui_img_space_bar_png.c
     images/ui_img_shift_lock_png.c
     images/ui_img_backspace_png.c

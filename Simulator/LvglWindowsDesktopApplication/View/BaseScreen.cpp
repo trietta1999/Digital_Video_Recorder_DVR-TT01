@@ -1,13 +1,13 @@
 ﻿#include "BaseScreen.h"
 #include "CommonData.h"
 
-void BaseScreen::ButtonOperator(lv_obj_t* btnObj, lv_event_code_t btnEvent)
+void BaseScreen::ButtonOperator(lv_event_t* event)
 {
     for (const auto& item : ListButtonCallback)
     {
-        if ((item.btnObj == btnObj) && (item.btnEvent == btnEvent))
+        if ((item.btnObj == event->current_target) && (item.btnEvent == event->code))
         {
-            item.btnCallback(btnObj);
+            item.btnCallback(event);
         }
     }
 }

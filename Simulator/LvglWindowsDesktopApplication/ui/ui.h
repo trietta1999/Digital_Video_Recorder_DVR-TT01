@@ -37,6 +37,9 @@ LV_IMG_DECLARE(ui_img_stop_png);    // assets/stop.png
 LV_IMG_DECLARE(ui_img_storage_png);    // assets/storage.png
 LV_IMG_DECLARE(ui_img_edit_note_png);    // assets/edit_note.png
 LV_IMG_DECLARE(ui_img_input_png);    // assets/input.png
+LV_IMG_DECLARE(ui_img_all_match_png);    // assets/all_match.png
+LV_IMG_DECLARE(ui_img_arrow_back_png);    // assets/arrow_back.png
+LV_IMG_DECLARE(ui_img_arrow_forward_png);    // assets/arrow_forward.png
 LV_IMG_DECLARE(ui_img_space_bar_png);    // assets/space_bar.png
 LV_IMG_DECLARE(ui_img_shift_lock_png);    // assets/shift_lock.png
 LV_IMG_DECLARE(ui_img_backspace_png);    // assets/backspace.png

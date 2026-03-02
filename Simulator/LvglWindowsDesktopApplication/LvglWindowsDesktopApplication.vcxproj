@@ -709,9 +709,13 @@
     <ClCompile Include="Library\CommonData\CommonDataType.cpp" />
     <ClCompile Include="Library\CommonLibrary.cpp" />
     <ClCompile Include="Library\CommonService.cpp" />
+    <ClCompile Include="Library\KeyboardLibrary.cpp" />
     <ClCompile Include="ui/**/*.cpp" />
     <ClCompile Include="LvglWindowsDesktopApplication.cpp" />
     <ClCompile Include="ui\components\ui_comp_hook.c" />
+    <ClCompile Include="ui\images\ui_img_all_match_png.c" />
+    <ClCompile Include="ui\images\ui_img_arrow_back_png.c" />
+    <ClCompile Include="ui\images\ui_img_arrow_forward_png.c" />
     <ClCompile Include="ui\images\ui_img_backspace_png.c" />
     <ClCompile Include="ui\images\ui_img_docs_apps_script_png.c" />
     <ClCompile Include="ui\images\ui_img_edit_note_png.c" />

@@ -76,7 +76,7 @@ void ScreenMapping::ChangeScreen(SCREEN_NAME screen)
 void ScreenMapping::HandleScreen()
 {
     // Handle operation
-    currentScreenInfo.second->ButtonOperator((lv_obj_t*)(event.current_target), event.code);
+    currentScreenInfo.second->ButtonOperator(&event);
     currentScreenInfo.second->DataUpdateOperator();
 
     // Reset event data

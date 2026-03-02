@@ -24,6 +24,12 @@
 
 #define TID_KEYDOWN 1
 
+#define VK_CHAR 0x100
+#define VK_KEY0 '0'
+#define VK_KEY9 '9'
+#define VK_KEYA 'A'
+#define VK_KEYZ 'Z'
+
 //#define MAX_SIZE 1000
 //#define BUFFER_SIZE sizeof(char) * MAX_SIZE
 //

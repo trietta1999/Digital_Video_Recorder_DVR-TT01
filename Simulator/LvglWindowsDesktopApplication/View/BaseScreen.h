@@ -9,7 +9,7 @@ protected:
     typedef struct
     {
         lv_obj_t* btnObj;
-        std::function<void(lv_obj_t*)> btnCallback;
+        std::function<void(lv_event_t*)> btnCallback;
         lv_event_code_t btnEvent;
     } ButtonInfo;
 
@@ -24,7 +24,7 @@ public:
 
     SCREEN_NAME GetScreenName() const { return this->screenName; }
 
-    void ButtonOperator(lv_obj_t* btnObj, lv_event_code_t btnEvent);
+    void ButtonOperator(lv_event_t* event);
     void DataUpdateOperator();
 };
 

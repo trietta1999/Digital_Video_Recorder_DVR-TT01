@@ -10,9 +10,11 @@ namespace keyboard_lib
     void CalculateInputChar(int keycode, lv_event_code_t event);
     char GetInputChar();
     char GetCombineChar();
-    void SetShiftState(bool state);
+    void SetKeyboardKeyState(int vk, bool state);
+    bool GetKeyboardCapsState();
     void SetListVkCode(const std::vector<std::pair<lv_obj_t*, int>>& list);
     const std::vector<std::pair<lv_obj_t*, int>>& GetListVkCode();
+    const std::vector<std::pair<std::pair<int, int>, char>>& GetListSpacialChar();
     void CALLBACK AutoConfirmKey(HWND hwnd, UINT uMsg, UINT_PTR timerId, DWORD dwTime);
     void HardwareKeyboardProcess(HWND hwnd, int uMsg, int wParam, lv_event_code_t lParam);
     void ResetAll();

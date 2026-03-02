@@ -812,12 +812,6 @@
     <ClInclude Include="Library\CommonData\CommonDataType.h">
       <Filter>Library\CommonData</Filter>
     </ClInclude>
-    <ClInclude Include="Library\CommonLibrary.h">
-      <Filter>Library</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\CommonService.h">
-      <Filter>Library</Filter>
-    </ClInclude>
     <ClInclude Include="View\BaseScreen.h">
       <Filter>UI\View\Common</Filter>
     </ClInclude>
@@ -838,6 +832,12 @@
     </ClInclude>
     <ClInclude Include="Library\ConfigMap.h">
       <Filter>Library\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\CommonLibrary.h">
+      <Filter>Library\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\CommonService.h">
+      <Filter>Library\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1479,6 +1479,9 @@
     <Filter Include="Library\Config">
       <UniqueIdentifier>{2514904a-9c35-4878-ba30-abdfd2bd71a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Library\Common">
+      <UniqueIdentifier>{83ee3b4e-5cf1-4e9a-b1a9-e3696850ae8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ui\components\ui_comp_hook.c">
@@ -1538,12 +1541,6 @@
     <ClCompile Include="Library\CommonData\CommonDataType.cpp">
       <Filter>Library\CommonData</Filter>
     </ClCompile>
-    <ClCompile Include="Library\CommonLibrary.cpp">
-      <Filter>Library</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\CommonService.cpp">
-      <Filter>Library</Filter>
-    </ClCompile>
     <ClCompile Include="View\BaseScreen.cpp">
       <Filter>UI\View\Common</Filter>
     </ClCompile>
@@ -1578,6 +1575,24 @@
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
     <ClCompile Include="ui\images\ui_img_esc_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\CommonLibrary.cpp">
+      <Filter>Library\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\CommonService.cpp">
+      <Filter>Library\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\KeyboardLibrary.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_arrow_back_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_arrow_forward_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_all_match_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
   </ItemGroup>

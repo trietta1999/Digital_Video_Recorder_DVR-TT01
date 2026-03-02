@@ -55,7 +55,7 @@ MainScreen::~MainScreen()
     timerDateTime = nullptr;
 }
 
-void MainScreen::OnClickNew(lv_obj_t* obj)
+void MainScreen::OnClickNew(lv_event_t* event)
 {
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::VIDEO_INPUT_SCREEN);
 }
