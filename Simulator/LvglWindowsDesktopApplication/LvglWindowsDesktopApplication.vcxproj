@@ -17,6 +17,9 @@
     <MileProjectVersion>9.0.0.0</MileProjectVersion>
     <MileProjectVersionTag Condition="false">Alpha 1</MileProjectVersionTag>
     <WindowsTargetPlatformVersion>$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+    <UseHostCompilerIfAvailable>true</UseHostCompilerIfAvailable>
+    <FileWritesTimestamps>false</FileWritesTimestamps>
+    <FastUpToDateCheck>true</FastUpToDateCheck>
   </PropertyGroup>
   <Import Project="..\Mile.Project.Windows\Mile.Project.Platform.x86.props" />
   <Import Project="..\Mile.Project.Windows\Mile.Project.Platform.x64.props" />
@@ -42,7 +45,7 @@
     </ClCompile>
     <Link>
       <GenerateMapFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateMapFile>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">winmm.lib;Ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -313,7 +316,8 @@
     <ClInclude Include="Library\CommonData\CommonDataType.h" />
     <ClInclude Include="Library\CommonLibrary.h" />
     <ClInclude Include="Library\CommonService.h" />
-    <ClInclude Include="Library\ConfigMap.h" />
+    <ClInclude Include="Library\SystemConfig.h" />
+    <ClInclude Include="Library\VideoInfoData.h" />
     <ClInclude Include="lv_conf.h" />
     <ClInclude Include="ui\screens\ui_Keyboard.h" />
     <ClInclude Include="ui\screens\ui_Main.h" />
@@ -382,6 +386,7 @@
     <None Include="$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\src\libs\thorvg\add_lvgl_if.sh" />
     <None Include="$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\src\others\fragment\README.md" />
     <None Include="..\Build\system_conf.ini" />
+    <None Include="..\Build\videoinfo_data.ini" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="LvglWindowsDesktopApplication.manifest" />
@@ -710,6 +715,7 @@
     <ClCompile Include="Library\CommonLibrary.cpp" />
     <ClCompile Include="Library\CommonService.cpp" />
     <ClCompile Include="Library\KeyboardLibrary.cpp" />
+    <ClCompile Include="Library\VideoInfoLibrary.cpp" />
     <ClCompile Include="ui/**/*.cpp" />
     <ClCompile Include="LvglWindowsDesktopApplication.cpp" />
     <ClCompile Include="ui\components\ui_comp_hook.c" />

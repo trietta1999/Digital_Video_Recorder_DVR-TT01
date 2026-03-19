@@ -7,6 +7,8 @@
 #include <string>
 #include <unordered_map>
 #include <functional>
+#include <algorithm>
+#include <iterator>
 
 #define STR(a) #a
 #define APP_NAME L"DVR-TT01"
@@ -29,6 +31,9 @@
 #define VK_KEY9 '9'
 #define VK_KEYA 'A'
 #define VK_KEYZ 'Z'
+
+#define ACCEPT_ALL_CHARS ""
+#define ACCEPT_SPACE_ONLY " "
 
 //#define MAX_SIZE 1000
 //#define BUFFER_SIZE sizeof(char) * MAX_SIZE
@@ -101,19 +106,27 @@ enum
 #define EXTERN_MAP_ENUM_STR(enum_name) extern std::unordered_map<enum_name, std::string> mapStr_##enum_name;
 
 #define DEF_SCREEN_NAME(e, CREATE) \
-        CREATE(e, MAIN_SCREEN) \
-        CREATE(e, VIDEO_INPUT_SCREEN) \
-        CREATE(e, KEYBOARD_SCREEN) \
+        CREATE(e, SCREEN_MAIN) \
+        CREATE(e, SCREEN_VIDEO_INPUT) \
+        CREATE(e, SCREEN_KEYBOARD) \
 
 #define DEF_KBSCREEN_NAME(e, CREATE) \
-        CREATE(e, VIDEO_ID_KBSCREEN) \
-        CREATE(e, VIDEO_NAME_KBSCREEN) \
-        CREATE(e, VIDEO_DESC_KBSCREEN) \
+        CREATE(e, KBSCREEN_VIDEO_EVENT) \
+        CREATE(e, KBSCREEN_VIDEO_NAME) \
+        CREATE(e, KBSCREEN_VIDEO_CATEGORY) \
+        CREATE(e, KBSCREEN_VIDEO_DESC) \
+        CREATE(e, KBSCREEN_VIDEO_AUTHOR) \
 
 #define DEF_KEYBOARD_TYPE(e, CREATE) \
         CREATE(e, INTERNAL_NUMPAD) \
         CREATE(e, STANDARD_NUMPAD) \
         CREATE(e, STANDARD_KEYBOARD) \
+
+#define DEF_STATE_TYPE(e, CREATE) \
+        CREATE(e, S_STOP) \
+        CREATE(e, S_RECORD) \
+        CREATE(e, S_PLAY) \
+        CREATE(e, S_PAUSE) \
 
 enum class SCREEN_NAME
 {
@@ -131,8 +144,15 @@ enum class KEYBOARD_TYPE
     DEF_KEYBOARD_TYPE(KEYBOARD_TYPE, TO_ENUM)
     MAX,
 };
+enum class STATE_TYPE
+{
+    MIN,
+    DEF_STATE_TYPE(STATE_TYPE, TO_ENUM)
+    MAX,
+};
 
 EXTERN_MAP_ENUM_STR(SCREEN_NAME)
 EXTERN_MAP_ENUM_STR(KEYBOARD_TYPE)
+EXTERN_MAP_ENUM_STR(STATE_TYPE)
 
 #endif // !_COMMON_DATATYPE_H

@@ -830,14 +830,17 @@
     <ClInclude Include="View\KeyboardScreen.h">
       <Filter>UI\View</Filter>
     </ClInclude>
-    <ClInclude Include="Library\ConfigMap.h">
-      <Filter>Library\Config</Filter>
-    </ClInclude>
     <ClInclude Include="Library\CommonLibrary.h">
       <Filter>Library\Common</Filter>
     </ClInclude>
     <ClInclude Include="Library\CommonService.h">
       <Filter>Library\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\SystemConfig.h">
+      <Filter>Library\Config\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\VideoInfoData.h">
+      <Filter>Library\Config\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1001,6 +1004,9 @@
       <Filter>lvgl\src\others\fragment</Filter>
     </None>
     <None Include="..\Build\system_conf.ini">
+      <Filter>Library\Config</Filter>
+    </None>
+    <None Include="..\Build\videoinfo_data.ini">
       <Filter>Library\Config</Filter>
     </None>
   </ItemGroup>
@@ -1482,6 +1488,9 @@
     <Filter Include="Library\Common">
       <UniqueIdentifier>{83ee3b4e-5cf1-4e9a-b1a9-e3696850ae8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Library\Config\Header">
+      <UniqueIdentifier>{53b6f2d4-936d-4389-a91a-f3a66f6fcb92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ui\components\ui_comp_hook.c">
@@ -1594,6 +1603,9 @@
     </ClCompile>
     <ClCompile Include="ui\images\ui_img_all_match_png.c">
       <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\VideoInfoLibrary.cpp">
+      <Filter>Library</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

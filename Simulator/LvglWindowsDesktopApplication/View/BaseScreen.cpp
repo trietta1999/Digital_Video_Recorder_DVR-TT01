@@ -14,11 +14,25 @@ void BaseScreen::ButtonOperator(lv_event_t* event)
 
 void BaseScreen::DataUpdateOperator()
 {
-    for (const auto& item : ListDataUpdateCallback)
+    // Update data when open new screen
+    if (isFirstInit)
     {
-        if (item.first() == true)
+        for (const auto& item : ListDataUpdateCallback)
         {
             item.second();
+        }
+
+        isFirstInit = false;
+    }
+    // Normal update data when state change
+    else
+    {
+        for (const auto& item : ListDataUpdateCallback)
+        {
+            if (item.first() == true)
+            {
+                item.second();
+            }
         }
     }
 }

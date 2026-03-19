@@ -22,7 +22,7 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
     dummyCharKey = lv_button_create(nullptr);
     dummySpaceKey = lv_button_create(nullptr);
 
-    system_data::KeyboardType.SetValue(KEYBOARD_TYPE::STANDARD_KEYBOARD); //@todo: wait setting
+    system_data::KeyboardType.SetValue(KEYBOARD_TYPE::INTERNAL_NUMPAD); //@todo: wait setting
     system_data::T9ConfirmTimeout.SetValue(750); //@todo: wait setting
 
     ListButtonCallback = {
@@ -75,9 +75,11 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
     ListDataUpdateCallback = {};
 
     mapKbInit = {
-        { SCREEN_NAME::VIDEO_ID_KBSCREEN  , { "Video ID"   , "._-#"    , []() { return temp_data::VideoID.GetValue(); }   } },
-        { SCREEN_NAME::VIDEO_NAME_KBSCREEN, { "Video name" , ".-_#[]()", []() { return temp_data::VideoName.GetValue(); } } },
-        { SCREEN_NAME::VIDEO_DESC_KBSCREEN, { "Description", ""        , []() { return temp_data::VideoDesc.GetValue(); } } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_EVENT   , { "Event"       , ACCEPT_ALL_CHARS , []() { return temp_data::VideoEvent.GetValue(); }       } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_NAME    , { "Video name"  , ACCEPT_ALL_CHARS , []() { return temp_data::VideoName.GetValue(); }     } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_CATEGORY, { "New category", ACCEPT_SPACE_ONLY, []() { return temp_data::VideoCategory.GetValue(); } } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_DESC    , { "Description" , ACCEPT_ALL_CHARS , []() { return temp_data::VideoDesc.GetValue(); }     } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR  , { "Author"      , "._-"            , []() { return temp_data::VideoAuthor.GetValue(); }   } },
     };
 
     listVkCode = {
@@ -327,14 +329,20 @@ void KeyboardScreen::SetKbData(SCREEN_NAME screen, void* data)
 {
     switch (screen)
     {
-    case SCREEN_NAME::VIDEO_ID_KBSCREEN:
-        temp_data::VideoID.SetValue(*(std::string*)data);
+    case SCREEN_NAME::KBSCREEN_VIDEO_EVENT:
+        temp_data::VideoEvent.SetValue(*(std::string*)data);
         break;
-    case SCREEN_NAME::VIDEO_NAME_KBSCREEN:
+    case SCREEN_NAME::KBSCREEN_VIDEO_NAME:
         temp_data::VideoName.SetValue(*(std::string*)data);
         break;
-    case SCREEN_NAME::VIDEO_DESC_KBSCREEN:
+    case SCREEN_NAME::KBSCREEN_VIDEO_CATEGORY:
+        temp_data::VideoCategory.SetValue(*(std::string*)data);
+        break;
+    case SCREEN_NAME::KBSCREEN_VIDEO_DESC:
         temp_data::VideoDesc.SetValue(*(std::string*)data);
+        break;
+    case SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR:
+        temp_data::VideoAuthor.SetValue(*(std::string*)data);
         break;
     default:
         break;

@@ -17,9 +17,10 @@ protected:
     std::vector<std::pair<std::function<bool(void)>, std::function<void(void)>>> ListDataUpdateCallback;
 
     SCREEN_NAME screenName;
+    bool isFirstInit;
 
 public:
-    BaseScreen(SCREEN_NAME screen) { this->screenName = screen; };
+    BaseScreen(SCREEN_NAME screen) { this->screenName = screen; this->isFirstInit = true; };
     virtual ~BaseScreen() = default;
 
     SCREEN_NAME GetScreenName() const { return this->screenName; }

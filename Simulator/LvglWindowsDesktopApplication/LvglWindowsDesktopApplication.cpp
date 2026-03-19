@@ -192,7 +192,7 @@ int WINAPI wWinMain(
     InitService();
 
     // Change to main screen
-    ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::MAIN_SCREEN);
+    ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);
 
     DebugConsoleRead();
 

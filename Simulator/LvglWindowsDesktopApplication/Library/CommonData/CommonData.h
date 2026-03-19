@@ -4,6 +4,8 @@
 #include "CommonDataType.h"
 #include "CData.h"
 
+#define COPY_CDATA_1TO2(a, b) b.SetValue(a.GetValue())
+
 namespace system_data
 {
     extern CData<HWND> WindowHandle;
@@ -14,13 +16,27 @@ namespace system_data
     extern CData<KEYBOARD_TYPE> KeyboardType;
     extern CData<short> T9ConfirmTimeout;
     extern CData<std::pair<double, double>> StorageInfo;
+    extern CData<STATE_TYPE> CurrentState;
+    extern CData<bool> TempVideoInfo;
+    extern CData<std::string> TempVideoID;
+}
+
+namespace input_data
+{
+    extern CData<std::string> VideoEvent;
+    extern CData<std::string> VideoName;
+    extern CData<std::string> VideoCategory;
+    extern CData<std::string> VideoDesc;
+    extern CData<std::string> VideoAuthor;
 }
 
 namespace temp_data
 {
-    extern CData<std::string> VideoID;
+    extern CData<std::string> VideoEvent;
     extern CData<std::string> VideoName;
+    extern CData<std::string> VideoCategory;
     extern CData<std::string> VideoDesc;
+    extern CData<std::string> VideoAuthor;
 }
 
 namespace debug_data
