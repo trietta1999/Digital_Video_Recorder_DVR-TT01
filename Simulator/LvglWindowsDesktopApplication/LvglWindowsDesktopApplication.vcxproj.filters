@@ -842,6 +842,9 @@
     <ClInclude Include="Library\VideoInfoData.h">
       <Filter>Library\Config\Header</Filter>
     </ClInclude>
+    <ClInclude Include="ui\screens\ui_RecordList.h">
+      <Filter>UI\UI_View\screens</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\.typos.toml">
@@ -1496,39 +1499,6 @@
     <ClCompile Include="ui\components\ui_comp_hook.c">
       <Filter>UI\UI_View\components</Filter>
     </ClCompile>
-    <ClCompile Include="ui\images\ui_img_backspace_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_docs_apps_script_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_edit_note_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_format_list_bulleted_add_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_pause_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_play_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_record_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_shift_lock_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_space_bar_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_stop_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_storage_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
     <ClCompile Include="ui\screens\ui_Keyboard.c">
       <Filter>UI\UI_View\screens</Filter>
     </ClCompile>
@@ -1568,24 +1538,6 @@
     <ClCompile Include="View\KeyboardScreen.cpp">
       <Filter>UI\View</Filter>
     </ClCompile>
-    <ClCompile Include="ui\images\ui_img_input_done_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_input_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_keyboard_off_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_keyboard_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_enter_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_esc_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
     <ClCompile Include="Library\CommonLibrary.cpp">
       <Filter>Library\Common</Filter>
     </ClCompile>
@@ -1595,17 +1547,95 @@
     <ClCompile Include="Library\KeyboardLibrary.cpp">
       <Filter>Library</Filter>
     </ClCompile>
+    <ClCompile Include="Library\VideoInfoLibrary.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\screens\ui_RecordList.c">
+      <Filter>UI\UI_View\screens</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_all_match_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_arrow_back_80dp_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
     <ClCompile Include="ui\images\ui_img_arrow_back_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_arrow_forward_80dp_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
     <ClCompile Include="ui\images\ui_img_arrow_forward_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
-    <ClCompile Include="ui\images\ui_img_all_match_png.c">
+    <ClCompile Include="ui\images\ui_img_backspace_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
-    <ClCompile Include="Library\VideoInfoLibrary.cpp">
-      <Filter>Library</Filter>
+    <ClCompile Include="ui\images\ui_img_bandicam_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_cancel_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_check_circle_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_delete_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_drive_file_move_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_edit_note_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_enter_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_esc_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_filter_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_input_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_list_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_new_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_pause_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_play_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_record_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_search_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_settings_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_shift_lock_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_space_bar_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_stop_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_storage_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_virtualvcr_png.c">
+      <Filter>UI\UI_View\images</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

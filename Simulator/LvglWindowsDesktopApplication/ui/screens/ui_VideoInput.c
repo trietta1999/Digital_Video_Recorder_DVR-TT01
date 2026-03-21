@@ -25,9 +25,7 @@ lv_obj_t * ui_lblVideoAuthor = NULL;
 lv_obj_t * ui_btnVideoAuthor = NULL;
 lv_obj_t * ui_Container2 = NULL;
 lv_obj_t * ui_btnVideoInputCancel = NULL;
-lv_obj_t * ui_Label26 = NULL;
 lv_obj_t * ui_btnVideoInputOK = NULL;
-lv_obj_t * ui_Label14 = NULL;
 // event funtions
 void ui_event_VideoInput(lv_event_t * e)
 {
@@ -176,10 +174,11 @@ void ui_VideoInput_screen_init(void)
 
     ui_lblVideoEvent = lv_label_create(ui_Panel1);
     lv_obj_set_width(ui_lblVideoEvent, 845);
-    lv_obj_set_height(ui_lblVideoEvent, 60);
+    lv_obj_set_height(ui_lblVideoEvent, 80);
     lv_obj_set_x(ui_lblVideoEvent, 51);
     lv_obj_set_y(ui_lblVideoEvent, 183);
     lv_obj_set_align(ui_lblVideoEvent, LV_ALIGN_CENTER);
+    lv_label_set_long_mode(ui_lblVideoEvent, LV_LABEL_LONG_DOT);
     lv_label_set_text(ui_lblVideoEvent, "");
     lv_obj_remove_flag(ui_lblVideoEvent,
                        LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE | LV_OBJ_FLAG_SNAPPABLE |
@@ -233,6 +232,7 @@ void ui_VideoInput_screen_init(void)
     lv_obj_set_x(ui_lblVideoName, 51);
     lv_obj_set_y(ui_lblVideoName, 183);
     lv_obj_set_align(ui_lblVideoName, LV_ALIGN_CENTER);
+    lv_label_set_long_mode(ui_lblVideoName, LV_LABEL_LONG_DOT);
     lv_label_set_text(ui_lblVideoName, "");
     lv_obj_remove_flag(ui_lblVideoName, LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
                        LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
@@ -280,10 +280,11 @@ void ui_VideoInput_screen_init(void)
 
     ui_lblVideoCategory = lv_label_create(ui_Panel1);
     lv_obj_set_width(ui_lblVideoCategory, 845);
-    lv_obj_set_height(ui_lblVideoCategory, 60);
+    lv_obj_set_height(ui_lblVideoCategory, 80);
     lv_obj_set_x(ui_lblVideoCategory, 51);
     lv_obj_set_y(ui_lblVideoCategory, 183);
     lv_obj_set_align(ui_lblVideoCategory, LV_ALIGN_CENTER);
+    lv_label_set_long_mode(ui_lblVideoCategory, LV_LABEL_LONG_DOT);
     lv_label_set_text(ui_lblVideoCategory, "");
     lv_obj_remove_flag(ui_lblVideoCategory,
                        LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE | LV_OBJ_FLAG_SNAPPABLE |
@@ -333,10 +334,11 @@ void ui_VideoInput_screen_init(void)
 
     ui_lblVideoDesc = lv_label_create(ui_Panel1);
     lv_obj_set_width(ui_lblVideoDesc, 845);
-    lv_obj_set_height(ui_lblVideoDesc, 185);
+    lv_obj_set_height(ui_lblVideoDesc, 180);
     lv_obj_set_x(ui_lblVideoDesc, 58);
     lv_obj_set_y(ui_lblVideoDesc, 205);
     lv_obj_set_align(ui_lblVideoDesc, LV_ALIGN_CENTER);
+    lv_label_set_long_mode(ui_lblVideoDesc, LV_LABEL_LONG_DOT);
     lv_label_set_text(ui_lblVideoDesc, "");
     lv_obj_remove_flag(ui_lblVideoDesc, LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
                        LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
@@ -384,10 +386,11 @@ void ui_VideoInput_screen_init(void)
 
     ui_lblVideoAuthor = lv_label_create(ui_Panel1);
     lv_obj_set_width(ui_lblVideoAuthor, 845);
-    lv_obj_set_height(ui_lblVideoAuthor, 60);
+    lv_obj_set_height(ui_lblVideoAuthor, 80);
     lv_obj_set_x(ui_lblVideoAuthor, 51);
     lv_obj_set_y(ui_lblVideoAuthor, 183);
     lv_obj_set_align(ui_lblVideoAuthor, LV_ALIGN_CENTER);
+    lv_label_set_long_mode(ui_lblVideoAuthor, LV_LABEL_LONG_DOT);
     lv_label_set_text(ui_lblVideoAuthor, "");
     lv_obj_remove_flag(ui_lblVideoAuthor,
                        LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE | LV_OBJ_FLAG_SNAPPABLE |
@@ -441,7 +444,7 @@ void ui_VideoInput_screen_init(void)
     lv_obj_set_style_pad_column(ui_Container2, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btnVideoInputCancel = lv_button_create(ui_Container2);
-    lv_obj_set_width(ui_btnVideoInputCancel, 230);
+    lv_obj_set_width(ui_btnVideoInputCancel, 250);
     lv_obj_set_height(ui_btnVideoInputCancel, 80);
     lv_obj_set_x(ui_btnVideoInputCancel, -47);
     lv_obj_set_y(ui_btnVideoInputCancel, 92);
@@ -457,26 +460,13 @@ void ui_VideoInput_screen_init(void)
     lv_obj_set_style_bg_main_stop(ui_btnVideoInputCancel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_stop(ui_btnVideoInputCancel, 140, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_dir(ui_btnVideoInputCancel, LV_GRAD_DIR_VER, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_src(ui_btnVideoInputCancel, &ui_img_cancel_png, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_color(ui_btnVideoInputCancel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_btnVideoInputCancel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_btnVideoInputCancel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Label26 = lv_label_create(ui_btnVideoInputCancel);
-    lv_obj_set_width(ui_Label26, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Label26, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Label26, -46);
-    lv_obj_set_y(ui_Label26, 183);
-    lv_obj_set_align(ui_Label26, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label26, "Cancel");
-    lv_obj_remove_flag(ui_Label26, LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
-                       LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
-                       LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
-    lv_obj_set_style_text_color(ui_Label26, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_Label26, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_Label26, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     ui_btnVideoInputOK = lv_button_create(ui_Container2);
-    lv_obj_set_width(ui_btnVideoInputOK, 230);
+    lv_obj_set_width(ui_btnVideoInputOK, 250);
     lv_obj_set_height(ui_btnVideoInputOK, 80);
     lv_obj_set_x(ui_btnVideoInputOK, -47);
     lv_obj_set_y(ui_btnVideoInputOK, 92);
@@ -492,23 +482,10 @@ void ui_VideoInput_screen_init(void)
     lv_obj_set_style_bg_main_stop(ui_btnVideoInputOK, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_stop(ui_btnVideoInputOK, 140, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_dir(ui_btnVideoInputOK, LV_GRAD_DIR_VER, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_src(ui_btnVideoInputOK, &ui_img_check_circle_png, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_color(ui_btnVideoInputOK, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_btnVideoInputOK, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_btnVideoInputOK, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_Label14 = lv_label_create(ui_btnVideoInputOK);
-    lv_obj_set_width(ui_Label14, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Label14, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Label14, -46);
-    lv_obj_set_y(ui_Label14, 183);
-    lv_obj_set_align(ui_Label14, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label14, "OK");
-    lv_obj_remove_flag(ui_Label14, LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
-                       LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
-                       LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
-    lv_obj_set_style_text_color(ui_Label14, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_Label14, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_Label14, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_btnVideoEvent, ui_event_btnVideoEvent, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_btnVideoName, ui_event_btnVideoName, LV_EVENT_ALL, NULL);
@@ -546,8 +523,6 @@ void ui_VideoInput_screen_destroy(void)
     ui_btnVideoAuthor = NULL;
     ui_Container2 = NULL;
     ui_btnVideoInputCancel = NULL;
-    ui_Label26 = NULL;
     ui_btnVideoInputOK = NULL;
-    ui_Label14 = NULL;
 
 }

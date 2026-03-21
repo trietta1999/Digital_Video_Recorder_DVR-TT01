@@ -15,6 +15,7 @@ void CommonButtonOnClick(lv_event_t * e);
 void CommonButtonOnLongPress(lv_event_t * e);
 void CommonButtonOnLongPressRepeat(lv_event_t * e);
 void CommonButtonOnRelease(lv_event_t * e);
+void CommonButtonOnValueChange(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

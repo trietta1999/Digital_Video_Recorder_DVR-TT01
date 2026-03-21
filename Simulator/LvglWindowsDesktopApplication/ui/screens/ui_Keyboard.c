@@ -899,7 +899,7 @@ void ui_Keyboard_screen_init(void)
     lv_obj_set_style_pad_column(ui_Container1, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btnKeyboardCancel = lv_button_create(ui_Container1);
-    lv_obj_set_width(ui_btnKeyboardCancel, 280);
+    lv_obj_set_width(ui_btnKeyboardCancel, 300);
     lv_obj_set_height(ui_btnKeyboardCancel, 80);
     lv_obj_set_x(ui_btnKeyboardCancel, -47);
     lv_obj_set_y(ui_btnKeyboardCancel, 92);
@@ -946,7 +946,7 @@ void ui_Keyboard_screen_init(void)
     lv_obj_set_style_text_font(ui_Label34, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btnKeyboardOK = lv_button_create(ui_Container1);
-    lv_obj_set_width(ui_btnKeyboardOK, 280);
+    lv_obj_set_width(ui_btnKeyboardOK, 300);
     lv_obj_set_height(ui_btnKeyboardOK, 80);
     lv_obj_set_x(ui_btnKeyboardOK, -47);
     lv_obj_set_y(ui_btnKeyboardOK, 92);

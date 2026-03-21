@@ -40,10 +40,8 @@ extern lv_obj_t * ui_btnVideoAuthor;
 extern lv_obj_t * ui_Container2;
 extern void ui_event_btnVideoInputCancel(lv_event_t * e);
 extern lv_obj_t * ui_btnVideoInputCancel;
-extern lv_obj_t * ui_Label26;
 extern void ui_event_btnVideoInputOK(lv_event_t * e);
 extern lv_obj_t * ui_btnVideoInputOK;
-extern lv_obj_t * ui_Label14;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

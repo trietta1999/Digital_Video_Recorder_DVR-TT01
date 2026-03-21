@@ -21,6 +21,7 @@ extern "C" {
 #include "screens/ui_Main.h"
 #include "screens/ui_VideoInput.h"
 #include "screens/ui_Keyboard.h"
+#include "screens/ui_RecordList.h"
 
 ///////////////////// VARIABLES ////////////////////
 
@@ -30,12 +31,18 @@ extern "C" {
 extern lv_obj_t * ui____initial_actions0;
 
 // IMAGES AND IMAGE SETS
+LV_IMG_DECLARE(ui_img_new_png);    // assets/new.png
+LV_IMG_DECLARE(ui_img_cancel_png);    // assets/cancel.png
+LV_IMG_DECLARE(ui_img_settings_png);    // assets/settings.png
+LV_IMG_DECLARE(ui_img_bandicam_png);    // assets/bandicam.png
+LV_IMG_DECLARE(ui_img_virtualvcr_png);    // assets/virtualvcr.png
 LV_IMG_DECLARE(ui_img_record_png);    // assets/record.png
 LV_IMG_DECLARE(ui_img_pause_png);    // assets/pause.png
 LV_IMG_DECLARE(ui_img_play_png);    // assets/play.png
 LV_IMG_DECLARE(ui_img_stop_png);    // assets/stop.png
 LV_IMG_DECLARE(ui_img_storage_png);    // assets/storage.png
 LV_IMG_DECLARE(ui_img_edit_note_png);    // assets/edit_note.png
+LV_IMG_DECLARE(ui_img_check_circle_png);    // assets/check_circle.png
 LV_IMG_DECLARE(ui_img_input_png);    // assets/input.png
 LV_IMG_DECLARE(ui_img_all_match_png);    // assets/all_match.png
 LV_IMG_DECLARE(ui_img_arrow_back_png);    // assets/arrow_back.png
@@ -45,11 +52,13 @@ LV_IMG_DECLARE(ui_img_shift_lock_png);    // assets/shift_lock.png
 LV_IMG_DECLARE(ui_img_backspace_png);    // assets/backspace.png
 LV_IMG_DECLARE(ui_img_esc_png);    // assets/esc.png
 LV_IMG_DECLARE(ui_img_enter_png);    // assets/enter.png
-LV_IMG_DECLARE(ui_img_docs_apps_script_png);    // assets/docs_apps_script.png
-LV_IMG_DECLARE(ui_img_format_list_bulleted_add_png);    // assets/format_list_bulleted_add.png
-LV_IMG_DECLARE(ui_img_input_done_png);    // assets/input_done.png
-LV_IMG_DECLARE(ui_img_keyboard_png);    // assets/keyboard.png
-LV_IMG_DECLARE(ui_img_keyboard_off_png);    // assets/keyboard_off.png
+LV_IMG_DECLARE(ui_img_search_png);    // assets/search.png
+LV_IMG_DECLARE(ui_img_filter_png);    // assets/filter.png
+LV_IMG_DECLARE(ui_img_arrow_back_80dp_png);    // assets/arrow_back_80dp.png
+LV_IMG_DECLARE(ui_img_arrow_forward_80dp_png);    // assets/arrow_forward_80dp.png
+LV_IMG_DECLARE(ui_img_delete_png);    // assets/delete.png
+LV_IMG_DECLARE(ui_img_drive_file_move_png);    // assets/drive_file_move.png
+LV_IMG_DECLARE(ui_img_list_png);    // assets/list.png
 
 // UI INIT
 void ui_init(void);

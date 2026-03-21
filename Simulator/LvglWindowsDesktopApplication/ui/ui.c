@@ -33,6 +33,7 @@ void ui_init(void)
     ui_Main_screen_init();
     ui_VideoInput_screen_init();
     ui_Keyboard_screen_init();
+    ui_RecordList_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_Main);
 }
@@ -42,4 +43,5 @@ void ui_destroy(void)
     ui_Main_screen_destroy();
     ui_VideoInput_screen_destroy();
     ui_Keyboard_screen_destroy();
+    ui_RecordList_screen_destroy();
 }
