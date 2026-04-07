@@ -33,9 +33,8 @@ extern lv_obj_t * ui____initial_actions0;
 // IMAGES AND IMAGE SETS
 LV_IMG_DECLARE(ui_img_new_png);    // assets/new.png
 LV_IMG_DECLARE(ui_img_cancel_png);    // assets/cancel.png
+LV_IMG_DECLARE(ui_img_list_png);    // assets/list.png
 LV_IMG_DECLARE(ui_img_settings_png);    // assets/settings.png
-LV_IMG_DECLARE(ui_img_bandicam_png);    // assets/bandicam.png
-LV_IMG_DECLARE(ui_img_virtualvcr_png);    // assets/virtualvcr.png
 LV_IMG_DECLARE(ui_img_record_png);    // assets/record.png
 LV_IMG_DECLARE(ui_img_pause_png);    // assets/pause.png
 LV_IMG_DECLARE(ui_img_play_png);    // assets/play.png
@@ -58,7 +57,6 @@ LV_IMG_DECLARE(ui_img_arrow_back_80dp_png);    // assets/arrow_back_80dp.png
 LV_IMG_DECLARE(ui_img_arrow_forward_80dp_png);    // assets/arrow_forward_80dp.png
 LV_IMG_DECLARE(ui_img_delete_png);    // assets/delete.png
 LV_IMG_DECLARE(ui_img_drive_file_move_png);    // assets/drive_file_move.png
-LV_IMG_DECLARE(ui_img_list_png);    // assets/list.png
 
 // UI INIT
 void ui_init(void);

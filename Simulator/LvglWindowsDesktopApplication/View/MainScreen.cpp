@@ -4,6 +4,7 @@
 #include "ScreenMapping.h"
 #include "MainScreen.h"
 #include "VideoInfoScreen.h"
+#include "VideoInfoData.h" // @todo: wait video record fucntion
 
 static lv_timer_t* timerGetSystemData = nullptr;
 
@@ -19,11 +20,11 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
     };
 
     ListDataUpdateCallback = {
-        { []() { return system_data::CurrentDate.GetState();   }, UpdateDate    },
-        { []() { return system_data::CurrentTime.GetState();   }, UpdateTime    },
-        { []() { return system_data::StorageInfo.GetState();   }, UpdateStorage },
-        { []() { return system_data::CurrentState.GetState();  }, UpdateButton  },
-        { []() { return system_data::TempVideoInfo.GetState(); }, UpdateButton  },
+        { []() { return system_data::CurrentDate.GetState();     }, UpdateDate    },
+        { []() { return system_data::CurrentTime.GetState();     }, UpdateTime    },
+        { []() { return system_data::StorageInfo.GetState();     }, UpdateStorage },
+        { []() { return system_data::CurrentState.GetState();    }, UpdateButton  },
+        { []() { return system_data::IsTempVideoInfo.GetState(); }, UpdateButton  },
     };
 
     // Init button state
@@ -33,14 +34,16 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
     lv_obj_add_state(ui_btnPause, LV_STATE_DISABLED);
     lv_obj_add_state(ui_btnStop, LV_STATE_DISABLED);
 
-    if (!system_data::TempVideoInfo.GetValue())
+    if (!system_data::IsTempVideoInfo.GetValue())
     {
         // Get temp video info
-        auto info = videoinfo_lib::GetTempFromData();
+        auto info = videoinfo_lib::GetTempData();
 
         // Data is available
         if (!info.IsAllNone())
         {
+            videoinfo_lib::CreateCurrentInfoFromInfo(info);
+
             input_data::VideoEvent.SetValue(info.videoEvent);
             input_data::VideoName.SetValue(info.videoName);
             input_data::VideoCategory.SetValue(info.videoCategory);
@@ -48,8 +51,7 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
             input_data::VideoAuthor.SetValue(info.videoAuthor);
 
             // Init temp video info
-            system_data::TempVideoInfo.SetValue(true);
-            system_data::TempVideoID.SetValue(videoinfo_lib::GetTempIDFromTempData());
+            system_data::IsTempVideoInfo.SetValue(true);
         }
     }
 
@@ -64,7 +66,7 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         char buffDate[MAX_PATH] = { 0 };
         char buffTime[MAX_PATH] = { 0 };
 
-        GetLocalTime(&systime);
+        systime = common_lib::GetSystemDateTime();
         common_lib::GetSystemStorageSize(totalGB, usedGB);
 
         sprintf(buffDate, "%02d.%02d.%04d", systime.wDay, systime.wMonth, systime.wYear); // @todo: wait setting
@@ -96,33 +98,50 @@ void MainScreen::OnClickClose(lv_event_t* event)
     input_data::VideoCategory.SetValue("");
     input_data::VideoDesc.SetValue("");
     input_data::VideoAuthor.SetValue("");
-    system_data::TempVideoInfo.SetValue(false);
-    system_data::TempVideoID.SetValue("");
 
     // Clear temp video info
-    videoinfo_lib::videoinfo_t info = { "", "", "", "", "", };
-    videoinfo_lib::WriteToTempData(info);
+    videoinfo_lib::ClearTempData();
 
-    lv_obj_add_state(ui_btnCloseVideo, LV_STATE_DISABLED);
-    lv_obj_add_state(ui_btnRec, LV_STATE_DISABLED);
+    // Clear current video info
+    videoinfo_lib::videoinfo_t info;
+    videoinfo_lib::CreateCurrentInfoFromInfo(info);
+
+    system_data::IsTempVideoInfo.SetValue(false);
+
+    // Call button event Stop
+    event->current_target = ui_btnStop;
+    OnClickOperator(event);
 }
 
 void MainScreen::OnClickOperator(lv_event_t* event)
 {
     if (event->current_target == ui_btnRec)
     {
-        // Add new video info to data
+        videoinfo_lib::UpdateCurrentInfoDateTime();
+
+        // Get current info
         videoinfo_lib::videoinfo_t info = {
-            input_data::VideoEvent.GetValue(),
-            input_data::VideoName.GetValue(),
-            input_data::VideoCategory.GetValue(),
-            input_data::VideoDesc.GetValue(),
-            input_data::VideoAuthor.GetValue(),
+            current_videoinfo_data::VideoID.GetValue(),
+            current_videoinfo_data::VideoEvent.GetValue(),
+            current_videoinfo_data::VideoName.GetValue(),
+            current_videoinfo_data::VideoCategory.GetValue(),
+            current_videoinfo_data::VideoDesc.GetValue(),
+            current_videoinfo_data::VideoAuthor.GetValue(),
+            {
+                current_videoinfo_data::VideoYear.GetValue(),
+                current_videoinfo_data::VideoMonth.GetValue(),
+                0,
+                current_videoinfo_data::VideoDay.GetValue(),
+                current_videoinfo_data::VideoHour.GetValue(),
+                current_videoinfo_data::VideoMinute.GetValue(),
+                current_videoinfo_data::VideoSecond.GetValue(),
+                0
+            }
         };
 
-        videoinfo_lib::WriteToNewData(info);
+        // Add new video info to data
+        videoinfo_lib::CreateNewData(info.videoID, info);
 
-        system_data::TempVideoInfo.SetValue(false);
         system_data::CurrentState.SetValue(STATE_TYPE::S_RECORD);
     }
     else if (event->current_target == ui_btnPlay)
@@ -158,53 +177,61 @@ void MainScreen::UpdateStorage()
 void MainScreen::UpdateButton()
 {
     auto state = system_data::CurrentState.GetValue();
-    auto tempVideoInfo = system_data::TempVideoInfo.GetValue();
+    auto isTempVideoInfo = system_data::IsTempVideoInfo.GetValue();
 
-    if (state == STATE_TYPE::S_RECORD)
+    lv_obj_remove_state(ui_btnNewVideo, LV_STATE_DISABLED);
+    lv_obj_remove_state(ui_btnCloseVideo, LV_STATE_DISABLED);
+    lv_obj_remove_state(ui_btnRec, LV_STATE_DISABLED);
+    lv_obj_remove_state(ui_btnPlay, LV_STATE_DISABLED);
+    lv_obj_remove_state(ui_btnPause, LV_STATE_DISABLED);
+    lv_obj_remove_state(ui_btnStop, LV_STATE_DISABLED);
+
+    // Update New button
+    if ((state == STATE_TYPE::S_RECORD)
+        || (state == STATE_TYPE::S_PLAY)
+        || (state == STATE_TYPE::S_PAUSE)
+        )
     {
         lv_obj_add_state(ui_btnNewVideo, LV_STATE_DISABLED);
+    }
+
+    // Update Close button
+    if (!isTempVideoInfo)
+    {
         lv_obj_add_state(ui_btnCloseVideo, LV_STATE_DISABLED);
+    }
+
+    // Update Rec button
+    if ((!isTempVideoInfo)
+        || (state == STATE_TYPE::S_RECORD)
+        || (state == STATE_TYPE::S_PLAY)
+        || (state == STATE_TYPE::S_PAUSE)
+        )
+    {
         lv_obj_add_state(ui_btnRec, LV_STATE_DISABLED);
+    }
+
+    // Update Play button
+    if (!videoinfo_lib::CheckCurrentVideoInfoPathExist()
+        || (state == STATE_TYPE::S_RECORD)
+        || (state == STATE_TYPE::S_PLAY)
+        )
+    {
         lv_obj_add_state(ui_btnPlay, LV_STATE_DISABLED);
-        lv_obj_add_state(ui_btnPause, LV_STATE_DISABLED);
-        lv_obj_remove_state(ui_btnStop, LV_STATE_DISABLED);
     }
-    else if (state == STATE_TYPE::S_PLAY)
+
+    // Update Pause button
+    if ((state == STATE_TYPE::S_RECORD)
+        || (state == STATE_TYPE::S_PAUSE)
+        || (state == STATE_TYPE::S_STOP)
+        )
     {
-        lv_obj_add_state(ui_btnNewVideo, LV_STATE_DISABLED);
-        lv_obj_add_state(ui_btnCloseVideo, LV_STATE_DISABLED);
-        lv_obj_add_state(ui_btnRec, LV_STATE_DISABLED);
-        lv_obj_add_state(ui_btnPlay, LV_STATE_DISABLED);
-        lv_obj_remove_state(ui_btnPause, LV_STATE_DISABLED);
-        lv_obj_remove_state(ui_btnStop, LV_STATE_DISABLED);
-    }
-    else if (state == STATE_TYPE::S_PAUSE)
-    {
-        lv_obj_add_state(ui_btnNewVideo, LV_STATE_DISABLED);
-        lv_obj_add_state(ui_btnCloseVideo, LV_STATE_DISABLED);
-        lv_obj_add_state(ui_btnRec, LV_STATE_DISABLED);
-        lv_obj_remove_state(ui_btnPlay, LV_STATE_DISABLED);
         lv_obj_add_state(ui_btnPause, LV_STATE_DISABLED);
-        lv_obj_remove_state(ui_btnStop, LV_STATE_DISABLED);
     }
-    else if (state == STATE_TYPE::S_STOP)
+
+    // Update Stop button
+    if (state == STATE_TYPE::S_STOP)
     {
-        lv_obj_remove_state(ui_btnNewVideo, LV_STATE_DISABLED);
-        lv_obj_remove_state(ui_btnCloseVideo, LV_STATE_DISABLED);
-        lv_obj_remove_state(ui_btnRec, LV_STATE_DISABLED);
-        lv_obj_remove_state(ui_btnPlay, LV_STATE_DISABLED);
-        lv_obj_add_state(ui_btnPause, LV_STATE_DISABLED);
         lv_obj_add_state(ui_btnStop, LV_STATE_DISABLED);
-    }
-
-    if (tempVideoInfo)
-    {
-        lv_obj_remove_state(ui_btnCloseVideo, LV_STATE_DISABLED);
-        lv_obj_remove_state(ui_btnRec, LV_STATE_DISABLED);
-    }
-    else
-    {
-        lv_obj_add_state(ui_btnCloseVideo, LV_STATE_DISABLED);
-        lv_obj_add_state(ui_btnRec, LV_STATE_DISABLED);
     }
 }

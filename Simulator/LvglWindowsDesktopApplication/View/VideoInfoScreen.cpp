@@ -52,18 +52,30 @@ void VideoInfoScreen::OnClickOK(lv_event_t* event)
     COPY_CDATA_1TO2(temp_data::VideoDesc, input_data::VideoDesc);
     COPY_CDATA_1TO2(temp_data::VideoAuthor, input_data::VideoAuthor);
 
+    system_data::IsTempVideoInfo.SetValue(true);
+
+    videoinfo_lib::CreateCurrentInfoFromInput();
+
     videoinfo_lib::videoinfo_t info = {
-        input_data::VideoEvent.GetValue(),
-        input_data::VideoName.GetValue(),
-        input_data::VideoCategory.GetValue(),
-        input_data::VideoDesc.GetValue(),
-        input_data::VideoAuthor.GetValue(),
+        current_videoinfo_data::VideoID.GetValue(),
+        current_videoinfo_data::VideoEvent.GetValue(),
+        current_videoinfo_data::VideoName.GetValue(),
+        current_videoinfo_data::VideoCategory.GetValue(),
+        current_videoinfo_data::VideoDesc.GetValue(),
+        current_videoinfo_data::VideoAuthor.GetValue(),
+        {
+            current_videoinfo_data::VideoYear.GetValue(),
+            current_videoinfo_data::VideoMonth.GetValue(),
+            0,
+            current_videoinfo_data::VideoDay.GetValue(),
+            current_videoinfo_data::VideoHour.GetValue(),
+            current_videoinfo_data::VideoMinute.GetValue(),
+            current_videoinfo_data::VideoSecond.GetValue(),
+            0
+        }
     };
 
-    system_data::TempVideoInfo.SetValue(true);
-    system_data::TempVideoID.SetValue(common_lib::GenerateGUID());
-
-    videoinfo_lib::WriteToTempData(info);
+    videoinfo_lib::CreateTempData(info);
 
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);
 }
@@ -125,6 +137,7 @@ void VideoInfoScreen::UpdateVideoInfo()
     }
 
     videoinfo_lib::videoinfo_t info = {
+        "",
         temp_data::VideoEvent.GetValue(),
         temp_data::VideoName.GetValue(),
         temp_data::VideoCategory.GetValue(),
@@ -132,7 +145,7 @@ void VideoInfoScreen::UpdateVideoInfo()
         temp_data::VideoAuthor.GetValue(),
     };
 
-    if (info.IsAnyNone())
+    if (info.IsAnyNoneForInput())
     {
         lv_obj_add_state(ui_btnVideoInputOK, LV_STATE_DISABLED);
     }

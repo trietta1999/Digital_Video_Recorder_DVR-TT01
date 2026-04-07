@@ -22,7 +22,7 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
     dummyCharKey = lv_button_create(nullptr);
     dummySpaceKey = lv_button_create(nullptr);
 
-    system_data::KeyboardType.SetValue(KEYBOARD_TYPE::INTERNAL_NUMPAD); //@todo: wait setting
+    system_data::KeyboardType.SetValue(KEYBOARD_TYPE::STANDARD_KEYBOARD); //@todo: wait setting
     system_data::T9ConfirmTimeout.SetValue(750); //@todo: wait setting
 
     ListButtonCallback = {

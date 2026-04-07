@@ -17,8 +17,23 @@ namespace system_data
     extern CData<short> T9ConfirmTimeout;
     extern CData<std::pair<double, double>> StorageInfo;
     extern CData<STATE_TYPE> CurrentState;
-    extern CData<bool> TempVideoInfo;
-    extern CData<std::string> TempVideoID;
+    extern CData<bool> IsTempVideoInfo;
+}
+
+namespace current_videoinfo_data
+{
+    extern CData<std::string> VideoID;
+    extern CData<std::string> VideoEvent;
+    extern CData<std::string> VideoName;
+    extern CData<std::string> VideoCategory;
+    extern CData<std::string> VideoDesc;
+    extern CData<std::string> VideoAuthor;
+    extern CData<unsigned short> VideoDay;
+    extern CData<unsigned short> VideoMonth;
+    extern CData<unsigned short> VideoYear;
+    extern CData<unsigned short> VideoHour;
+    extern CData<unsigned short> VideoMinute;
+    extern CData<unsigned short> VideoSecond;
 }
 
 namespace input_data

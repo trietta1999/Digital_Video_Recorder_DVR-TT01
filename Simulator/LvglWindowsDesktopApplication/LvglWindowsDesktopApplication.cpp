@@ -16,6 +16,7 @@
 WNDPROC OriginalWndProc = NULL;
 HWND ClientHandle = NULL;
 
+#ifdef _DEBUG
 static void DebugConsoleProcess();
 
 static void AttachConsoleWindow()
@@ -30,30 +31,33 @@ static void AttachConsoleWindow()
 static void DebugConsoleRead()
 {
     std::thread([] {
-        std::string inputConsole;
-
-        try
+        while (true)
         {
-            std::getline(std::cin, inputConsole);
+            std::string inputConsole;
 
-            if (!inputConsole.empty())
+            try
             {
-                std::istringstream iss(inputConsole);
-                std::string param;
-                std::vector<std::string> inputParams;
+                std::getline(std::cin, inputConsole);
 
-                while (iss >> param) {
-                    inputParams.push_back(param);
+                if (!inputConsole.empty())
+                {
+                    std::istringstream iss(inputConsole);
+                    std::string param;
+                    std::vector<std::string> inputParams;
+
+                    while (iss >> param) {
+                        inputParams.push_back(param);
+                    }
+
+                    debug_data::InputParamList.SetValue(inputParams);
+
+                    DebugConsoleProcess();
                 }
-
-                debug_data::InputParamList.SetValue(inputParams);
-
-                DebugConsoleProcess();
             }
-        }
-        catch (...)
-        {
-            debug_println("Process debug data fail! Try again!");
+            catch (...)
+            {
+                debug_println("Process debug data fail! Try again!");
+            }
         }
         }).detach();
 }
@@ -71,6 +75,14 @@ static void DebugConsoleProcess()
             {
                 ::MessageBox(NULL, L"Test show message box", L"Test", MB_OK);
             }
+            else if (inputParams.at(0) == "input_test")
+            {
+                temp_data::VideoEvent.SetValue("Test event");
+                temp_data::VideoName.SetValue("Test name");
+                temp_data::VideoCategory.SetValue("Test category");
+                temp_data::VideoDesc.SetValue("Test desc");
+                temp_data::VideoAuthor.SetValue("Test author");
+            }
 
             debug_println("Process debug data done!");
         }
@@ -81,10 +93,9 @@ static void DebugConsoleProcess()
 
         debug_data::InputParamList.SetValue({ });
         debug_data::InputParamList.ResetState();
-
-        DebugConsoleRead();
     }
 }
+#endif
 
 static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -105,11 +116,7 @@ static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     return CallWindowProc(OriginalWndProc, hwnd, uMsg, wParam, lParam);
 }
 
-int WINAPI wWinMain(
-    _In_ HINSTANCE hInstance,
-    _In_opt_ HINSTANCE hPrevInstance,
-    _In_ LPWSTR lpCmdLine,
-    _In_ int nShowCmd)
+int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
@@ -120,13 +127,7 @@ int WINAPI wWinMain(
     int32_t zoom_level = 100;
     bool allow_dpi_override = false;
     bool simulator_mode = false;
-    lv_display_t* display = ::lv_windows_create_display(
-        APP_NAME,
-        HORIZON_MAX_RESOLUTION,
-        VERTICAL_MAX_RESOLUTION,
-        zoom_level,
-        allow_dpi_override,
-        simulator_mode);
+    lv_display_t* display = ::lv_windows_create_display(APP_NAME, HORIZON_MAX_RESOLUTION, VERTICAL_MAX_RESOLUTION, zoom_level, allow_dpi_override, simulator_mode);
     if (!display)
     {
         return -1;
@@ -142,21 +143,11 @@ int WINAPI wWinMain(
         system_data::WindowHandle.SetValue(window_handle);
     }
 
-    HICON icon_handle = ::LoadIconW(
-        hInstance,
-        MAKEINTRESOURCE(IDI_LVGL_WINDOWS));
+    HICON icon_handle = ::LoadIconW(hInstance, MAKEINTRESOURCE(IDI_LVGL_WINDOWS));
     if (icon_handle)
     {
-        ::SendMessageW(
-            window_handle,
-            WM_SETICON,
-            TRUE,
-            (LPARAM)icon_handle);
-        ::SendMessageW(
-            window_handle,
-            WM_SETICON,
-            FALSE,
-            (LPARAM)icon_handle);
+        ::SendMessageW(window_handle, WM_SETICON, TRUE, (LPARAM)icon_handle);
+        ::SendMessageW(window_handle, WM_SETICON, FALSE, (LPARAM)icon_handle);
     }
 
     lv_indev_t* pointer_indev = ::lv_windows_acquire_pointer_indev(display);
@@ -177,13 +168,28 @@ int WINAPI wWinMain(
         return -1;
     }
 
+    // Set custom winproc
     OriginalWndProc = (WNDPROC)::SetWindowLongPtr(window_handle, GWLP_WNDPROC, (LONG_PTR)MyNewWinProc);
     if (!OriginalWndProc)
     {
         return -1;
     }
 
+#ifdef NDEBUG
+    // Hide caption, block resizable
+    LONG_PTR style = ::GetWindowLongPtr(window_handle, GWL_STYLE);
+    style &= ~WS_CAPTION;
+    style &= ~WS_THICKFRAME;
+    style &= ~WS_MAXIMIZEBOX;
+    ::SetWindowLongPtr(window_handle, GWL_STYLE, style);
+
+    // Redraw window
+    ::SetWindowPos(window_handle, HWND_TOPMOST, 0, 0, HORIZON_MAX_RESOLUTION, VERTICAL_MAX_RESOLUTION, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+#endif
+
+#ifdef _DEBUG
     AttachConsoleWindow();
+#endif
 
     // Create UI
     ui_init();
@@ -194,7 +200,9 @@ int WINAPI wWinMain(
     // Change to main screen
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);
 
+#ifdef _DEBUG
     DebugConsoleRead();
+#endif
 
     while (true)
     {

@@ -24,19 +24,28 @@ namespace videoinfo_lib
 {
     struct videoinfo_t
     {
-        std::string videoEvent;
-        std::string videoName;
-        std::string videoCategory;
-        std::string videoDesc;
-        std::string videoAuthor;
+        std::string videoID = "";
+        std::string videoEvent = "";
+        std::string videoName = "";
+        std::string videoCategory = "";
+        std::string videoDesc = "";
+        std::string videoAuthor = "";
+        SYSTEMTIME datetime = { 0 };
 
         bool IsAllNone() const
         {
-            if ((videoEvent == "")
-                && (videoName == "")
-                && (videoCategory == "")
-                && (videoDesc == "")
-                && (videoAuthor == "")
+            if (videoID.empty()
+                && videoEvent.empty()
+                && videoName.empty()
+                && videoCategory.empty()
+                && videoDesc.empty()
+                && videoAuthor.empty()
+                && !datetime.wYear
+                && !datetime.wMonth
+                && !datetime.wDay
+                && !datetime.wHour
+                && !datetime.wMinute
+                && !datetime.wSecond
                 )
             {
                 return true;
@@ -45,13 +54,13 @@ namespace videoinfo_lib
             return false;
         }
 
-        bool IsAnyNone() const
+        bool IsAnyNoneForInput() const
         {
-            if ((videoEvent == "")
-                || (videoName == "")
-                || (videoCategory == "")
-                || (videoDesc == "")
-                || (videoAuthor == "")
+            if (videoEvent.empty()
+                && videoName.empty()
+                && videoCategory.empty()
+                && videoDesc.empty()
+                && videoAuthor.empty()
                 )
             {
                 return true;
@@ -61,15 +70,21 @@ namespace videoinfo_lib
         }
     };
 
-    void WriteToTempData(const videoinfo_t& info);
-    std::string GetTempIDFromTempData();
-    videoinfo_t GetTempFromData();
-    void WriteToNewData(const videoinfo_t& info);
+    void CreateTempData(const videoinfo_t& info);
+    void CreateNewData(std::string id, const videoinfo_t& info);
+    void ClearTempData();
+    videoinfo_t GetTempData();
+    void CreateCurrentInfoFromInput();
+    void CreateCurrentInfoFromInfo(const videoinfo_t& info);
+    void UpdateCurrentInfoDateTime();
+    bool CheckCurrentVideoInfoPathExist();
 }
 
 namespace config_lib
 {
     std::wstring GetWStringConfig(std::wstring section, std::wstring key, std::wstring file);
+    unsigned int GetUIntConfig(std::wstring section, std::wstring key, std::wstring file);
+    unsigned short GetUShortConfig(std::wstring section, std::wstring key, std::wstring file);
     void WriteWStringConfig(std::wstring section, std::wstring key, std::wstring file, std::wstring value);
 }
 
@@ -78,6 +93,7 @@ namespace common_lib
     bool CheckInRangeNumber(int check, int min, int max);
     std::string JoinString(std::string delimeter, const std::vector<std::string>& list);
     void GetSystemStorageSize(double& totalGB, double& usedGB);
+    SYSTEMTIME GetSystemDateTime();
     std::wstring ConvertStringToWString(std::string input);
     std::string ConvertWStringToString(std::wstring input);
     std::string GenerateGUID();

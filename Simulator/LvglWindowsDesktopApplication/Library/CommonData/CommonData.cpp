@@ -11,8 +11,23 @@ namespace system_data
     CData<short> T9ConfirmTimeout;
     CData<std::pair<double, double>> StorageInfo;
     CData<STATE_TYPE> CurrentState;
-    CData<bool> TempVideoInfo;
-    CData<std::string> TempVideoID;
+    CData<bool> IsTempVideoInfo;
+}
+
+namespace current_videoinfo_data
+{
+    CData<std::string> VideoID;
+    CData<std::string> VideoEvent;
+    CData<std::string> VideoName;
+    CData<std::string> VideoCategory;
+    CData<std::string> VideoDesc;
+    CData<std::string> VideoAuthor;
+    CData<unsigned short> VideoDay;
+    CData<unsigned short> VideoMonth;
+    CData<unsigned short> VideoYear;
+    CData<unsigned short> VideoHour;
+    CData<unsigned short> VideoMinute;
+    CData<unsigned short> VideoSecond;
 }
 
 namespace input_data
@@ -49,8 +64,20 @@ void CommonDataUpdateAll()
     system_data::T9ConfirmTimeout.ResetState();
     system_data::StorageInfo.ResetState();
     system_data::CurrentState.ResetState();
-    system_data::TempVideoInfo.ResetState();
-    system_data::TempVideoID.ResetState();
+    system_data::IsTempVideoInfo.ResetState();
+
+    current_videoinfo_data::VideoID.ResetState();
+    current_videoinfo_data::VideoEvent.ResetState();
+    current_videoinfo_data::VideoName.ResetState();
+    current_videoinfo_data::VideoCategory.ResetState();
+    current_videoinfo_data::VideoDesc.ResetState();
+    current_videoinfo_data::VideoAuthor.ResetState();
+    current_videoinfo_data::VideoDay.ResetState();
+    current_videoinfo_data::VideoMonth.ResetState();
+    current_videoinfo_data::VideoYear.ResetState();
+    current_videoinfo_data::VideoHour.ResetState();
+    current_videoinfo_data::VideoMinute.ResetState();
+    current_videoinfo_data::VideoSecond.ResetState();
 
     input_data::VideoEvent.ResetState();
     input_data::VideoName.ResetState();

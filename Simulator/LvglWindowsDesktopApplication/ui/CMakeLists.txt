@@ -8,9 +8,8 @@ SET(SOURCES screens/ui_Main.c
     ui_events.cpp
     images/ui_img_new_png.c
     images/ui_img_cancel_png.c
+    images/ui_img_list_png.c
     images/ui_img_settings_png.c
-    images/ui_img_bandicam_png.c
-    images/ui_img_virtualvcr_png.c
     images/ui_img_record_png.c
     images/ui_img_pause_png.c
     images/ui_img_play_png.c
@@ -32,7 +31,6 @@ SET(SOURCES screens/ui_Main.c
     images/ui_img_arrow_back_80dp_png.c
     images/ui_img_arrow_forward_80dp_png.c
     images/ui_img_delete_png.c
-    images/ui_img_drive_file_move_png.c
-    images/ui_img_list_png.c)
+    images/ui_img_drive_file_move_png.c)
 
 add_library(ui ${SOURCES})

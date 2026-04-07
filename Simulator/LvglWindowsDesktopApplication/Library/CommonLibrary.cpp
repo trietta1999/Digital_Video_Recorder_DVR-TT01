@@ -16,12 +16,44 @@ namespace config_lib
         return buff;
     }
 
+    unsigned int GetUIntConfig(std::wstring section, std::wstring key, std::wstring file)
+    {
+        wchar_t path[MAX_PATH] = { 0 };
+
+        ::GetFullPathName(file.c_str(), MAX_PATH, path, NULL);
+        auto value = ::GetPrivateProfileInt(section.c_str(), key.c_str(), 0, path);
+
+        return value;
+    }
+
+    unsigned short GetUShortConfig(std::wstring section, std::wstring key, std::wstring file)
+    {
+        wchar_t path[MAX_PATH] = { 0 };
+
+        ::GetFullPathName(file.c_str(), MAX_PATH, path, NULL);
+        unsigned short value = ::GetPrivateProfileInt(section.c_str(), key.c_str(), 0, path);
+
+        return value;
+    }
+
     void WriteWStringConfig(std::wstring section, std::wstring key, std::wstring file, std::wstring value)
     {
         wchar_t path[MAX_PATH] = { 0 };
 
         ::GetFullPathName(file.c_str(), MAX_PATH, path, NULL);
-        ::WritePrivateProfileString(section.c_str(), key.c_str(), value.c_str(), path);
+
+        if (key == L"")
+        {
+            ::WritePrivateProfileString(section.c_str(), nullptr, nullptr, path);
+        }
+        else if (value == L"")
+        {
+            ::WritePrivateProfileString(section.c_str(), key.c_str(), nullptr, path);
+        }
+        else
+        {
+            ::WritePrivateProfileString(section.c_str(), key.c_str(), value.c_str(), path);
+        }
     }
 }
 
@@ -67,6 +99,14 @@ namespace common_lib
             totalGB = (double)totalNumberOfBytes.QuadPart / (1024 * 1024 * 1024);
             usedGB = totalGB - (double)freeBytesAvailableToUser.QuadPart / (1024 * 1024 * 1024);
         }
+    }
+
+    SYSTEMTIME GetSystemDateTime()
+    {
+        SYSTEMTIME systime = { 0 };
+        GetLocalTime(&systime);
+
+        return systime;
     }
 
     std::wstring ConvertStringToWString(std::string input)
