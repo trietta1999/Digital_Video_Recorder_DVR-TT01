@@ -2,7 +2,6 @@
 
 #include <Windows.h>
 #include <thread>
-#include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <LvglWindowsIconResource.h>
@@ -106,6 +105,7 @@ static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     case WM_QUIT:
     case WM_DESTROY:
     case WM_NCDESTROY:
+        videorecord_lib::KillAllProcess();
         ::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)OriginalWndProc);
         break;
 
@@ -180,7 +180,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     LONG_PTR style = ::GetWindowLongPtr(window_handle, GWL_STYLE);
     style &= ~WS_CAPTION;
     style &= ~WS_THICKFRAME;
-    style &= ~WS_MAXIMIZEBOX;
     ::SetWindowLongPtr(window_handle, GWL_STYLE, style);
 
     // Redraw window

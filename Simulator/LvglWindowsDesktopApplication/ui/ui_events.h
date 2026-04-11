@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-void OnLoaded(lv_event_t * e);
+void CommonOnLoaded(lv_event_t * e);
 void CommonButtonOnClick(lv_event_t * e);
 void CommonButtonOnLongPress(lv_event_t * e);
 void CommonButtonOnLongPressRepeat(lv_event_t * e);

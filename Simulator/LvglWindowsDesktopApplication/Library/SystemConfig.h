@@ -2,7 +2,7 @@
 #define _SYSTEM_CONFIG_H
 
 // File name
-#define SYSTEM_CONFIG L"..\\Build\\system_conf.ini"
+#define SYSTEM_CONFIG L"system_conf.ini"
 
 // Section name
 #define SYSTEM_SECTION L"System"

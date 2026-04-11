@@ -9,9 +9,15 @@
 #include <functional>
 #include <algorithm>
 #include <iterator>
+#include <iostream>
 
 #define STR(a) #a
+
 #define APP_NAME L"DVR-TT01"
+#define RECORD_SCREENNAME L"Record window"
+#define RECORD_PROCESSNAME L"Record process"
+#define REVIEW_SCREENNAME L"Review window"
+#define PLAY_SCREENNAME L"Play window"
 
 #define HORIZON_MAX_RESOLUTION 1280
 #define VERTICAL_MAX_RESOLUTION 768
@@ -34,6 +40,8 @@
 
 #define ACCEPT_ALL_CHARS ""
 #define ACCEPT_SPACE_ONLY " "
+
+#define MAX_CHARS MAX_PATH * 2
 
 //#define MAX_SIZE 1000
 //#define BUFFER_SIZE sizeof(char) * MAX_SIZE

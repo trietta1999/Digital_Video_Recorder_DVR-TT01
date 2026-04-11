@@ -21,7 +21,7 @@ namespace videoinfo_lib
 
         if (section != VIF_TEMP_SECTION)
         {
-            config_lib::WriteWStringConfig(section.c_str(), VIF_VIDEO_PATH, VIDEOINFO_DATA, common_lib::ConvertStringToWString(info.videoID).c_str());
+            config_lib::WriteWStringConfig(section.c_str(), VIF_VIDEO_PATH, VIDEOINFO_DATA, common_lib::ConvertStringToWString("video_data\\" + info.videoID).c_str());
         }
     }
 
@@ -60,7 +60,8 @@ namespace videoinfo_lib
 
     void ClearTempData()
     {
-        config_lib::WriteWStringConfig(VIF_TEMP_SECTION, L"", VIDEOINFO_DATA, L"");
+        videoinfo_t info;
+        CreateData(VIF_TEMP_SECTION, info);
     }
 
     videoinfo_t GetTempData()

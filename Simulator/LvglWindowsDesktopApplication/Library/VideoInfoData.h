@@ -2,7 +2,7 @@
 #define _VIDEOINFO_DATA_H
 
 // File name
-#define VIDEOINFO_DATA L"..\\Build\\videoinfo_data.ini"
+#define VIDEOINFO_DATA L"videoinfo_data.ini"
 
 // Section name
 #define VIF_TEMP_SECTION L"TempInfo"

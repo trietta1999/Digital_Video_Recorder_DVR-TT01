@@ -33,6 +33,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(MileProjectOutputPath)..\Build\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(MileProjectOutputPath)..\Build\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -45,7 +48,10 @@
     </ClCompile>
     <Link>
       <GenerateMapFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateMapFile>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">winmm.lib;Ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">winmm.lib;Ole32.lib;Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">winmm.lib;Ole32.lib;Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -717,6 +723,7 @@
     <ClCompile Include="Library\CommonService.cpp" />
     <ClCompile Include="Library\KeyboardLibrary.cpp" />
     <ClCompile Include="Library\VideoInfoLibrary.cpp" />
+    <ClCompile Include="Library\VideoRecordLibrary.cpp" />
     <ClCompile Include="ui/**/*.cpp" />
     <ClCompile Include="LvglWindowsDesktopApplication.cpp" />
     <ClCompile Include="ui\components\ui_comp_hook.c" />
@@ -727,6 +734,7 @@
     <ClCompile Include="ui\images\ui_img_arrow_forward_png.c" />
     <ClCompile Include="ui\images\ui_img_backspace_png.c" />
     <ClCompile Include="ui\images\ui_img_bandicam_png.c" />
+    <ClCompile Include="ui\images\ui_img_brand_awareness_png.c" />
     <ClCompile Include="ui\images\ui_img_cancel_png.c" />
     <ClCompile Include="ui\images\ui_img_check_circle_png.c" />
     <ClCompile Include="ui\images\ui_img_delete_png.c" />
@@ -734,10 +742,13 @@
     <ClCompile Include="ui\images\ui_img_edit_note_png.c" />
     <ClCompile Include="ui\images\ui_img_enter_png.c" />
     <ClCompile Include="ui\images\ui_img_esc_png.c" />
+    <ClCompile Include="ui\images\ui_img_fast_forward_png.c" />
+    <ClCompile Include="ui\images\ui_img_fast_rewind_png.c" />
     <ClCompile Include="ui\images\ui_img_filter_png.c" />
     <ClCompile Include="ui\images\ui_img_input_png.c" />
     <ClCompile Include="ui\images\ui_img_list_png.c" />
     <ClCompile Include="ui\images\ui_img_new_png.c" />
+    <ClCompile Include="ui\images\ui_img_no_sound_png.c" />
     <ClCompile Include="ui\images\ui_img_pause_png.c" />
     <ClCompile Include="ui\images\ui_img_play_png.c" />
     <ClCompile Include="ui\images\ui_img_record_png.c" />

@@ -80,6 +80,16 @@ namespace videoinfo_lib
     bool CheckCurrentVideoInfoPathExist();
 }
 
+namespace videorecord_lib
+{
+    void StartExternalWindow(lv_obj_t* wnd, std::wstring screenName);
+    void StopExternalWindow();
+    void SetSoundState();
+    void ExecuteSeek(bool rewind, bool forward);
+    void ExecutePause();
+    void KillAllProcess();
+}
+
 namespace config_lib
 {
     std::wstring GetWStringConfig(std::wstring section, std::wstring key, std::wstring file);
@@ -97,6 +107,8 @@ namespace common_lib
     std::wstring ConvertStringToWString(std::string input);
     std::string ConvertWStringToString(std::wstring input);
     std::string GenerateGUID();
+    std::wstring GetFullPath(std::wstring file);
+    std::wstring GetSystemPath();
 }
 
 #endif // !_COMMON_LIBRARY_H

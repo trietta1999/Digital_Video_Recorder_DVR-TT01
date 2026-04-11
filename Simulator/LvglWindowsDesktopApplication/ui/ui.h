@@ -33,12 +33,16 @@ extern lv_obj_t * ui____initial_actions0;
 // IMAGES AND IMAGE SETS
 LV_IMG_DECLARE(ui_img_new_png);    // assets/new.png
 LV_IMG_DECLARE(ui_img_cancel_png);    // assets/cancel.png
+LV_IMG_DECLARE(ui_img_fast_rewind_png);    // assets/fast_rewind.png
+LV_IMG_DECLARE(ui_img_fast_forward_png);    // assets/fast_forward.png
 LV_IMG_DECLARE(ui_img_list_png);    // assets/list.png
 LV_IMG_DECLARE(ui_img_settings_png);    // assets/settings.png
 LV_IMG_DECLARE(ui_img_record_png);    // assets/record.png
 LV_IMG_DECLARE(ui_img_pause_png);    // assets/pause.png
 LV_IMG_DECLARE(ui_img_play_png);    // assets/play.png
 LV_IMG_DECLARE(ui_img_stop_png);    // assets/stop.png
+LV_IMG_DECLARE(ui_img_brand_awareness_png);    // assets/brand_awareness.png
+LV_IMG_DECLARE(ui_img_no_sound_png);    // assets/no_sound.png
 LV_IMG_DECLARE(ui_img_storage_png);    // assets/storage.png
 LV_IMG_DECLARE(ui_img_edit_note_png);    // assets/edit_note.png
 LV_IMG_DECLARE(ui_img_check_circle_png);    // assets/check_circle.png

@@ -6,11 +6,6 @@
 #include "ui.h"
 #include "ScreenMapping.h"
 
-void OnLoaded(lv_event_t* e)
-{
-    // Your code here
-}
-
 void CommonButtonOnClick(lv_event_t* e)
 {
     lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED);
@@ -39,4 +34,9 @@ void CommonButtonOnValueChange(lv_event_t* e)
 {
     lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED);
     ScreenMapping::GetInstance().SetEvent(*e);
+}
+
+void CommonOnLoaded(lv_event_t * e)
+{
+
 }

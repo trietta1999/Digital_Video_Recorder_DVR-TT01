@@ -18,6 +18,7 @@ namespace system_data
     extern CData<std::pair<double, double>> StorageInfo;
     extern CData<STATE_TYPE> CurrentState;
     extern CData<bool> IsTempVideoInfo;
+    extern CData<bool> CurrentSoundState;
 }
 
 namespace current_videoinfo_data

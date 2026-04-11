@@ -1,9 +1,5 @@
 
 
-def OnLoaded(event_struct):
-    return
-
-
 def CommonButtonOnClick(event_struct):
     return
 
@@ -21,5 +17,9 @@ def CommonButtonOnLongPressRepeat(event_struct):
 
 
 def CommonButtonOnValueChange(event_struct):
+    return
+
+
+def CommonOnLoaded(event_struct):
     return
 

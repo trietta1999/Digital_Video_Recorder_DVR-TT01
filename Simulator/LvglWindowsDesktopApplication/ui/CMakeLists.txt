@@ -8,12 +8,16 @@ SET(SOURCES screens/ui_Main.c
     ui_events.cpp
     images/ui_img_new_png.c
     images/ui_img_cancel_png.c
+    images/ui_img_fast_rewind_png.c
+    images/ui_img_fast_forward_png.c
     images/ui_img_list_png.c
     images/ui_img_settings_png.c
     images/ui_img_record_png.c
     images/ui_img_pause_png.c
     images/ui_img_play_png.c
     images/ui_img_stop_png.c
+    images/ui_img_brand_awareness_png.c
+    images/ui_img_no_sound_png.c
     images/ui_img_storage_png.c
     images/ui_img_edit_note_png.c
     images/ui_img_check_circle_png.c

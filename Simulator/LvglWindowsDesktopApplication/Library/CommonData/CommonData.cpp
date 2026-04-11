@@ -12,6 +12,7 @@ namespace system_data
     CData<std::pair<double, double>> StorageInfo;
     CData<STATE_TYPE> CurrentState;
     CData<bool> IsTempVideoInfo;
+    CData<bool> CurrentSoundState;
 }
 
 namespace current_videoinfo_data
@@ -65,6 +66,7 @@ void CommonDataUpdateAll()
     system_data::StorageInfo.ResetState();
     system_data::CurrentState.ResetState();
     system_data::IsTempVideoInfo.ResetState();
+    system_data::CurrentSoundState.ResetState();
 
     current_videoinfo_data::VideoID.ResetState();
     current_videoinfo_data::VideoEvent.ResetState();

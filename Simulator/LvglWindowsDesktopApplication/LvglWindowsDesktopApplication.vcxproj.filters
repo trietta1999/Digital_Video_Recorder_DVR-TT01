@@ -1637,6 +1637,21 @@
     <ClCompile Include="ui\images\ui_img_virtualvcr_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
+    <ClCompile Include="Library\VideoRecordLibrary.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_brand_awareness_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_no_sound_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_fast_forward_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_fast_rewind_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="LvglWindowsDesktopApplication.manifest" />
