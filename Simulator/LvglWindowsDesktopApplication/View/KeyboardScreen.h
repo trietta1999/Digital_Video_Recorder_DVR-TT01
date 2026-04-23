@@ -6,7 +6,6 @@
 typedef struct
 {
     std::string title;
-    std::string acceptedSpecialChars;
     std::function<std::string(void)> cdataGetValueCallback;
 } KbInfo;
 
@@ -17,9 +16,6 @@ public:
     ~KeyboardScreen();
 
 private:
-    static std::unordered_map<SCREEN_NAME, KbInfo> mapKbInit;
-    static std::vector<std::pair<lv_obj_t*, int>> listVkCode;
-
     static void OnClickCancel(lv_event_t* event);
     static void OnClickOK(lv_event_t* event);
     static void OnClickKey(lv_event_t* event);

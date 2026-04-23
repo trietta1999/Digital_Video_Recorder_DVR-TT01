@@ -235,25 +235,30 @@ namespace keyboard_lib
     {
         KillTimer(hwnd, TID_KEYDOWN);
 
-        lv_event_t e = { 0 };
-
-        // Match VK code with real button on screen keypad
-        for (const auto& item : keyboard_lib::GetListVkCode())
+        if ((system_data::CurrentKbScreen.GetValue() != SCREEN_NAME::MIN_KBSCREEN)
+            && (system_data::KeyboardType.GetValue() != KEYBOARD_TYPE::STANDARD_KEYBOARD))
         {
-            if (item.second == VK_CONVERT)
-            {
-                e.current_target = item.first;
-                break;
-            }
-        }
+            lv_event_t e = { 0 };
 
-        e.code = LV_EVENT_SHORT_CLICKED;
-        ScreenMapping::GetInstance().SetEvent(e);
+            // Match VK code with real button on screen keypad
+            for (const auto& item : keyboard_lib::GetListVkCode())
+            {
+                if (item.second == VK_CONVERT)
+                {
+                    e.current_target = item.first;
+                    break;
+                }
+            }
+
+            e.code = LV_EVENT_SHORT_CLICKED;
+            ScreenMapping::GetInstance().SetEvent(e);
+        }
     }
 
     void HardwareKeyboardProcess(HWND hwnd, int uMsg, int wParam, lv_event_code_t lParam)
     {
-        if (system_data::CurrentKbScreen.GetValue() != SCREEN_NAME::MIN_KBSCREEN)
+        if ((system_data::CurrentKbScreen.GetValue() != SCREEN_NAME::MIN_KBSCREEN)
+            || system_data::CurrentScreen.GetValue() == SCREEN_NAME::SCREEN_VIDEO_RECORDLIST)
         {
             lv_event_t e = { 0 };
 

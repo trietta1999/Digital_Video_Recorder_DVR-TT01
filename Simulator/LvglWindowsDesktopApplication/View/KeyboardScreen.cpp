@@ -5,8 +5,8 @@
 #include "ScreenMapping.h"
 #include "KeyboardScreen.h"
 
-std::unordered_map<SCREEN_NAME, KbInfo> KeyboardScreen::mapKbInit = {};
-std::vector<std::pair<lv_obj_t*, int>> KeyboardScreen::listVkCode = {};
+static std::unordered_map<SCREEN_NAME, KbInfo> mapKbInit = {};
+static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
 static lv_timer_t* timerUpdateInput = nullptr;
 static lv_obj_t* dummyConfirmKey = nullptr;
 static lv_obj_t* dummyOkKey = nullptr;
@@ -75,11 +75,11 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
     ListDataUpdateCallback = {};
 
     mapKbInit = {
-        { SCREEN_NAME::KBSCREEN_VIDEO_EVENT   , { "Event"       , ACCEPT_ALL_CHARS , []() { return temp_data::VideoEvent.GetValue(); }       } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_NAME    , { "Video name"  , ACCEPT_ALL_CHARS , []() { return temp_data::VideoName.GetValue(); }     } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_CATEGORY, { "New category", ACCEPT_SPACE_ONLY, []() { return temp_data::VideoCategory.GetValue(); } } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_DESC    , { "Description" , ACCEPT_ALL_CHARS , []() { return temp_data::VideoDesc.GetValue(); }     } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR  , { "Author"      , "._-"            , []() { return temp_data::VideoAuthor.GetValue(); }   } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_EVENT   , { "Event"       , []() { return temp_data::VideoEvent.GetValue(); }    } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_NAME    , { "Video name"  , []() { return temp_data::VideoName.GetValue(); }     } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_CATEGORY, { "New category", []() { return temp_data::VideoCategory.GetValue(); } } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_DESC    , { "Description" , []() { return temp_data::VideoDesc.GetValue(); }     } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR  , { "Author"      , []() { return temp_data::VideoAuthor.GetValue(); }   } },
     };
 
     listVkCode = {
@@ -152,18 +152,10 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
     lv_obj_add_flag(ui_imgAcceptPunct, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui_txtAcceptPunct, LV_OBJ_FLAG_HIDDEN);
 
-    if (mapKbInit[system_data::CurrentKbScreen.GetValue()].acceptedSpecialChars != "")
-    {
-        lv_obj_remove_flag(ui_imgAcceptPunct, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_remove_flag(ui_txtAcceptPunct, LV_OBJ_FLAG_HIDDEN);
-        lv_textarea_set_text(ui_txtAcceptPunct, ("A-Z, a-z, 0-9, " + mapKbInit[system_data::CurrentKbScreen.GetValue()].acceptedSpecialChars).c_str());
-    }
-
     // Auto update text input
     timerUpdateInput = lv_timer_create([](lv_timer_t* timer) {
         auto input = keyboard_lib::GetInputChar();
         auto combine = keyboard_lib::GetCombineChar();
-        const auto& checklist = mapKbInit[system_data::CurrentKbScreen.GetValue()].acceptedSpecialChars;
 
         if ((system_data::KeyboardType.GetValue() == KEYBOARD_TYPE::INTERNAL_NUMPAD)
             || (system_data::KeyboardType.GetValue() == KEYBOARD_TYPE::STANDARD_NUMPAD))
@@ -175,11 +167,6 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
 
             if (combine)
             {
-                if (ispunct(combine) && (checklist != "") && (checklist.find(combine) == std::string::npos))
-                {
-                    return;
-                }
-
                 lv_textarea_add_char(ui_txtKeyboardInput, combine);
             }
         }
@@ -187,11 +174,6 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         {
             if (input)
             {
-                if (ispunct(input) && (checklist != "") && (checklist.find(input) == std::string::npos))
-                {
-                    return;
-                }
-
                 lv_textarea_add_char(ui_txtKeyboardInput, input);
             }
         }
