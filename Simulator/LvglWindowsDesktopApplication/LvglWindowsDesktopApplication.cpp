@@ -122,18 +122,18 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     UNREFERENCED_PARAMETER(lpCmdLine);
     UNREFERENCED_PARAMETER(nShowCmd);
 
-    ::lv_init();
+    lv_init();
 
     int32_t zoom_level = 100;
     bool allow_dpi_override = false;
     bool simulator_mode = false;
-    lv_display_t* display = ::lv_windows_create_display(APP_NAME, HORIZON_MAX_RESOLUTION, VERTICAL_MAX_RESOLUTION, zoom_level, allow_dpi_override, simulator_mode);
+    lv_display_t* display = lv_windows_create_display(APP_NAME, HORIZON_MAX_RESOLUTION, VERTICAL_MAX_RESOLUTION, zoom_level, allow_dpi_override, simulator_mode);
     if (!display)
     {
         return -1;
     }
 
-    HWND window_handle = ::lv_windows_get_display_window_handle(display);
+    HWND window_handle = lv_windows_get_display_window_handle(display);
     if (!window_handle)
     {
         return -1;
@@ -150,19 +150,19 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         ::SendMessageW(window_handle, WM_SETICON, FALSE, (LPARAM)icon_handle);
     }
 
-    lv_indev_t* pointer_indev = ::lv_windows_acquire_pointer_indev(display);
+    lv_indev_t* pointer_indev = lv_windows_acquire_pointer_indev(display);
     if (!pointer_indev)
     {
         return -1;
     }
 
-    lv_indev_t* keypad_indev = ::lv_windows_acquire_keypad_indev(display);
+    lv_indev_t* keypad_indev = lv_windows_acquire_keypad_indev(display);
     if (!keypad_indev)
     {
         return -1;
     }
 
-    lv_indev_t* encoder_indev = ::lv_windows_acquire_encoder_indev(display);
+    lv_indev_t* encoder_indev = lv_windows_acquire_encoder_indev(display);
     if (!encoder_indev)
     {
         return -1;
@@ -177,7 +177,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
 #ifdef NDEBUG
     // Hide caption, block resizable
-    LONG_PTR style = ::GetWindowLongPtr(window_handle, GWL_STYLE);
+    DWORD style = ::GetWindowLongPtr(window_handle, GWL_STYLE);
     style &= ~WS_CAPTION;
     style &= ~WS_THICKFRAME;
     ::SetWindowLongPtr(window_handle, GWL_STYLE, style);
@@ -197,6 +197,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     InitService();
 
     // Change to main screen
+    lv_timer_handler();
+    ::Sleep(TIMECYCLE_10MS);
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);
 
 #ifdef _DEBUG
@@ -205,12 +207,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
     while (true)
     {
-        ::lv_timer_handler();
+        lv_timer_handler();
         ServiceProcess();
         ScreenMapping::GetInstance().HandleScreen();
         CommonDataUpdateAll();
 
-        ::Sleep(10);
+        ::Sleep(TIMECYCLE_10MS);
     }
 
     lv_deinit();

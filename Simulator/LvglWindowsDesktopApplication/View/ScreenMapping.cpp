@@ -5,6 +5,7 @@
 #include "MainScreen.h"
 #include "VideoInfoScreen.h"
 #include "KeyboardScreen.h"
+#include "VideoRecordListScreen.h"
 
 ScreenMapping& ScreenMapping::GetInstance()
 {
@@ -39,6 +40,13 @@ ScreenMapping::ScreenMapping()
                 []() { _ui_screen_change(&ui_Keyboard, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_Keyboard_screen_init); },
             },
         },
+        {
+            SCREEN_NAME::SCREEN_VIDEO_RECORDLIST,
+            {
+                []() { return new VideoRecordListScreen(SCREEN_NAME::SCREEN_VIDEO_RECORDLIST); },
+                []() { _ui_screen_change(&ui_RecordList, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_RecordList_screen_init); },
+            },
+        },
     };
 }
 
@@ -59,8 +67,9 @@ void ScreenMapping::ChangeScreen(SCREEN_NAME screen)
 
         // Create new screen info
         currentScreenInfo.first = screen;
-        currentScreenInfo.second = mapScreenInfo[screen].first();
-        mapScreenInfo[screen].second();
+        mapScreenInfo[screen].second(); // Call change screen
+        lv_timer_handler(); // Wait for screen changed
+        currentScreenInfo.second = mapScreenInfo[screen].first(); // Create screen class
     }
     else if (common_lib::CheckInRangeNumber((int)screen, (int)SCREEN_NAME::MIN_KBSCREEN, (int)SCREEN_NAME::MAX_KBSCREEN))
     {
@@ -68,8 +77,9 @@ void ScreenMapping::ChangeScreen(SCREEN_NAME screen)
 
         // Create keyboard screen info
         currentScreenInfo.first = SCREEN_NAME::SCREEN_KEYBOARD;
-        currentScreenInfo.second = mapScreenInfo[SCREEN_NAME::SCREEN_KEYBOARD].first();
-        mapScreenInfo[SCREEN_NAME::SCREEN_KEYBOARD].second();
+        mapScreenInfo[SCREEN_NAME::SCREEN_KEYBOARD].second(); // Call change screen
+        lv_timer_handler(); // Wait for screen changed
+        currentScreenInfo.second = mapScreenInfo[SCREEN_NAME::SCREEN_KEYBOARD].first(); // Create screen class
     }
 }
 
