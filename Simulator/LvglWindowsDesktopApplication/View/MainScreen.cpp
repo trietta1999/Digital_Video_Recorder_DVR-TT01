@@ -4,28 +4,29 @@
 #include "ScreenMapping.h"
 #include "MainScreen.h"
 #include "VideoInfoScreen.h"
-#include "VideoInfoData.h" // @todo: wait video record fucntion
+#include "VideoRecordListScreen.h"
 
 static lv_timer_t* timerGetSystemData = nullptr;
 
 MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
     ListButtonCallback = {
-        { ui_btnNewVideo   , OnClickNew     , LV_EVENT_CLICKED },
-        { ui_btnCloseVideo , OnClickClose   , LV_EVENT_CLICKED },
-        { ui_btnRec        , OnClickOperator, LV_EVENT_CLICKED },
-        { ui_btnPlay       , OnClickOperator, LV_EVENT_CLICKED },
-        { ui_btnPause      , OnClickOperator, LV_EVENT_CLICKED },
-        { ui_btnStop       , OnClickOperator, LV_EVENT_CLICKED },
-        { ui_btnSound      , OnClickOperator, LV_EVENT_CLICKED },
-        { ui_btnFastForward, OnClickOperator, LV_EVENT_CLICKED },
-        { ui_btnFastRewind , OnClickOperator, LV_EVENT_CLICKED },
+        { ui_btnNewVideo       , OnClickNew            , LV_EVENT_CLICKED },
+        { ui_btnCloseVideo     , OnClickClose          , LV_EVENT_CLICKED },
+        { ui_btnVideoRecordList, OnClickVideoRecordList, LV_EVENT_CLICKED },
+        { ui_btnRec            , OnClickOperator       , LV_EVENT_CLICKED },
+        { ui_btnPlay           , OnClickOperator       , LV_EVENT_CLICKED },
+        { ui_btnPause          , OnClickOperator       , LV_EVENT_CLICKED },
+        { ui_btnStop           , OnClickOperator       , LV_EVENT_CLICKED },
+        { ui_btnSound          , OnClickOperator       , LV_EVENT_CLICKED },
+        { ui_btnFastForward    , OnClickOperator       , LV_EVENT_CLICKED },
+        { ui_btnFastRewind     , OnClickOperator       , LV_EVENT_CLICKED },
     };
 
     ListDataUpdateCallback = {
         { []() { return system_data::CurrentDate.GetState();       }, UpdateDate    },
         { []() { return system_data::CurrentTime.GetState();       }, UpdateTime    },
-        { []() { return system_data::StorageInfo.GetState();       }, UpdateStorage },
+        { []() { return system_data::FreeStorage.GetState();       }, UpdateStorage },
         { []() { return system_data::CurrentState.GetState();      }, UpdateButton  },
         { []() { return system_data::IsTempVideoInfo.GetState();   }, UpdateButton  },
         { []() { return system_data::CurrentSoundState.GetState(); }, UpdateButton  },
@@ -56,25 +57,22 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
     system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
 
     // Show review sub-screen
-    videorecord_lib::StartExternalWindow(ui_wndReview, REVIEW_SCREENNAME);
+    videorecord_lib::StartExternalWindow(ui_wndReview, REVIEW_SCREENNAME, "");
 
     // Create get system timer
     timerGetSystemData = lv_timer_create([](lv_timer_t* timer) {
-        SYSTEMTIME systime;
-        double totalGB = 0;
-        double usedGB = 0;
         char buffDate[MAX_PATH] = { 0 };
         char buffTime[MAX_PATH] = { 0 };
 
-        systime = common_lib::GetSystemDateTime();
-        common_lib::GetSystemStorageSize(totalGB, usedGB);
+        auto systime = common_lib::GetSystemDateTime();
+        auto freeSpace = common_lib::GetSystemFreeStorage();
 
         sprintf(buffDate, "%02d.%02d.%04d", systime.wDay, systime.wMonth, systime.wYear); // @todo: wait setting
         sprintf(buffTime, "%02d.%02d.%02d", systime.wHour, systime.wMinute, systime.wSecond); // @todo: wait setting
 
         system_data::CurrentDate.SetValue(buffDate);
         system_data::CurrentTime.SetValue(buffTime);
-        system_data::StorageInfo.SetValue({ usedGB, totalGB });
+        system_data::FreeStorage.SetValue(freeSpace);
         }, TIMECYCLE_1SEC, nullptr);
 }
 
@@ -146,7 +144,7 @@ void MainScreen::OnClickOperator(lv_event_t* event)
         videoinfo_lib::CreateNewData(info.videoID, info);
 
         // Show record sub-screen
-        videorecord_lib::StartExternalWindow(ui_wndReview, RECORD_SCREENNAME);
+        videorecord_lib::StartExternalWindow(ui_wndReview, RECORD_SCREENNAME, current_videoinfo_data::VideoID.GetValue());
 
         system_data::CurrentState.SetValue(STATE_TYPE::S_RECORD);
     }
@@ -155,11 +153,11 @@ void MainScreen::OnClickOperator(lv_event_t* event)
         if (system_data::CurrentState.GetValue() == STATE_TYPE::S_STOP)
         {
             // Show play sub-screen
-            videorecord_lib::StartExternalWindow(ui_wndReview, PLAY_SCREENNAME);
+            videorecord_lib::StartExternalWindow(ui_wndReview, PLAY_SCREENNAME, current_videoinfo_data::VideoID.GetValue());
         }
         else if (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)
         {
-            // Send pause
+            // Send unpause
             videorecord_lib::ExecutePause();
         }
 
@@ -167,7 +165,7 @@ void MainScreen::OnClickOperator(lv_event_t* event)
     }
     else if (event->current_target == ui_btnPause)
     {
-        // Send unpause
+        // Send pause
         videorecord_lib::ExecutePause();
 
         system_data::CurrentState.SetValue(STATE_TYPE::S_PAUSE);
@@ -180,7 +178,7 @@ void MainScreen::OnClickOperator(lv_event_t* event)
             )
         {
             // Show review sub-screen
-            videorecord_lib::StartExternalWindow(ui_wndReview, REVIEW_SCREENNAME);
+            videorecord_lib::StartExternalWindow(ui_wndReview, REVIEW_SCREENNAME, "");
         }
 
         system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
@@ -208,6 +206,11 @@ void MainScreen::OnClickOperator(lv_event_t* event)
     }
 }
 
+void MainScreen::OnClickVideoRecordList(lv_event_t* event)
+{
+    ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_VIDEO_RECORDLIST);
+}
+
 void MainScreen::UpdateDate()
 {
     lv_label_set_text(ui_lblDate, system_data::CurrentDate.GetValue().c_str());
@@ -220,8 +223,7 @@ void MainScreen::UpdateTime()
 
 void MainScreen::UpdateStorage()
 {
-    auto value = system_data::StorageInfo.GetValue();
-    lv_label_set_text_fmt(ui_lblStorage, "%.1f GB free", value.second - value.first);
+    lv_label_set_text(ui_lblStorage, system_data::FreeStorage.GetValue().c_str());
 }
 
 void MainScreen::UpdateButton()

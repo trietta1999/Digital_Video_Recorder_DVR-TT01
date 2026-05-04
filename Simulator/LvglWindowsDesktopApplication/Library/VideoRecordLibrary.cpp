@@ -1,18 +1,12 @@
-﻿#include <thread>
-#include <shlwapi.h>
+﻿#include <shlwapi.h>
 #include "CommonData.h"
 #include "CommonLibrary.h"
 #include "VideoInfoData.h"
 
-#ifdef _DEBUG
-#define SCRIPT_DIRECTORY L"debug_script"
-#else
-#define SCRIPT_DIRECTORY L"release_script"
-#endif
 namespace videorecord_lib
 {
     static HWND extHwnd = NULL;
-    static std::wstring listScreenName[] = { REVIEW_SCREENNAME, RECORD_SCREENNAME, RECORD_PROCESSNAME, PLAY_SCREENNAME };
+    static std::wstring listScreenName[] = { REVIEW_SCREENNAME, RECORD_SCREENNAME, RECORD_PROCESSNAME, PLAY_SCREENNAME, DUKTO_SCREENNAME };
 
     static HWND Wait(std::wstring screenName)
     {
@@ -44,7 +38,8 @@ namespace videorecord_lib
 #endif
     }
 
-    void StartExternalWindow(lv_obj_t* wnd, std::wstring screenName)
+    // @todo: refactor later
+    void StartExternalWindow(lv_obj_t* wnd, std::wstring screenName, std::string videoID)
     {
         StopExternalWindow();
         //KillAllProcess();
@@ -77,14 +72,13 @@ namespace videorecord_lib
 
         if (screenName == RECORD_SCREENNAME)
         {
-            swprintf_s(outputPath, L"%s\\video_data\\%s", common_lib::GetSystemPath().c_str(), common_lib::ConvertStringToWString(current_videoinfo_data::VideoID.GetValue()).c_str());
+            swprintf_s(outputPath, L"%s\\video_data\\%s", common_lib::GetSystemPath().c_str(), common_lib::ConvertStringToWString(videoID).c_str());
             swprintf_s(param, L"$host.UI.RawUI.WindowTitle = \\\"%s\\\";cd \\\"%s\\\";.\\record.bat \\\"%s\\\" \\\"%s\\\\video.mp4\\\"", RECORD_PROCESSNAME, common_lib::GetFullPath(SCRIPT_DIRECTORY).c_str(), RECORD_SCREENNAME, outputPath);
-            ::CreateDirectory(outputPath, NULL);
             ::ShellExecute(NULL, L"open", L"powershell", param, common_lib::GetFullPath(SCRIPT_DIRECTORY).c_str(), SW_HIDE);
         }
         else if (screenName == PLAY_SCREENNAME)
         {
-            swprintf_s(outputPath, L"%s\\video_data\\%s\\video.mp4", common_lib::GetSystemPath().c_str(), common_lib::ConvertStringToWString(current_videoinfo_data::VideoID.GetValue()).c_str());
+            swprintf_s(outputPath, L"%s\\video_data\\%s\\video.mp4", common_lib::GetSystemPath().c_str(), common_lib::ConvertStringToWString(videoID).c_str());
             swprintf_s(param, L"\"%s\" \"%s\"", PLAY_SCREENNAME, outputPath);
             swprintf_s(scriptPath, L"%s\\play.bat", SCRIPT_DIRECTORY);
             ::ShellExecute(NULL, L"open", common_lib::GetFullPath(scriptPath).c_str(), param, common_lib::GetFullPath(SCRIPT_DIRECTORY).c_str(), SW_HIDE);
@@ -99,25 +93,14 @@ namespace videorecord_lib
         // Wait for process starting
         extHwnd = Wait(screenName);
 
-        // Window alignment processing
-        std::thread([screenName, wnd]() {
-            POINT point = { 0 };
-            SIZE size = { 0 };
+        // Get LVGL window review
+        POINT point = { lv_obj_get_x(wnd), lv_obj_get_y(wnd) };
+        SIZE size = { lv_obj_get_width(wnd), lv_obj_get_height(wnd) };
 
-            while (!point.x || !point.y || !size.cx || !size.cy)
-            {
-                // Get LVGL window review
-                point = { lv_obj_get_x(wnd), lv_obj_get_y(wnd) };
-                size = { lv_obj_get_width(wnd),lv_obj_get_height(wnd) };
+        // Convert to screen coordinates
+        ::ClientToScreen(system_data::WindowHandle.GetValue(), &point);
 
-                ::Sleep(TIMECYCLE_10MS);
-            }
-
-            // Convert to screen coordinates
-            ::ClientToScreen(system_data::WindowHandle.GetValue(), &point);
-
-            ChangeWindowStyle(screenName.c_str(), point, size);
-            }).detach();
+        ChangeWindowStyle(screenName.c_str(), point, size);
 
         // During initialization, sound is enabled by default and is only disabled when other conditions are met
         if (!system_data::CurrentSoundState.GetValue())

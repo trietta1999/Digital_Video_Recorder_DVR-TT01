@@ -18,6 +18,7 @@
 #define RECORD_PROCESSNAME L"Record process"
 #define REVIEW_SCREENNAME L"Review window"
 #define PLAY_SCREENNAME L"Play window"
+#define DUKTO_SCREENNAME L"Dukto"
 
 #define HORIZON_MAX_RESOLUTION 1280
 #define VERTICAL_MAX_RESOLUTION 768
@@ -28,7 +29,7 @@
 #define TIMECYCLE_500MS 500
 #define TIMECYCLE_200MS 200
 #define TIMECYCLE_100MS 100
-#define TIMECYCLE_10MS 100
+#define TIMECYCLE_10MS 10
 
 #define TID_KEYDOWN 1
 
@@ -42,6 +43,15 @@
 #define ACCEPT_SPACE_ONLY " "
 
 #define MAX_CHARS MAX_PATH * 2
+
+#define RL_ITEM_PER_PAGE 5
+#define SCROLL_Y_STEP 200
+
+#ifdef _DEBUG
+#define SCRIPT_DIRECTORY L"debug_script"
+#else
+#define SCRIPT_DIRECTORY L"release_script"
+#endif
 
 //#define MAX_SIZE 1000
 //#define BUFFER_SIZE sizeof(char) * MAX_SIZE
@@ -117,6 +127,7 @@ enum
         CREATE(e, SCREEN_MAIN) \
         CREATE(e, SCREEN_VIDEO_INPUT) \
         CREATE(e, SCREEN_KEYBOARD) \
+        CREATE(e, SCREEN_VIDEO_RECORDLIST) \
 
 #define DEF_KBSCREEN_NAME(e, CREATE) \
         CREATE(e, KBSCREEN_VIDEO_EVENT) \
@@ -135,6 +146,7 @@ enum
         CREATE(e, S_RECORD) \
         CREATE(e, S_PLAY) \
         CREATE(e, S_PAUSE) \
+        CREATE(e, S_TRANSFER) \
 
 enum class SCREEN_NAME
 {

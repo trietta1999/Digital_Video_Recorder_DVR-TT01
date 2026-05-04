@@ -23,3 +23,7 @@ def CommonButtonOnValueChange(event_struct):
 def CommonOnLoaded(event_struct):
     return
 
+
+def CommonButtonOnRelase(event_struct):
+    return
+

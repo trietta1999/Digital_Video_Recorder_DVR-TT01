@@ -845,6 +845,9 @@
     <ClInclude Include="ui\screens\ui_RecordList.h">
       <Filter>UI\UI_View\screens</Filter>
     </ClInclude>
+    <ClInclude Include="View\VideoRecordListScreen.h">
+      <Filter>UI\View</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\.typos.toml">
@@ -1556,13 +1559,7 @@
     <ClCompile Include="ui\images\ui_img_all_match_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
-    <ClCompile Include="ui\images\ui_img_arrow_back_80dp_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
     <ClCompile Include="ui\images\ui_img_arrow_back_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_arrow_forward_80dp_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
     <ClCompile Include="ui\images\ui_img_arrow_forward_png.c">
@@ -1650,6 +1647,32 @@
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
     <ClCompile Include="ui\images\ui_img_fast_rewind_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="View\VideoRecordListScreen.cpp">
+      <Filter>UI\View</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\VideoRecordListLibrary.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_usb_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_replace_video_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_arrow_downward_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_arrow_upward_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_vertical_align_bottom_png.c" />
+    <ClCompile Include="ui\images\ui_img_vertical_align_top_png.c" />
+    <ClCompile Include="ui\images\ui_img_check_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_dukto_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
   </ItemGroup>

@@ -77,22 +77,20 @@ namespace common_lib
         return output;
     }
 
-    void GetSystemStorageSize(double& totalGB, double& usedGB)
+    std::string GetSystemFreeStorage()
     {
         ULARGE_INTEGER freeBytesAvailableToUser; // Available free space for the user
         ULARGE_INTEGER totalNumberOfBytes; // Total disk space
         ULARGE_INTEGER totalNumberOfFreeBytes; // Actual total free space
-        char buffDate[MAX_CHARS] = { 0 };
-        char buffTime[MAX_CHARS] = { 0 };
-
+        wchar_t buffer[MAX_PATH];
         auto drive = config_lib::GetWStringConfig(SYSTEM_SECTION, STORAGE_DRIVE, SYSTEM_CONFIG);
 
-        if (GetDiskFreeSpaceExW(drive.c_str(), &freeBytesAvailableToUser, &totalNumberOfBytes, &totalNumberOfFreeBytes))
+        if (::GetDiskFreeSpaceEx(drive.c_str(), &freeBytesAvailableToUser, &totalNumberOfBytes, &totalNumberOfFreeBytes))
         {
-            // Convert Bytes to GB (1 GB = 1024 * 1024 * 1024 Bytes)
-            totalGB = (double)totalNumberOfBytes.QuadPart / (1024 * 1024 * 1024);
-            usedGB = totalGB - (double)freeBytesAvailableToUser.QuadPart / (1024 * 1024 * 1024);
+            ::StrFormatByteSize(freeBytesAvailableToUser.QuadPart, buffer, MAX_PATH);
         }
+
+        return ConvertWStringToString(buffer);
     }
 
     SYSTEMTIME GetSystemDateTime()

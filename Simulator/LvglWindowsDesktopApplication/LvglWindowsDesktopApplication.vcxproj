@@ -337,6 +337,7 @@
     <ClInclude Include="View\MainScreen.h" />
     <ClInclude Include="View\ScreenMapping.h" />
     <ClInclude Include="View\VideoInfoScreen.h" />
+    <ClInclude Include="View\VideoRecordListScreen.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\.typos.toml" />
@@ -724,21 +725,24 @@
     <ClCompile Include="Library\KeyboardLibrary.cpp" />
     <ClCompile Include="Library\VideoInfoLibrary.cpp" />
     <ClCompile Include="Library\VideoRecordLibrary.cpp" />
+    <ClCompile Include="Library\VideoRecordListLibrary.cpp" />
     <ClCompile Include="ui/**/*.cpp" />
     <ClCompile Include="LvglWindowsDesktopApplication.cpp" />
     <ClCompile Include="ui\components\ui_comp_hook.c" />
     <ClCompile Include="ui\images\ui_img_all_match_png.c" />
-    <ClCompile Include="ui\images\ui_img_arrow_back_80dp_png.c" />
     <ClCompile Include="ui\images\ui_img_arrow_back_png.c" />
-    <ClCompile Include="ui\images\ui_img_arrow_forward_80dp_png.c" />
+    <ClCompile Include="ui\images\ui_img_arrow_downward_png.c" />
     <ClCompile Include="ui\images\ui_img_arrow_forward_png.c" />
+    <ClCompile Include="ui\images\ui_img_arrow_upward_png.c" />
     <ClCompile Include="ui\images\ui_img_backspace_png.c" />
     <ClCompile Include="ui\images\ui_img_bandicam_png.c" />
     <ClCompile Include="ui\images\ui_img_brand_awareness_png.c" />
     <ClCompile Include="ui\images\ui_img_cancel_png.c" />
     <ClCompile Include="ui\images\ui_img_check_circle_png.c" />
+    <ClCompile Include="ui\images\ui_img_check_png.c" />
     <ClCompile Include="ui\images\ui_img_delete_png.c" />
     <ClCompile Include="ui\images\ui_img_drive_file_move_png.c" />
+    <ClCompile Include="ui\images\ui_img_dukto_png.c" />
     <ClCompile Include="ui\images\ui_img_edit_note_png.c" />
     <ClCompile Include="ui\images\ui_img_enter_png.c" />
     <ClCompile Include="ui\images\ui_img_esc_png.c" />
@@ -752,12 +756,16 @@
     <ClCompile Include="ui\images\ui_img_pause_png.c" />
     <ClCompile Include="ui\images\ui_img_play_png.c" />
     <ClCompile Include="ui\images\ui_img_record_png.c" />
+    <ClCompile Include="ui\images\ui_img_replace_video_png.c" />
     <ClCompile Include="ui\images\ui_img_search_png.c" />
     <ClCompile Include="ui\images\ui_img_settings_png.c" />
     <ClCompile Include="ui\images\ui_img_shift_lock_png.c" />
     <ClCompile Include="ui\images\ui_img_space_bar_png.c" />
     <ClCompile Include="ui\images\ui_img_stop_png.c" />
     <ClCompile Include="ui\images\ui_img_storage_png.c" />
+    <ClCompile Include="ui\images\ui_img_usb_png.c" />
+    <ClCompile Include="ui\images\ui_img_vertical_align_bottom_png.c" />
+    <ClCompile Include="ui\images\ui_img_vertical_align_top_png.c" />
     <ClCompile Include="ui\images\ui_img_virtualvcr_png.c" />
     <ClCompile Include="ui\screens\ui_Keyboard.c" />
     <ClCompile Include="ui\screens\ui_Main.c" />
@@ -770,6 +778,7 @@
     <ClCompile Include="View\MainScreen.cpp" />
     <ClCompile Include="View\ScreenMapping.cpp" />
     <ClCompile Include="View\VideoInfoScreen.cpp" />
+    <ClCompile Include="View\VideoRecordListScreen.cpp" />
   </ItemGroup>
   <Import Project="..\Mile.Project.Windows\Mile.Project.Cpp.targets" />
 </Project>

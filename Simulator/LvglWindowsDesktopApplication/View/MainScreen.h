@@ -13,6 +13,7 @@ private:
     static void OnClickNew(lv_event_t* event);
     static void OnClickClose(lv_event_t* event);
     static void OnClickOperator(lv_event_t* event);
+    static void OnClickVideoRecordList(lv_event_t* event);
 
     static void UpdateDate();
     static void UpdateTime();

@@ -33,17 +33,18 @@ extern lv_obj_t * ui____initial_actions0;
 // IMAGES AND IMAGE SETS
 LV_IMG_DECLARE(ui_img_new_png);    // assets/new.png
 LV_IMG_DECLARE(ui_img_cancel_png);    // assets/cancel.png
-LV_IMG_DECLARE(ui_img_fast_rewind_png);    // assets/fast_rewind.png
-LV_IMG_DECLARE(ui_img_fast_forward_png);    // assets/fast_forward.png
 LV_IMG_DECLARE(ui_img_list_png);    // assets/list.png
 LV_IMG_DECLARE(ui_img_settings_png);    // assets/settings.png
+LV_IMG_DECLARE(ui_img_brand_awareness_png);    // assets/brand_awareness.png
+LV_IMG_DECLARE(ui_img_no_sound_png);    // assets/no_sound.png
 LV_IMG_DECLARE(ui_img_record_png);    // assets/record.png
 LV_IMG_DECLARE(ui_img_pause_png);    // assets/pause.png
 LV_IMG_DECLARE(ui_img_play_png);    // assets/play.png
 LV_IMG_DECLARE(ui_img_stop_png);    // assets/stop.png
-LV_IMG_DECLARE(ui_img_brand_awareness_png);    // assets/brand_awareness.png
-LV_IMG_DECLARE(ui_img_no_sound_png);    // assets/no_sound.png
+LV_IMG_DECLARE(ui_img_fast_rewind_png);    // assets/fast_rewind.png
+LV_IMG_DECLARE(ui_img_fast_forward_png);    // assets/fast_forward.png
 LV_IMG_DECLARE(ui_img_storage_png);    // assets/storage.png
+LV_IMG_DECLARE(ui_img_usb_png);    // assets/usb.png
 LV_IMG_DECLARE(ui_img_edit_note_png);    // assets/edit_note.png
 LV_IMG_DECLARE(ui_img_check_circle_png);    // assets/check_circle.png
 LV_IMG_DECLARE(ui_img_input_png);    // assets/input.png
@@ -57,10 +58,15 @@ LV_IMG_DECLARE(ui_img_esc_png);    // assets/esc.png
 LV_IMG_DECLARE(ui_img_enter_png);    // assets/enter.png
 LV_IMG_DECLARE(ui_img_search_png);    // assets/search.png
 LV_IMG_DECLARE(ui_img_filter_png);    // assets/filter.png
-LV_IMG_DECLARE(ui_img_arrow_back_80dp_png);    // assets/arrow_back_80dp.png
-LV_IMG_DECLARE(ui_img_arrow_forward_80dp_png);    // assets/arrow_forward_80dp.png
+LV_IMG_DECLARE(ui_img_check_png);    // assets/check.png
+LV_IMG_DECLARE(ui_img_vertical_align_top_png);    // assets/vertical_align_top.png
+LV_IMG_DECLARE(ui_img_arrow_upward_png);    // assets/arrow_upward.png
+LV_IMG_DECLARE(ui_img_arrow_downward_png);    // assets/arrow_downward.png
+LV_IMG_DECLARE(ui_img_vertical_align_bottom_png);    // assets/vertical_align_bottom.png
+LV_IMG_DECLARE(ui_img_replace_video_png);    // assets/replace_video.png
 LV_IMG_DECLARE(ui_img_delete_png);    // assets/delete.png
 LV_IMG_DECLARE(ui_img_drive_file_move_png);    // assets/drive_file_move.png
+LV_IMG_DECLARE(ui_img_dukto_png);    // assets/dukto.png
 
 // UI INIT
 void ui_init(void);

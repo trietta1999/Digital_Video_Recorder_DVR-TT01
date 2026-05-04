@@ -3,6 +3,7 @@
 
 // File name
 #define VIDEOINFO_DATA L"videoinfo_data.ini"
+#define VIDEOINFO_DATA_FOLDER L"video_data"
 
 // Section name
 #define VIF_TEMP_SECTION L"TempInfo"
@@ -21,5 +22,6 @@
 #define VIF_VIDEO_MINUTE L"VIDEO_MINUTE"
 #define VIF_VIDEO_SECOND L"VIDEO_SECOND"
 #define VIF_VIDEO_PATH L"VIDEO_PATH"
+
 
 #endif // _VIDEOINFO_DATA_H

@@ -73,7 +73,9 @@ namespace videoinfo_lib
     void CreateTempData(const videoinfo_t& info);
     void CreateNewData(std::string id, const videoinfo_t& info);
     void ClearTempData();
+    void DeleteData(std::string id);
     videoinfo_t GetTempData();
+    videoinfo_t GetExistData(std::string id);
     void CreateCurrentInfoFromInput();
     void CreateCurrentInfoFromInfo(const videoinfo_t& info);
     void UpdateCurrentInfoDateTime();
@@ -82,12 +84,17 @@ namespace videoinfo_lib
 
 namespace videorecord_lib
 {
-    void StartExternalWindow(lv_obj_t* wnd, std::wstring screenName);
+    void StartExternalWindow(lv_obj_t* wnd, std::wstring screenName, std::string videoID);
     void StopExternalWindow();
     void SetSoundState();
     void ExecuteSeek(bool rewind, bool forward);
     void ExecutePause();
     void KillAllProcess();
+}
+
+namespace recordlist_lib
+{
+    std::vector<videoinfo_lib::videoinfo_t> GetVideoInfoListData();
 }
 
 namespace config_lib
@@ -102,7 +109,7 @@ namespace common_lib
 {
     bool CheckInRangeNumber(int check, int min, int max);
     std::string JoinString(std::string delimeter, const std::vector<std::string>& list);
-    void GetSystemStorageSize(double& totalGB, double& usedGB);
+    std::string GetSystemFreeStorage();
     SYSTEMTIME GetSystemDateTime();
     std::wstring ConvertStringToWString(std::string input);
     std::string ConvertWStringToString(std::wstring input);

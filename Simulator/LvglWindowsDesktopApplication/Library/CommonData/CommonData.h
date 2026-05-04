@@ -15,7 +15,7 @@ namespace system_data
     extern CData<std::string> CurrentTime;
     extern CData<KEYBOARD_TYPE> KeyboardType;
     extern CData<short> T9ConfirmTimeout;
-    extern CData<std::pair<double, double>> StorageInfo;
+    extern CData<std::string> FreeStorage;
     extern CData<STATE_TYPE> CurrentState;
     extern CData<bool> IsTempVideoInfo;
     extern CData<bool> CurrentSoundState;

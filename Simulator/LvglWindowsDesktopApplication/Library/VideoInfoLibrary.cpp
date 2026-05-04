@@ -1,4 +1,5 @@
-﻿#include "CommonData.h"
+﻿#include <shlwapi.h>
+#include "CommonData.h"
 #include "CommonLibrary.h"
 #include "VideoInfoData.h"
 
@@ -23,6 +24,13 @@ namespace videoinfo_lib
         {
             config_lib::WriteWStringConfig(section.c_str(), VIF_VIDEO_PATH, VIDEOINFO_DATA, common_lib::ConvertStringToWString("video_data\\" + info.videoID).c_str());
         }
+
+        wchar_t path[MAX_CHARS] = { 0 };
+
+        ::PathAppend(path, common_lib::GetSystemPath().c_str());
+        ::PathAppend(path, VIDEOINFO_DATA_FOLDER);
+        ::PathAppend(path, common_lib::ConvertStringToWString(info.videoID).c_str());
+        ::CreateDirectory(path, NULL);
     }
 
     static videoinfo_t GetData(std::wstring section)
@@ -64,9 +72,32 @@ namespace videoinfo_lib
         CreateData(VIF_TEMP_SECTION, info);
     }
 
+    void DeleteData(std::string id)
+    {
+        config_lib::WriteWStringConfig(common_lib::ConvertStringToWString(id).c_str(), L"", VIDEOINFO_DATA, L"");
+
+        wchar_t path[MAX_CHARS] = { 0 };
+
+        ::PathAppend(path, common_lib::GetSystemPath().c_str());
+        ::PathAppend(path, VIDEOINFO_DATA_FOLDER);
+        ::PathAppend(path, common_lib::ConvertStringToWString(id).c_str());
+
+        SHFILEOPSTRUCTW fileOp = { 0 };
+        fileOp.wFunc = FO_DELETE;
+        fileOp.pFrom = path;
+        fileOp.fFlags = FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
+
+        ::SHFileOperation(&fileOp);
+    }
+
     videoinfo_t GetTempData()
     {
         return GetData(VIF_TEMP_SECTION);
+    }
+
+    videoinfo_t GetExistData(std::string id)
+    {
+        return GetData(common_lib::ConvertStringToWString(id));
     }
 
     void CreateCurrentInfoFromInput()
