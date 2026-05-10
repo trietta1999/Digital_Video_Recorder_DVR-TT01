@@ -45,7 +45,7 @@ extern lv_obj_t * ui_lblTime;
 extern lv_obj_t * ui_Container5;
 extern lv_obj_t * ui_lblStorage;
 extern lv_obj_t * ui_Image1;
-extern lv_obj_t * ui_Container4;
+extern lv_obj_t * ui_conStorageUSB;
 extern lv_obj_t * ui_lblStorageUSB;
 extern void ui_event_btnStorageUSB(lv_event_t * e);
 extern lv_obj_t * ui_btnStorageUSB;

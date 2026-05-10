@@ -1,4 +1,5 @@
-﻿#include "ui.h"
+﻿#include <thread>
+#include "ui.h"
 #include "CommonData.h"
 #include "CommonLibrary.h"
 #include "ScreenMapping.h"
@@ -8,9 +9,11 @@ struct RowInfo_t
 {
     lv_obj_t* rowObj;
     lv_obj_t* checkboxObj;
+    lv_obj_t* checkboxTransferObj;
     lv_obj_t* datetimeObj;
     lv_obj_t* nameObj;
     bool isCheck;
+    bool isTransfered;
     std::string datetime;
     std::string name;
     std::string id;
@@ -24,10 +27,11 @@ struct RowInfo_t
             );
     }
 
-    void CreateUI(lv_obj_t* row, lv_obj_t* checkbox, lv_obj_t* datetime, lv_obj_t* name)
+    void CreateUI(lv_obj_t* row, lv_obj_t* checkbox, lv_obj_t* checkboxTransfer, lv_obj_t* datetime, lv_obj_t* name)
     {
         this->rowObj = row;
         this->checkboxObj = checkbox;
+        this->checkboxTransferObj = checkboxTransfer;
         this->datetimeObj = datetime;
         this->nameObj = name;
     }
@@ -36,8 +40,10 @@ struct RowInfo_t
     {
         lv_label_set_text(this->datetimeObj, datetime.c_str());
         lv_label_set_text(this->nameObj, name.c_str());
+        lv_obj_add_state(this->checkboxTransferObj, LV_STATE_CHECKED);
 
         this->isCheck = false;
+        this->isTransfered = false;
         this->datetime = datetime;
         this->name = name;
         this->id = id;
@@ -64,7 +70,19 @@ struct RowInfo_t
         }
     }
 
-    void DeleteRow()
+    void UpdateTransferState() const
+    {
+        if (!isTransfered)
+        {
+            lv_obj_add_state(checkboxTransferObj, LV_STATE_CHECKED);
+        }
+        else
+        {
+            lv_obj_remove_state(checkboxTransferObj, LV_STATE_CHECKED);
+        }
+    }
+
+    void DeleteRow() const
     {
         lv_obj_delete(rowObj);
     }
@@ -73,6 +91,8 @@ struct RowInfo_t
 static std::vector<RowInfo_t> listRowInfo = {};
 static std::vector<RowInfo_t> listRowInfoSorted = {};
 static std::vector<RowInfo_t> listRowInfoSelected = {};
+static std::vector<std::pair<std::string, bool>> listTransferState = {};
+static std::vector<storage_lib::RemovableDriveInfo_t> listExtDrive = {};
 static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
 static lv_obj_t* dummyUpKey = nullptr;
 static lv_obj_t* dummyDownKey = nullptr;
@@ -80,32 +100,36 @@ static lv_obj_t* dummyTopKey = nullptr;
 static lv_obj_t* dummyBottomKey = nullptr;
 static short totalRowHeight = 0;
 static short deleteTimeCounter = 0;
+static int copyItemCount = 0;
 
 static RowInfo_t CreateRowUI()
 {
-    auto row = lv_obj_create(ui_conRL);
-    lv_obj_remove_style_all(row);
-    lv_obj_set_width(row, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(row, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(row, -419);
-    lv_obj_set_y(row, -51);
-    lv_obj_set_align(row, LV_ALIGN_CENTER);
-    lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START);
-    lv_obj_add_flag(row, LV_OBJ_FLAG_CHECKABLE);     /// Flags
-    lv_obj_remove_flag(row, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
+    auto ui_conRLItemCustomRow1 = lv_obj_create(ui_conRL);
+    lv_obj_remove_style_all(ui_conRLItemCustomRow1);
+    lv_obj_set_height(ui_conRLItemCustomRow1, 110);
+    lv_obj_set_width(ui_conRLItemCustomRow1, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_x(ui_conRLItemCustomRow1, -419);
+    lv_obj_set_y(ui_conRLItemCustomRow1, -51);
+    lv_obj_set_align(ui_conRLItemCustomRow1, LV_ALIGN_CENTER);
+    lv_obj_set_flex_flow(ui_conRLItemCustomRow1, LV_FLEX_FLOW_COLUMN_WRAP);
+    lv_obj_set_flex_align(ui_conRLItemCustomRow1, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START);
+    lv_obj_add_flag(ui_conRLItemCustomRow1, LV_OBJ_FLAG_CHECKABLE);     /// Flags
+    lv_obj_remove_flag(ui_conRLItemCustomRow1,
+        LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
         LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
-    lv_obj_set_style_border_color(row, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_opa(row, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_width(row, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_left(row, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_right(row, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_top(row, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_bottom(row, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(row, lv_color_hex(0xFF0000), LV_PART_MAIN | LV_STATE_CHECKED);
-    lv_obj_set_style_border_opa(row, 255, LV_PART_MAIN | LV_STATE_CHECKED);
-    lv_obj_set_style_border_width(row, 5, LV_PART_MAIN | LV_STATE_CHECKED);
-    lv_obj_add_event_cb(row, [](lv_event_t* e) {
+    lv_obj_set_style_border_color(ui_conRLItemCustomRow1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_conRLItemCustomRow1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_conRLItemCustomRow1, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui_conRLItemCustomRow1, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_conRLItemCustomRow1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_conRLItemCustomRow1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_conRLItemCustomRow1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_row(ui_conRLItemCustomRow1, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_column(ui_conRLItemCustomRow1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_conRLItemCustomRow1, lv_color_hex(0xFF0000), LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_border_opa(ui_conRLItemCustomRow1, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_border_width(ui_conRLItemCustomRow1, 5, LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_add_event_cb(ui_conRLItemCustomRow1, [](lv_event_t* e) {
         lv_event_code_t event_code = lv_event_get_code(e);
         if (event_code == LV_EVENT_CLICKED)
         {
@@ -113,54 +137,78 @@ static RowInfo_t CreateRowUI()
         }
         }, LV_EVENT_ALL, NULL);
 
-    auto checkbox = lv_checkbox_create(row);
-    lv_obj_set_width(checkbox, 60);
-    lv_obj_set_height(checkbox, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(checkbox, -106);
-    lv_obj_set_y(checkbox, -98);
-    lv_obj_set_align(checkbox, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(checkbox, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE |
+    auto ui_cbRLItemCustom1 = lv_checkbox_create(ui_conRLItemCustomRow1);
+    lv_obj_set_width(ui_cbRLItemCustom1, 50);
+    lv_obj_set_height(ui_cbRLItemCustom1, 45);
+    lv_obj_set_x(ui_cbRLItemCustom1, -106);
+    lv_obj_set_y(ui_cbRLItemCustom1, -98);
+    lv_obj_set_align(ui_cbRLItemCustom1, LV_ALIGN_CENTER);
+    lv_obj_remove_flag(ui_cbRLItemCustom1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE |
         LV_OBJ_FLAG_GESTURE_BUBBLE | LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC |
         LV_OBJ_FLAG_SCROLL_MOMENTUM | LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
-    lv_obj_set_style_text_font(checkbox, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_cbRLItemCustom1, &lv_font_montserrat_38, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_set_style_bg_image_src(checkbox, &ui_img_check_png, LV_PART_INDICATOR | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_image_src(ui_cbRLItemCustom1, &ui_img_check_png, LV_PART_INDICATOR | LV_STATE_CHECKED);
 
-    auto datetime = lv_label_create(row);
-    lv_obj_set_width(datetime, 265);
-    lv_obj_set_height(datetime, 100);
-    lv_obj_set_x(datetime, 75);
-    lv_obj_set_y(datetime, 184);
-    lv_obj_set_align(datetime, LV_ALIGN_CENTER);
-    lv_label_set_text(datetime, "");
-    lv_obj_remove_flag(datetime,
+    auto ui_cbRLItemCustomTransfer1 = lv_checkbox_create(ui_conRLItemCustomRow1);
+    lv_obj_set_width(ui_cbRLItemCustomTransfer1, 50);
+    lv_obj_set_height(ui_cbRLItemCustomTransfer1, 45);
+    lv_obj_set_x(ui_cbRLItemCustomTransfer1, -106);
+    lv_obj_set_y(ui_cbRLItemCustomTransfer1, -99);
+    lv_obj_set_align(ui_cbRLItemCustomTransfer1, LV_ALIGN_CENTER);
+    lv_obj_remove_flag(ui_cbRLItemCustomTransfer1,
+        LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
+        LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
+        LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
+    lv_obj_set_style_text_font(ui_cbRLItemCustomTransfer1, &lv_font_montserrat_38, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_set_style_bg_color(ui_cbRLItemCustomTransfer1, lv_color_hex(0xFFFFFF), LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_cbRLItemCustomTransfer1, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_src(ui_cbRLItemCustomTransfer1, &ui_img_folder_check_png, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_cbRLItemCustomTransfer1, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_cbRLItemCustomTransfer1, lv_color_hex(0xFFFFFF), LV_PART_INDICATOR | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(ui_cbRLItemCustomTransfer1, 0, LV_PART_INDICATOR | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_image_src(ui_cbRLItemCustomTransfer1, &ui_img_folder_limited_png, LV_PART_INDICATOR | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_image_recolor(ui_cbRLItemCustomTransfer1, lv_color_hex(0xFF0000), LV_PART_INDICATOR | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_image_recolor_opa(ui_cbRLItemCustomTransfer1, 255, LV_PART_INDICATOR | LV_STATE_CHECKED);
+    lv_obj_set_style_border_width(ui_cbRLItemCustomTransfer1, 0, LV_PART_INDICATOR | LV_STATE_CHECKED);
+
+    auto ui_lblRLItemCustomDateTime1 = lv_label_create(ui_conRLItemCustomRow1);
+    lv_obj_set_width(ui_lblRLItemCustomDateTime1, 265);
+    lv_obj_set_height(ui_lblRLItemCustomDateTime1, 100);
+    lv_obj_set_x(ui_lblRLItemCustomDateTime1, 75);
+    lv_obj_set_y(ui_lblRLItemCustomDateTime1, 184);
+    lv_obj_set_align(ui_lblRLItemCustomDateTime1, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_lblRLItemCustomDateTime1, "");
+    lv_obj_remove_flag(ui_lblRLItemCustomDateTime1,
         LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE | LV_OBJ_FLAG_SNAPPABLE |
         LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
         LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
-    lv_obj_set_style_text_color(datetime, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(datetime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(datetime, &lv_font_montserrat_44, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(datetime, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(datetime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_lblRLItemCustomDateTime1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_lblRLItemCustomDateTime1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_lblRLItemCustomDateTime1, &lv_font_montserrat_44, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_lblRLItemCustomDateTime1, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_lblRLItemCustomDateTime1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    auto name = lv_label_create(row);
-    lv_obj_set_width(name, 830);
-    lv_obj_set_height(name, 100);
-    lv_obj_set_x(name, 38);
-    lv_obj_set_y(name, 189);
-    lv_obj_set_align(name, LV_ALIGN_CENTER);
-    lv_label_set_text(name, "");
-    lv_obj_remove_flag(name, LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
-        LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
+    auto ui_lblRLItemCustomName1 = lv_label_create(ui_conRLItemCustomRow1);
+    lv_obj_set_width(ui_lblRLItemCustomName1, 840);
+    lv_obj_set_height(ui_lblRLItemCustomName1, 100);
+    lv_obj_set_x(ui_lblRLItemCustomName1, 38);
+    lv_obj_set_y(ui_lblRLItemCustomName1, 189);
+    lv_obj_set_align(ui_lblRLItemCustomName1, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_lblRLItemCustomName1, "");
+    lv_obj_remove_flag(ui_lblRLItemCustomName1,
+        LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE | LV_OBJ_FLAG_SNAPPABLE |
+        LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
         LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
-    lv_obj_set_style_text_color(name, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(name, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(name, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(name, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(name, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_lblRLItemCustomName1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_lblRLItemCustomName1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_lblRLItemCustomName1, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_lblRLItemCustomName1, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_lblRLItemCustomName1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     RowInfo_t info = { 0 };
-    info.CreateUI(row, checkbox, datetime, name);
+    info.CreateUI(ui_conRLItemCustomRow1, ui_cbRLItemCustom1, ui_cbRLItemCustomTransfer1, ui_lblRLItemCustomDateTime1, ui_lblRLItemCustomName1);
 
     return info;
 }
@@ -187,6 +235,7 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
         { ui_btnRLFastForward, OnClickOperator  , LV_EVENT_CLICKED             },
         { ui_btnRLFastRewind , OnClickOperator  , LV_EVENT_CLICKED             },
         { ui_btnRLDukto      , OnClickOperator  , LV_EVENT_CLICKED             },
+        { ui_btnRLTransfer   , OnClickTransfer  , LV_EVENT_CLICKED             },
         { ui_barDeleteWaiting, OnDelete         , LV_EVENT_LONG_PRESSED_REPEAT },
         { ui_barDeleteWaiting, OnDelete         , LV_EVENT_RELEASED            },
         { ui_cbRLItemAll     , OnClickAllItem   , LV_EVENT_CLICKED             },
@@ -199,8 +248,10 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
     };
 
     ListDataUpdateCallback = {
-        { []() { return system_data::CurrentState.GetState();      }, UpdateButton  },
-        { []() { return system_data::CurrentSoundState.GetState(); }, UpdateButton  },
+        { []() { return system_data::DeviceChange.GetState();      }, UpdateExtDevice        },
+        { []() { return system_data::CurrentState.GetState();      }, UpdateButton           },
+        { []() { return system_data::CurrentSoundState.GetState(); }, UpdateButton           },
+        { []() { return system_data::TransferPercent.GetState();   }, UpdateTransferProgress },
     };
 
     listVkCode = {
@@ -218,8 +269,8 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
 
     // Calculate row height
     auto rowSpacing = lv_obj_get_style_pad_row(ui_conRL, LV_STYLE_PAD_ROW);
-    auto rowHeight = lv_obj_get_height(ui_lblRLName1);
-    auto borderWidth = lv_obj_get_style_border_width(ui_conRLRow1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    auto rowHeight = lv_obj_get_height(ui_lblRLItemName1);
+    auto borderWidth = lv_obj_get_style_border_width(ui_conRLItemRow1, LV_PART_MAIN | LV_STATE_DEFAULT);
     auto totalHeight = rowHeight + borderWidth * 2 + rowSpacing;
 
     // Clear template item
@@ -236,6 +287,19 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
             videoInfo.datetime.wHour, videoInfo.datetime.wMinute, videoInfo.datetime.wSecond); // @todo: wait setting
 
         rowInfo.CreateData(datetime, videoInfo.videoName, videoInfo.videoID);
+
+        // Find if the latest transfer state is exist
+        auto find = std::find_if(listTransferState.begin(), listTransferState.end(),
+            [rowInfo](const std::pair<std::string, bool>& item) {
+                return rowInfo.id == item.first;
+            });
+
+        // Update transfer state
+        if (find != listTransferState.end())
+        {
+            rowInfo.isTransfered = find->second;
+            rowInfo.UpdateTransferState();
+        }
 
         listRowInfo.push_back(rowInfo);
 
@@ -450,6 +514,44 @@ void VideoRecordListScreen::OnClickOperator(lv_event_t* event)
     }
 }
 
+void VideoRecordListScreen::OnClickTransfer(lv_event_t* event)
+{
+    system_data::CurrentState.SetValue(STATE_TYPE::S_TRANSFER);
+
+    char selectDrive[MAX_PATH] = { 0 };
+    std::string driveLetter = "";
+    int totalPercent = listRowInfoSelected.size() * STANDARD_PERCENT;
+
+    // Get selected drive
+    lv_dropdown_get_selected_str(ui_dropPortableMemory, selectDrive, sizeof(selectDrive));
+
+    // Get drive letter from list
+    for (const auto& driveInfo : listExtDrive)
+    {
+        if (driveInfo.label == selectDrive)
+        {
+            driveLetter = driveInfo.letter;
+            break;
+        }
+    }
+
+    // Set total percent
+    lv_bar_set_range(ui_barTransferProgress, 0, totalPercent);
+    lv_obj_remove_flag(ui_barTransferProgress, LV_OBJ_FLAG_HIDDEN);
+
+    // Execute copy
+    std::thread([driveLetter]() {
+        for (auto& rowInfo : listRowInfoSelected)
+        {
+            rowInfo.isTransfered = recordlist_lib::ExportVideoToExternalDrive(rowInfo.id, rowInfo.name, driveLetter);
+            copyItemCount++;
+        }
+
+        copyItemCount = 0;
+        system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
+        }).detach();
+}
+
 void VideoRecordListScreen::OnDelete(lv_event_t* event)
 {
     // Check if the input is a continuous long press event
@@ -493,8 +595,11 @@ void VideoRecordListScreen::OnDelete(lv_event_t* event)
 
 void VideoRecordListScreen::UpdateButton()
 {
+    auto oldState = system_data::CurrentState.GetOldValue();
     auto state = system_data::CurrentState.GetValue();
 
+    lv_obj_remove_state(ui_btnVideoSearch, LV_STATE_DISABLED);
+    lv_obj_remove_state(ui_dropVideoFilter, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_btnRLPlay, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_btnRLPause, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_btnRLStop, LV_STATE_DISABLED);
@@ -504,9 +609,17 @@ void VideoRecordListScreen::UpdateButton()
     lv_obj_remove_state(ui_btnRLFastRewind, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_barDeleteWaiting, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_btnRLNewRecord, LV_STATE_DISABLED);
+    lv_obj_remove_state(ui_dropPortableMemory, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_btnRLTransfer, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_btnRLDukto, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_btnRLBack, LV_STATE_DISABLED);
+
+    // Update Search button and Filter dropdown
+    if (state != STATE_TYPE::S_STOP)
+    {
+        lv_obj_add_state(ui_btnVideoSearch, LV_STATE_DISABLED);
+        lv_obj_add_state(ui_dropVideoFilter, LV_STATE_DISABLED);
+    }
 
     // Update Play button
     if ((listRowInfoSelected.size() != 1)
@@ -562,9 +675,17 @@ void VideoRecordListScreen::UpdateButton()
         lv_obj_add_state(ui_barDeleteWaiting, LV_STATE_DISABLED);
     }
 
+    // Update portable memory dropdown
+    if (!listExtDrive.size())
+    {
+        lv_obj_add_state(ui_dropPortableMemory, LV_STATE_DISABLED);
+    }
+
     // Update Transfer button
     if ((!listRowInfoSelected.size())
-        || (state != STATE_TYPE::S_STOP))
+        || (state != STATE_TYPE::S_STOP)
+        || (!listExtDrive.size())
+        )
     {
         lv_obj_add_state(ui_btnRLTransfer, LV_STATE_DISABLED);
     }
@@ -599,9 +720,11 @@ void VideoRecordListScreen::UpdateButton()
         }
     }
 
-    // Update all button when transfering
+    // Disable all button when transfering
     if (state == STATE_TYPE::S_TRANSFER)
     {
+        lv_obj_add_state(ui_btnVideoSearch, LV_STATE_DISABLED);
+        lv_obj_add_state(ui_dropVideoFilter, LV_STATE_DISABLED);
         lv_obj_add_state(ui_btnRLPlay, LV_STATE_DISABLED);
         lv_obj_add_state(ui_btnRLPause, LV_STATE_DISABLED);
         lv_obj_add_state(ui_btnRLStop, LV_STATE_DISABLED);
@@ -614,4 +737,61 @@ void VideoRecordListScreen::UpdateButton()
         lv_obj_add_state(ui_btnRLDukto, LV_STATE_DISABLED);
         lv_obj_add_state(ui_btnRLBack, LV_STATE_DISABLED);
     }
+
+    // Finish transfer
+    if ((state == STATE_TYPE::S_STOP) && (oldState == STATE_TYPE::S_TRANSFER))
+    {
+        // Clear transfer progress
+        lv_bar_set_value(ui_barTransferProgress, 0, LV_ANIM_ON);
+        lv_obj_add_flag(ui_barTransferProgress, LV_OBJ_FLAG_HIDDEN);
+
+        // Update item transfer state
+        for (auto& rowInfo : listRowInfoSelected)
+        {
+            // Find if the latest transfer state is exist
+            auto find = std::find_if(listTransferState.begin(), listTransferState.end(),
+                [rowInfo](const std::pair<std::string, bool>& item) {
+                    return rowInfo.id == item.first;
+                });
+
+            // Update transfer state
+            if (find != listTransferState.end())
+            {
+                find->second = rowInfo.isTransfered;
+            }
+            // Add new transfer state
+            else
+            {
+                listTransferState.push_back({ rowInfo.id, rowInfo.isTransfered });
+            }
+
+            rowInfo.UpdateTransferState();
+        }
+    }
+}
+
+void VideoRecordListScreen::UpdateTransferProgress()
+{
+    int percent = system_data::TransferPercent.GetValue();
+    int value = copyItemCount * STANDARD_PERCENT + percent;
+
+    lv_bar_set_value(ui_barTransferProgress, value, LV_ANIM_ON);
+}
+
+void VideoRecordListScreen::UpdateExtDevice()
+{
+    listExtDrive = storage_lib::GetExternalDrivesList();
+
+    if (listExtDrive.size())
+    {
+        lv_dropdown_set_options(ui_dropPortableMemory, common_lib::JoinString("\n", storage_lib::GetExternalLabelList()).c_str());
+    }
+    else
+    {
+        lv_dropdown_set_options(ui_dropPortableMemory, "");
+    }
+
+    UpdateButton();
+
+    system_data::DeviceChange.SetValue(false);
 }

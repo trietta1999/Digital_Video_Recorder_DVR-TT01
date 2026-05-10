@@ -16,9 +16,12 @@ namespace system_data
     extern CData<KEYBOARD_TYPE> KeyboardType;
     extern CData<short> T9ConfirmTimeout;
     extern CData<std::string> FreeStorage;
+    extern CData<std::string> FreeUSBStorage;
     extern CData<STATE_TYPE> CurrentState;
     extern CData<bool> IsTempVideoInfo;
     extern CData<bool> CurrentSoundState;
+    extern CData<double> TransferPercent;
+    extern CData<bool> DeviceChange;
 }
 
 namespace current_videoinfo_data

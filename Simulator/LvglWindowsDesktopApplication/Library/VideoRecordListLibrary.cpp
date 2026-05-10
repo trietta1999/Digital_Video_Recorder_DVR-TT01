@@ -43,4 +43,14 @@ namespace recordlist_lib
 
         return list;
     }
+
+    bool ExportVideoToExternalDrive(std::string id, std::string name, std::string driveLetter)
+    {
+        wchar_t inputPath[MAX_CHARS] = { 0 };
+        wchar_t outputPath[MAX_CHARS] = { 0 };
+        swprintf_s(inputPath, L"%s\\video_data\\%s\\video.mp4", common_lib::GetSystemPath().c_str(), common_lib::ConvertStringToWString(id).c_str());
+        swprintf_s(outputPath, L"%s%s.mp4", common_lib::ConvertStringToWString(driveLetter).c_str(), common_lib::ConvertStringToWString(name).c_str());
+
+        return storage_lib::CopyFileWithProgress(inputPath, outputPath);
+    }
 }

@@ -10,9 +10,12 @@ namespace system_data
     CData<KEYBOARD_TYPE> KeyboardType;
     CData<short> T9ConfirmTimeout;
     CData<std::string> FreeStorage;
+    CData<std::string> FreeUSBStorage;
     CData<STATE_TYPE> CurrentState;
     CData<bool> IsTempVideoInfo;
     CData<bool> CurrentSoundState;
+    CData<double> TransferPercent;
+    CData<bool> DeviceChange;
 }
 
 namespace current_videoinfo_data
@@ -64,9 +67,12 @@ void CommonDataUpdateAll()
     system_data::KeyboardType.ResetState();
     system_data::T9ConfirmTimeout.ResetState();
     system_data::FreeStorage.ResetState();
+    system_data::FreeUSBStorage.ResetState();
     system_data::CurrentState.ResetState();
     system_data::IsTempVideoInfo.ResetState();
     system_data::CurrentSoundState.ResetState();
+    system_data::TransferPercent.ResetState();
+    system_data::DeviceChange.ResetState();
 
     current_videoinfo_data::VideoID.ResetState();
     current_videoinfo_data::VideoEvent.ResetState();

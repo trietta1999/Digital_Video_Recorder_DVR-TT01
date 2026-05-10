@@ -102,6 +102,12 @@ static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
     switch (uMsg)
     {
+    case WM_DEVICECHANGE:
+    {
+        storage_lib::CollectExternalDrivesList();
+        system_data::DeviceChange.SetValue(true);
+    }
+        break;
     case WM_QUIT:
     case WM_DESTROY:
     case WM_NCDESTROY:
@@ -189,6 +195,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 #ifdef _DEBUG
     AttachConsoleWindow();
 #endif
+
+    // Init external device
+    ::SendMessage(window_handle, WM_DEVICECHANGE, 0, 0);
 
     // Create UI
     ui_init();

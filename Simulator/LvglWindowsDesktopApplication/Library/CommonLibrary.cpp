@@ -2,7 +2,7 @@
 #include <shlwapi.h>
 #include "CommonLibrary.h"
 #include "CommonData.h"
-#include "SystemConfig.h"
+
 
 namespace config_lib
 {
@@ -75,22 +75,6 @@ namespace common_lib
         }
 
         return output;
-    }
-
-    std::string GetSystemFreeStorage()
-    {
-        ULARGE_INTEGER freeBytesAvailableToUser; // Available free space for the user
-        ULARGE_INTEGER totalNumberOfBytes; // Total disk space
-        ULARGE_INTEGER totalNumberOfFreeBytes; // Actual total free space
-        wchar_t buffer[MAX_PATH];
-        auto drive = config_lib::GetWStringConfig(SYSTEM_SECTION, STORAGE_DRIVE, SYSTEM_CONFIG);
-
-        if (::GetDiskFreeSpaceEx(drive.c_str(), &freeBytesAvailableToUser, &totalNumberOfBytes, &totalNumberOfFreeBytes))
-        {
-            ::StrFormatByteSize(freeBytesAvailableToUser.QuadPart, buffer, MAX_PATH);
-        }
-
-        return ConvertWStringToString(buffer);
     }
 
     SYSTEMTIME GetSystemDateTime()

@@ -47,6 +47,8 @@
 #define RL_ITEM_PER_PAGE 5
 #define SCROLL_Y_STEP 200
 
+#define STANDARD_PERCENT 100
+
 #ifdef _DEBUG
 #define SCRIPT_DIRECTORY L"debug_script"
 #else

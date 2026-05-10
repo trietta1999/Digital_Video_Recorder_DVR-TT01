@@ -95,6 +95,7 @@ namespace videorecord_lib
 namespace recordlist_lib
 {
     std::vector<videoinfo_lib::videoinfo_t> GetVideoInfoListData();
+    bool ExportVideoToExternalDrive(std::string id, std::string name, std::string driveLetter);
 }
 
 namespace config_lib
@@ -105,11 +106,27 @@ namespace config_lib
     void WriteWStringConfig(std::wstring section, std::wstring key, std::wstring file, std::wstring value);
 }
 
+namespace storage_lib
+{
+    struct RemovableDriveInfo_t
+    {
+        std::string letter = "";
+        std::string label = "";
+        std::string totalGB = "";
+        std::string freeGB = "";
+    };
+
+    std::string GetDriveFreeStorage(std::string driveLetter);
+    void CollectExternalDrivesList();
+    std::vector<RemovableDriveInfo_t> GetExternalDrivesList();
+    std::vector<std::string> GetExternalLabelList();
+    bool CopyFileWithProgress(std::wstring source, std::wstring dest);
+}
+
 namespace common_lib
 {
     bool CheckInRangeNumber(int check, int min, int max);
     std::string JoinString(std::string delimeter, const std::vector<std::string>& list);
-    std::string GetSystemFreeStorage();
     SYSTEMTIME GetSystemDateTime();
     std::wstring ConvertStringToWString(std::string input);
     std::string ConvertWStringToString(std::wstring input);

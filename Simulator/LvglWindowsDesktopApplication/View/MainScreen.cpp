@@ -7,6 +7,8 @@
 #include "VideoRecordListScreen.h"
 
 static lv_timer_t* timerGetSystemData = nullptr;
+static int currentExtIndex = 0;
+static std::vector<storage_lib::RemovableDriveInfo_t> listExtDrive = {};
 
 MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
@@ -21,15 +23,18 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_btnSound          , OnClickOperator       , LV_EVENT_CLICKED },
         { ui_btnFastForward    , OnClickOperator       , LV_EVENT_CLICKED },
         { ui_btnFastRewind     , OnClickOperator       , LV_EVENT_CLICKED },
+        { ui_btnStorageUSB     , OnClickStorageUSB     , LV_EVENT_CLICKED },
     };
 
     ListDataUpdateCallback = {
-        { []() { return system_data::CurrentDate.GetState();       }, UpdateDate    },
-        { []() { return system_data::CurrentTime.GetState();       }, UpdateTime    },
-        { []() { return system_data::FreeStorage.GetState();       }, UpdateStorage },
-        { []() { return system_data::CurrentState.GetState();      }, UpdateButton  },
-        { []() { return system_data::IsTempVideoInfo.GetState();   }, UpdateButton  },
-        { []() { return system_data::CurrentSoundState.GetState(); }, UpdateButton  },
+        { []() { return system_data::DeviceChange.GetState();      }, UpdateExtDevice },
+        { []() { return system_data::CurrentDate.GetState();       }, UpdateDate      },
+        { []() { return system_data::CurrentTime.GetState();       }, UpdateTime      },
+        { []() { return system_data::FreeStorage.GetState();       }, UpdateStorage   },
+        { []() { return system_data::FreeUSBStorage.GetState();    }, UpdateStorage   },
+        { []() { return system_data::CurrentState.GetState();      }, UpdateButton    },
+        { []() { return system_data::IsTempVideoInfo.GetState();   }, UpdateButton    },
+        { []() { return system_data::CurrentSoundState.GetState(); }, UpdateButton    },
     };
 
     if (!system_data::IsTempVideoInfo.GetValue())
@@ -65,14 +70,23 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         char buffTime[MAX_PATH] = { 0 };
 
         auto systime = common_lib::GetSystemDateTime();
-        auto freeSpace = common_lib::GetSystemFreeStorage();
 
         sprintf(buffDate, "%02d.%02d.%04d", systime.wDay, systime.wMonth, systime.wYear); // @todo: wait setting
         sprintf(buffTime, "%02d.%02d.%02d", systime.wHour, systime.wMinute, systime.wSecond); // @todo: wait setting
 
         system_data::CurrentDate.SetValue(buffDate);
         system_data::CurrentTime.SetValue(buffTime);
-        system_data::FreeStorage.SetValue(freeSpace);
+        system_data::FreeStorage.SetValue(storage_lib::GetDriveFreeStorage(common_lib::ConvertWStringToString(common_lib::GetSystemPath())));
+
+        if (listExtDrive.size())
+        {
+            if (currentExtIndex >= listExtDrive.size())
+            {
+                currentExtIndex = 0;
+            }
+
+            system_data::FreeUSBStorage.SetValue(storage_lib::GetDriveFreeStorage(listExtDrive[currentExtIndex].letter));
+        }
         }, TIMECYCLE_1SEC, nullptr);
 }
 
@@ -211,6 +225,18 @@ void MainScreen::OnClickVideoRecordList(lv_event_t* event)
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_VIDEO_RECORDLIST);
 }
 
+void MainScreen::OnClickStorageUSB(lv_event_t* event)
+{
+    if (currentExtIndex < listExtDrive.size() - 1)
+    {
+        currentExtIndex++;
+    }
+    else
+    {
+        currentExtIndex = 0;
+    }
+}
+
 void MainScreen::UpdateDate()
 {
     lv_label_set_text(ui_lblDate, system_data::CurrentDate.GetValue().c_str());
@@ -224,6 +250,8 @@ void MainScreen::UpdateTime()
 void MainScreen::UpdateStorage()
 {
     lv_label_set_text(ui_lblStorage, system_data::FreeStorage.GetValue().c_str());
+    lv_label_set_text(ui_lblStorageUSB, system_data::FreeUSBStorage.GetValue().c_str());
+    lv_label_set_text_fmt(ui_lblStorageUSBIndex, "%d", currentExtIndex + 1);
 }
 
 void MainScreen::UpdateButton()
@@ -311,4 +339,20 @@ void MainScreen::UpdateButton()
         lv_obj_add_state(ui_btnFastForward, LV_STATE_DISABLED);
         lv_obj_add_state(ui_btnFastRewind, LV_STATE_DISABLED);
     }
+}
+
+void MainScreen::UpdateExtDevice()
+{
+    listExtDrive = storage_lib::GetExternalDrivesList();
+
+    if (listExtDrive.size())
+    {
+        lv_obj_remove_flag(ui_conStorageUSB, LV_OBJ_FLAG_HIDDEN);
+    }
+    else
+    {
+        lv_obj_add_flag(ui_conStorageUSB, LV_OBJ_FLAG_HIDDEN);
+    }
+
+    system_data::DeviceChange.SetValue(false);
 }

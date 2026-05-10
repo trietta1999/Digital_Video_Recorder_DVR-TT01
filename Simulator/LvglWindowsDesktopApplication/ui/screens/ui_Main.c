@@ -25,7 +25,7 @@ lv_obj_t * ui_lblTime = NULL;
 lv_obj_t * ui_Container5 = NULL;
 lv_obj_t * ui_lblStorage = NULL;
 lv_obj_t * ui_Image1 = NULL;
-lv_obj_t * ui_Container4 = NULL;
+lv_obj_t * ui_conStorageUSB = NULL;
 lv_obj_t * ui_lblStorageUSB = NULL;
 lv_obj_t * ui_btnStorageUSB = NULL;
 lv_obj_t * ui_lblStorageUSBIndex = NULL;
@@ -514,26 +514,27 @@ void ui_Main_screen_init(void)
                        LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
     lv_image_set_inner_align(ui_Image1, LV_IMAGE_ALIGN_LEFT_MID);
 
-    ui_Container4 = lv_obj_create(ui_Container3);
-    lv_obj_remove_style_all(ui_Container4);
-    lv_obj_set_width(ui_Container4, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Container4, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Container4, 547);
-    lv_obj_set_y(ui_Container4, 215);
-    lv_obj_set_align(ui_Container4, LV_ALIGN_CENTER);
-    lv_obj_set_flex_flow(ui_Container4, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(ui_Container4, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_Container4, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE |
-                       LV_OBJ_FLAG_GESTURE_BUBBLE | LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC |
-                       LV_OBJ_FLAG_SCROLL_MOMENTUM | LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
-    lv_obj_set_style_pad_left(ui_Container4, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_right(ui_Container4, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_top(ui_Container4, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_bottom(ui_Container4, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_row(ui_Container4, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_column(ui_Container4, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_conStorageUSB = lv_obj_create(ui_Container3);
+    lv_obj_remove_style_all(ui_conStorageUSB);
+    lv_obj_set_width(ui_conStorageUSB, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_conStorageUSB, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_conStorageUSB, 547);
+    lv_obj_set_y(ui_conStorageUSB, 215);
+    lv_obj_set_align(ui_conStorageUSB, LV_ALIGN_CENTER);
+    lv_obj_set_flex_flow(ui_conStorageUSB, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(ui_conStorageUSB, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_remove_flag(ui_conStorageUSB,
+                       LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
+                       LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
+                       LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
+    lv_obj_set_style_pad_left(ui_conStorageUSB, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_conStorageUSB, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_conStorageUSB, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_conStorageUSB, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_row(ui_conStorageUSB, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_column(ui_conStorageUSB, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_lblStorageUSB = lv_label_create(ui_Container4);
+    ui_lblStorageUSB = lv_label_create(ui_conStorageUSB);
     lv_obj_set_width(ui_lblStorageUSB, 270);
     lv_obj_set_height(ui_lblStorageUSB, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_lblStorageUSB, -46);
@@ -549,7 +550,7 @@ void ui_Main_screen_init(void)
     lv_obj_set_style_text_align(ui_lblStorageUSB, LV_TEXT_ALIGN_RIGHT, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_lblStorageUSB, &lv_font_montserrat_44, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_btnStorageUSB = lv_button_create(ui_Container4);
+    ui_btnStorageUSB = lv_button_create(ui_conStorageUSB);
     lv_obj_set_width(ui_btnStorageUSB, 80);
     lv_obj_set_height(ui_btnStorageUSB, 80);
     lv_obj_set_x(ui_btnStorageUSB, -47);
@@ -571,7 +572,7 @@ void ui_Main_screen_init(void)
     lv_obj_set_style_border_opa(ui_btnStorageUSB, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_btnStorageUSB, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_lblStorageUSBIndex = lv_label_create(ui_Container4);
+    ui_lblStorageUSBIndex = lv_label_create(ui_conStorageUSB);
     lv_obj_set_width(ui_lblStorageUSBIndex, 35);
     lv_obj_set_height(ui_lblStorageUSBIndex, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_lblStorageUSBIndex, 24);
@@ -623,7 +624,7 @@ void ui_Main_screen_destroy(void)
     ui_Container5 = NULL;
     ui_lblStorage = NULL;
     ui_Image1 = NULL;
-    ui_Container4 = NULL;
+    ui_conStorageUSB = NULL;
     ui_lblStorageUSB = NULL;
     ui_btnStorageUSB = NULL;
     ui_lblStorageUSBIndex = NULL;
