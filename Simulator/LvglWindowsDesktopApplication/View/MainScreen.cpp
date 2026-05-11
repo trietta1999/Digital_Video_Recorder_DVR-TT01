@@ -354,5 +354,5 @@ void MainScreen::UpdateExtDevice()
         lv_obj_add_flag(ui_conStorageUSB, LV_OBJ_FLAG_HIDDEN);
     }
 
-    system_data::DeviceChange.SetValue(false);
+    ::SendMessage(system_data::WindowHandle.GetValue(), WM_DEVICECHANGE_DONE, 0, 0);
 }

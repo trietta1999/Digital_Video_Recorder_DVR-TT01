@@ -99,6 +99,7 @@ enum
 {
     WM_USER_MIN = WM_USER,
     WM_KB_KEYDOWN,
+    WM_DEVICECHANGE_DONE,
 };
 
 //#define STRIKE_NUM_MAX 3

@@ -235,6 +235,7 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
         { ui_btnRLFastForward, OnClickOperator  , LV_EVENT_CLICKED             },
         { ui_btnRLFastRewind , OnClickOperator  , LV_EVENT_CLICKED             },
         { ui_btnRLDukto      , OnClickOperator  , LV_EVENT_CLICKED             },
+        { ui_btnRLNewRecord  , OnClickOperator  , LV_EVENT_CLICKED             },
         { ui_btnRLTransfer   , OnClickTransfer  , LV_EVENT_CLICKED             },
         { ui_barDeleteWaiting, OnDelete         , LV_EVENT_LONG_PRESSED_REPEAT },
         { ui_barDeleteWaiting, OnDelete         , LV_EVENT_RELEASED            },
@@ -505,6 +506,23 @@ void VideoRecordListScreen::OnClickOperator(lv_event_t* event)
     else if (event->current_target == ui_btnRLFastForward)
     {
         videorecord_lib::ExecuteSeek(false, true);
+    }
+    else if (event->current_target == ui_btnRLNewRecord)
+    {
+        const auto& videoID = listRowInfoSelected.front().id;
+        auto videoInfo = videoinfo_lib::GetExistData(videoID);
+
+        input_data::VideoEvent.SetValue(videoInfo.videoEvent);
+        input_data::VideoName.SetValue(videoInfo.videoName);
+        input_data::VideoCategory.SetValue(videoInfo.videoCategory);
+        input_data::VideoDesc.SetValue(videoInfo.videoDesc);
+        input_data::VideoAuthor.SetValue(videoInfo.videoAuthor);
+
+        system_data::IsTempVideoInfo.SetValue(true);
+
+        videoinfo_lib::CreateCurrentInfoFromInfo(videoInfo);
+
+        ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);
     }
     else if (event->current_target == ui_btnRLDukto)
     {
@@ -793,5 +811,5 @@ void VideoRecordListScreen::UpdateExtDevice()
 
     UpdateButton();
 
-    system_data::DeviceChange.SetValue(false);
+    ::SendMessage(system_data::WindowHandle.GetValue(), WM_DEVICECHANGE_DONE, 0, 0);
 }

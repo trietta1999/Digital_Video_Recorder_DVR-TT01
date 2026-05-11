@@ -102,7 +102,11 @@ namespace videoinfo_lib
 
     void CreateCurrentInfoFromInput()
     {
-        current_videoinfo_data::VideoID.SetValue(common_lib::GenerateGUID());
+        if (current_videoinfo_data::VideoID.GetValue().empty())
+        {
+            current_videoinfo_data::VideoID.SetValue(common_lib::GenerateGUID());
+        }
+
         COPY_CDATA_1TO2(input_data::VideoEvent, current_videoinfo_data::VideoEvent);
         COPY_CDATA_1TO2(input_data::VideoName, current_videoinfo_data::VideoName);
         COPY_CDATA_1TO2(input_data::VideoCategory, current_videoinfo_data::VideoCategory);

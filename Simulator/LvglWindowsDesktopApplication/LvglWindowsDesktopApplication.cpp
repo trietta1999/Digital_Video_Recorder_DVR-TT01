@@ -108,6 +108,9 @@ static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
         system_data::DeviceChange.SetValue(true);
     }
         break;
+    case WM_DEVICECHANGE_DONE:
+        system_data::DeviceChange.SetValue(false);
+        break;
     case WM_QUIT:
     case WM_DESTROY:
     case WM_NCDESTROY:
