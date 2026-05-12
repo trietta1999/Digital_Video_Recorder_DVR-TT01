@@ -21,6 +21,13 @@ namespace videorecord_lib
         return hwnd;
     }
 
+    static void SetWindowFocus(HWND hwnd)
+    {
+        ::Sleep(TIMECYCLE_10MS);
+        ::SetForegroundWindow(hwnd);
+        ::SetFocus(hwnd);
+    }
+
     static void ChangeWindowStyle(std::wstring screenName, POINT point, SIZE size)
     {
         // Hide caption, block resizable
@@ -35,6 +42,7 @@ namespace videorecord_lib
         ::SetWindowPos(extHwnd, HWND_TOP, point.x, point.y, size.cx, size.cy, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 #else
         ::SetWindowPos(extHwnd, HWND_TOPMOST, point.x, point.y, size.cx, size.cy, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+        ::SetWindowLongPtr(extHwnd, GWLP_HWNDPARENT, (LONG_PTR)system_data::WindowHandle.GetValue());
 #endif
     }
 
@@ -107,6 +115,8 @@ namespace videorecord_lib
         {
             SetSoundState();
         }
+
+        SetWindowFocus(system_data::WindowHandle.GetValue());
     }
 
     void StopExternalWindow()
@@ -121,28 +131,30 @@ namespace videorecord_lib
             }
             else
             {
-                ::SetForegroundWindow(hwnd);
-                ::SetFocus(hwnd);
+                SetWindowFocus(hwnd);
 
                 BYTE vkey = LOBYTE(VkKeyScan('Q'));
                 BYTE scanCode = (BYTE)MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
 
                 keybd_event(vkey, scanCode, 0, 0);
                 keybd_event(vkey, scanCode, KEYEVENTF_KEYUP, 0);
+
+                SetWindowFocus(system_data::WindowHandle.GetValue());
             }
         }
     }
 
     void SetSoundState()
     {
-        ::SetForegroundWindow(extHwnd);
-        ::SetFocus(extHwnd);
+        SetWindowFocus(extHwnd);
 
         BYTE vkey = LOBYTE(VkKeyScan('M'));
         BYTE scanCode = (BYTE)MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
 
         keybd_event(vkey, scanCode, 0, 0);
         keybd_event(vkey, scanCode, KEYEVENTF_KEYUP, 0);
+
+        SetWindowFocus(system_data::WindowHandle.GetValue());
     }
 
     void SetMicState(bool enable)
@@ -152,8 +164,7 @@ namespace videorecord_lib
 
     void ExecuteSeek(bool rewind, bool forward)
     {
-        ::SetForegroundWindow(extHwnd);
-        ::SetFocus(extHwnd);
+        SetWindowFocus(extHwnd);
 
         if (rewind)
         {
@@ -165,18 +176,21 @@ namespace videorecord_lib
             keybd_event(VK_RIGHT, 0, KEYEVENTF_EXTENDEDKEY, 0);
             keybd_event(VK_RIGHT, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
         }
+
+        SetWindowFocus(system_data::WindowHandle.GetValue());
     }
 
     void ExecutePause()
     {
-        ::SetForegroundWindow(extHwnd);
-        ::SetFocus(extHwnd);
+        SetWindowFocus(extHwnd);
 
         BYTE vkey = LOBYTE(VkKeyScan('P'));
         BYTE scanCode = (BYTE)MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
 
         keybd_event(vkey, scanCode, 0, 0);
         keybd_event(vkey, scanCode, KEYEVENTF_KEYUP, 0);
+
+        SetWindowFocus(system_data::WindowHandle.GetValue());
     }
 
     void KillAllProcess()

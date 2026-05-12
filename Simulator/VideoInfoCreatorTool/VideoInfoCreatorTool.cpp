@@ -46,7 +46,7 @@ int main()
         videoinfo_lib::CreateNewData(info.videoID, info);
 
         // Create new info folder
-        swprintf_s(dummyVideoPath, L"%s\\debug_script\\dummy_video.mp4", common_lib::GetSystemPath().c_str());
+        swprintf_s(dummyVideoPath, L"%s\\%s\\dummy_video.mp4", common_lib::GetSystemPath().c_str(), SCRIPT_DIRECTORY);
         swprintf_s(outputPath, L"%s\\video_data\\%s\\", common_lib::GetSystemPath().c_str(), common_lib::ConvertStringToWString(info.videoID).c_str());
         ::CreateDirectory(outputPath, NULL);
         ::CopyFile(dummyVideoPath, (std::wstring(outputPath) + L"\\video.mp4").c_str(), FALSE);
