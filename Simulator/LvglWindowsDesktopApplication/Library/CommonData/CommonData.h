@@ -47,6 +47,7 @@ namespace input_data
     extern CData<std::string> VideoCategory;
     extern CData<std::string> VideoDesc;
     extern CData<std::string> VideoAuthor;
+    extern CData<std::string> VideoSearch;
 }
 
 namespace temp_data

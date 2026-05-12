@@ -22,6 +22,7 @@ private:
     static void UpdateButton();
     static void UpdateTransferProgress();
     static void UpdateExtDevice();
+    static void UpdateVideoInfoList();
 };
 
 #endif // _VIDEORECORDLIST_SCREEN_H

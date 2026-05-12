@@ -69,7 +69,6 @@ LV_IMG_DECLARE(ui_img_replace_video_png);    // assets/replace_video.png
 LV_IMG_DECLARE(ui_img_delete_png);    // assets/delete.png
 LV_IMG_DECLARE(ui_img_drive_file_move_png);    // assets/drive_file_move.png
 LV_IMG_DECLARE(ui_img_dukto_png);    // assets/dukto.png
-LV_IMG_DECLARE(ui_img_refresh_png);    // assets/refresh.png
 
 // UI INIT
 void ui_init(void);

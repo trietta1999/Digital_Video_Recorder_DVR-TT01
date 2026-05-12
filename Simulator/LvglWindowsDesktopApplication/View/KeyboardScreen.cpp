@@ -80,6 +80,7 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { SCREEN_NAME::KBSCREEN_VIDEO_CATEGORY, { "New category", []() { return temp_data::VideoCategory.GetValue(); } } },
         { SCREEN_NAME::KBSCREEN_VIDEO_DESC    , { "Description" , []() { return temp_data::VideoDesc.GetValue(); }     } },
         { SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR  , { "Author"      , []() { return temp_data::VideoAuthor.GetValue(); }   } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_SEARCH  , { "Search video", []() { return input_data::VideoSearch.GetValue(); }  } },
     };
 
     listVkCode = {
@@ -325,6 +326,9 @@ void KeyboardScreen::SetKbData(SCREEN_NAME screen, void* data)
         break;
     case SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR:
         temp_data::VideoAuthor.SetValue(*(std::string*)data);
+        break;
+    case SCREEN_NAME::KBSCREEN_VIDEO_SEARCH:
+        input_data::VideoSearch.SetValue(*(std::string*)data);
         break;
     default:
         break;

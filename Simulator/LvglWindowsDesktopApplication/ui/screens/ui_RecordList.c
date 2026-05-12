@@ -62,9 +62,6 @@ void ui_event_dropVideoFilter(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if(event_code == LV_EVENT_CLICKED) {
-        CommonButtonOnClick(e);
-    }
     if(event_code == LV_EVENT_VALUE_CHANGED) {
         CommonButtonOnValueChange(e);
     }
@@ -262,6 +259,7 @@ void ui_RecordList_screen_init(void)
     lv_obj_set_x(ui_lblVideoSearch, 109);
     lv_obj_set_y(ui_lblVideoSearch, 176);
     lv_obj_set_align(ui_lblVideoSearch, LV_ALIGN_CENTER);
+    lv_label_set_long_mode(ui_lblVideoSearch, LV_LABEL_LONG_DOT);
     lv_label_set_text(ui_lblVideoSearch, "");
     lv_obj_remove_flag(ui_lblVideoSearch,
                        LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE | LV_OBJ_FLAG_SNAPPABLE |
@@ -269,7 +267,7 @@ void ui_RecordList_screen_init(void)
                        LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
     lv_obj_set_style_text_color(ui_lblVideoSearch, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_lblVideoSearch, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_lblVideoSearch, &lv_font_montserrat_46, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_lblVideoSearch, &lv_font_montserrat_34, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_lblVideoSearch, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_lblVideoSearch, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -296,7 +294,7 @@ void ui_RecordList_screen_init(void)
     lv_obj_set_style_border_width(ui_btnVideoSearch, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_dropVideoFilter = lv_dropdown_create(ui_RecordList);
-    lv_dropdown_set_options(ui_dropVideoFilter, "--All video--\nEvent\nVideo name\nCategory\nDescription\nAuthor");
+    lv_dropdown_set_options(ui_dropVideoFilter, "Event\nVideo name\nCategory\nDescription\nAuthor");
     lv_dropdown_set_selected_highlight(ui_dropVideoFilter, false);
     lv_obj_set_width(ui_dropVideoFilter, 360);
     lv_obj_set_height(ui_dropVideoFilter, 80);
@@ -449,6 +447,7 @@ void ui_RecordList_screen_init(void)
     lv_obj_set_x(ui_lblRLItemName1, 38);
     lv_obj_set_y(ui_lblRLItemName1, 189);
     lv_obj_set_align(ui_lblRLItemName1, LV_ALIGN_CENTER);
+    lv_label_set_long_mode(ui_lblRLItemName1, LV_LABEL_LONG_DOT);
     lv_label_set_text(ui_lblRLItemName1, "");
     lv_obj_remove_flag(ui_lblRLItemName1,
                        LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE | LV_OBJ_FLAG_SNAPPABLE |
