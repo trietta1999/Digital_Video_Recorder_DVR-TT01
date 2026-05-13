@@ -21,7 +21,7 @@
 #define DUKTO_SCREENNAME L"Dukto"
 
 #define HORIZON_MAX_RESOLUTION 1280
-#define VERTICAL_MAX_RESOLUTION 768
+#define VERTICAL_MAX_RESOLUTION 800
 
 #define debug_println(a) std::cout << std::string(a) << "\n"
 

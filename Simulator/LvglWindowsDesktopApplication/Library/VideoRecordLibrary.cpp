@@ -37,6 +37,11 @@ namespace videorecord_lib
         style |= WS_BORDER;
         ::SetWindowLongPtr(extHwnd, GWL_STYLE, style);
 
+        // Block mouse clicking
+        LONG_PTR exStyle = ::GetWindowLongPtr(extHwnd, GWL_EXSTYLE);
+        ::SetWindowLongPtr(extHwnd, GWL_EXSTYLE, exStyle | WS_EX_LAYERED | WS_EX_TRANSPARENT);
+        ::SetLayeredWindowAttributes(extHwnd, 0, 255, LWA_ALPHA);
+
         // Redraw window
 #ifdef _DEBUG
         ::SetWindowPos(extHwnd, HWND_TOP, point.x, point.y, size.cx, size.cy, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
@@ -125,21 +130,24 @@ namespace videorecord_lib
         {
             auto hwnd = ::FindWindow(NULL, screen.c_str());
 
-            if (screen != RECORD_PROCESSNAME)
+            if (hwnd)
             {
-                ::SendMessage(hwnd, WM_CLOSE, 0, 0);
-            }
-            else
-            {
-                SetWindowFocus(hwnd);
+                if (screen != RECORD_PROCESSNAME)
+                {
+                    ::SendMessage(hwnd, WM_CLOSE, 0, 0);
+                }
+                else
+                {
+                    SetWindowFocus(hwnd);
 
-                BYTE vkey = LOBYTE(VkKeyScan('Q'));
-                BYTE scanCode = (BYTE)MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
+                    BYTE vkey = LOBYTE(VkKeyScan('Q'));
+                    BYTE scanCode = (BYTE)MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
 
-                keybd_event(vkey, scanCode, 0, 0);
-                keybd_event(vkey, scanCode, KEYEVENTF_KEYUP, 0);
+                    keybd_event(vkey, scanCode, 0, 0);
+                    keybd_event(vkey, scanCode, KEYEVENTF_KEYUP, 0);
 
-                SetWindowFocus(system_data::WindowHandle.GetValue());
+                    SetWindowFocus(system_data::WindowHandle.GetValue());
+                }
             }
         }
     }

@@ -325,6 +325,7 @@
     <ClInclude Include="Library\SystemConfig.h" />
     <ClInclude Include="Library\VideoInfoData.h" />
     <ClInclude Include="lv_conf.h" />
+    <ClInclude Include="ui\screens\ui_Blank.h" />
     <ClInclude Include="ui\screens\ui_Keyboard.h" />
     <ClInclude Include="ui\screens\ui_Main.h" />
     <ClInclude Include="ui\screens\ui_RecordList.h" />
@@ -770,6 +771,7 @@
     <ClCompile Include="ui\images\ui_img_vertical_align_bottom_png.c" />
     <ClCompile Include="ui\images\ui_img_vertical_align_top_png.c" />
     <ClCompile Include="ui\images\ui_img_virtualvcr_png.c" />
+    <ClCompile Include="ui\screens\ui_Blank.c" />
     <ClCompile Include="ui\screens\ui_Keyboard.c" />
     <ClCompile Include="ui\screens\ui_Main.c" />
     <ClCompile Include="ui\screens\ui_RecordList.c" />

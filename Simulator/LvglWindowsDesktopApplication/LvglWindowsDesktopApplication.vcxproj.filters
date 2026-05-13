@@ -848,6 +848,9 @@
     <ClInclude Include="View\VideoRecordListScreen.h">
       <Filter>UI\View</Filter>
     </ClInclude>
+    <ClInclude Include="ui\screens\ui_Blank.h">
+      <Filter>UI\UI_View\screens</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\LvglPlatform\lvgl\.typos.toml">
@@ -1683,6 +1686,9 @@
     </ClCompile>
     <ClCompile Include="ui\images\ui_img_folder_limited_png.c">
       <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\screens\ui_Blank.c">
+      <Filter>UI\UI_View\screens</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

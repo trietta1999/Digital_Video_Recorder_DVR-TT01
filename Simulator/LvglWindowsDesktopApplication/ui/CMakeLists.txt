@@ -1,4 +1,5 @@
-SET(SOURCES screens/ui_Main.c
+SET(SOURCES screens/ui_Blank.c
+    screens/ui_Main.c
     screens/ui_VideoInput.c
     screens/ui_Keyboard.c
     screens/ui_RecordList.c

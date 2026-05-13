@@ -18,6 +18,7 @@ extern "C" {
 
 ///////////////////// SCREENS ////////////////////
 
+#include "screens/ui_Blank.h"
 #include "screens/ui_Main.h"
 #include "screens/ui_VideoInput.h"
 #include "screens/ui_Keyboard.h"
