@@ -37,6 +37,8 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { []() { return system_data::CurrentSoundState.GetState(); }, UpdateButton    },
     };
 
+    lv_obj_update_layout(ui_wndReview); // Forcing component recalculation after screen changes
+
     if (!system_data::IsTempVideoInfo.GetValue())
     {
         // Get temp video info

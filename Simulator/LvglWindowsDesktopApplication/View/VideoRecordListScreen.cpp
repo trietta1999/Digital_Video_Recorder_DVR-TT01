@@ -98,7 +98,7 @@ static lv_obj_t* dummyUpKey = nullptr;
 static lv_obj_t* dummyDownKey = nullptr;
 static lv_obj_t* dummyTopKey = nullptr;
 static lv_obj_t* dummyBottomKey = nullptr;
-static short totalRowHeight = 0;
+static int totalRowHeight = 0;
 static short deleteTimeCounter = 0;
 static int copyItemCount = 0;
 static std::string lastSearchOption = "";
@@ -300,6 +300,8 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
 
     // Init state
     system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
+
+    lv_obj_update_layout(ui_conRL); // Forcing component recalculation after screen changes
 }
 
 VideoRecordListScreen::~VideoRecordListScreen()
@@ -826,6 +828,7 @@ void VideoRecordListScreen::UpdateVideoInfoList()
         auto rowHeight = lv_obj_get_height(ui_lblRLItemName1);
         auto borderWidth = lv_obj_get_style_border_width(ui_conRLItemRow1, LV_PART_MAIN | LV_STATE_DEFAULT);
         auto totalHeight = rowHeight + borderWidth * 2 + rowSpacing;
+        totalRowHeight = 0;
 
         auto listVideoInfo = recordlist_lib::GetVideoInfoListData(); // Get video info from data
         auto searchKey = input_data::VideoSearch.GetValue();
