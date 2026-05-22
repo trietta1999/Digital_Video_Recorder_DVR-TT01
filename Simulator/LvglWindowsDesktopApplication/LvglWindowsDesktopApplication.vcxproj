@@ -325,10 +325,10 @@
     <ClInclude Include="Library\SystemConfig.h" />
     <ClInclude Include="Library\VideoInfoData.h" />
     <ClInclude Include="lv_conf.h" />
-    <ClInclude Include="ui\screens\ui_Blank.h" />
     <ClInclude Include="ui\screens\ui_Keyboard.h" />
     <ClInclude Include="ui\screens\ui_Main.h" />
     <ClInclude Include="ui\screens\ui_RecordList.h" />
+    <ClInclude Include="ui\screens\ui_Setting.h" />
     <ClInclude Include="ui\screens\ui_VideoInput.h" />
     <ClInclude Include="ui\ui.h" />
     <ClInclude Include="ui\ui_events.h" />
@@ -337,6 +337,7 @@
     <ClInclude Include="View\KeyboardScreen.h" />
     <ClInclude Include="View\MainScreen.h" />
     <ClInclude Include="View\ScreenMapping.h" />
+    <ClInclude Include="View\SettingScreen.h" />
     <ClInclude Include="View\VideoInfoScreen.h" />
     <ClInclude Include="View\VideoRecordListScreen.h" />
   </ItemGroup>
@@ -771,10 +772,10 @@
     <ClCompile Include="ui\images\ui_img_vertical_align_bottom_png.c" />
     <ClCompile Include="ui\images\ui_img_vertical_align_top_png.c" />
     <ClCompile Include="ui\images\ui_img_virtualvcr_png.c" />
-    <ClCompile Include="ui\screens\ui_Blank.c" />
     <ClCompile Include="ui\screens\ui_Keyboard.c" />
     <ClCompile Include="ui\screens\ui_Main.c" />
     <ClCompile Include="ui\screens\ui_RecordList.c" />
+    <ClCompile Include="ui\screens\ui_Setting.c" />
     <ClCompile Include="ui\screens\ui_VideoInput.c" />
     <ClCompile Include="ui\ui.c" />
     <ClCompile Include="ui\ui_helpers.c" />
@@ -782,6 +783,7 @@
     <ClCompile Include="View\KeyboardScreen.cpp" />
     <ClCompile Include="View\MainScreen.cpp" />
     <ClCompile Include="View\ScreenMapping.cpp" />
+    <ClCompile Include="View\SettingScreen.cpp" />
     <ClCompile Include="View\VideoInfoScreen.cpp" />
     <ClCompile Include="View\VideoRecordListScreen.cpp" />
   </ItemGroup>

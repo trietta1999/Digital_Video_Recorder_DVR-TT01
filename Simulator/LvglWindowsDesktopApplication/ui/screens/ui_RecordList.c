@@ -256,8 +256,8 @@ void ui_RecordList_screen_init(void)
     ui_lblVideoSearch = lv_label_create(ui_RecordList);
     lv_obj_set_width(ui_lblVideoSearch, 680);
     lv_obj_set_height(ui_lblVideoSearch, 80);
-    lv_obj_set_x(ui_lblVideoSearch, 109);
-    lv_obj_set_y(ui_lblVideoSearch, 176);
+    lv_obj_set_x(ui_lblVideoSearch, 107);
+    lv_obj_set_y(ui_lblVideoSearch, 177);
     lv_obj_set_align(ui_lblVideoSearch, LV_ALIGN_CENTER);
     lv_label_set_long_mode(ui_lblVideoSearch, LV_LABEL_LONG_DOT);
     lv_label_set_text(ui_lblVideoSearch, "");
@@ -270,6 +270,9 @@ void ui_RecordList_screen_init(void)
     lv_obj_set_style_text_font(ui_lblVideoSearch, &lv_font_montserrat_34, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_lblVideoSearch, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_lblVideoSearch, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_lblVideoSearch, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_lblVideoSearch, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_lblVideoSearch, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btnVideoSearch = lv_button_create(ui_RecordList);
     lv_obj_set_width(ui_btnVideoSearch, 80);
@@ -310,7 +313,9 @@ void ui_RecordList_screen_init(void)
     lv_obj_set_style_text_font(ui_dropVideoFilter, &lv_font_montserrat_46, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_dropVideoFilter, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_dropVideoFilter, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_width(ui_dropVideoFilter, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_dropVideoFilter, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_dropVideoFilter, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_dropVideoFilter, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_set_style_text_color(lv_dropdown_get_list(ui_dropVideoFilter), lv_color_hex(0xFFFFFF),
                                 LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -781,7 +786,9 @@ void ui_RecordList_screen_init(void)
     lv_obj_set_style_text_font(ui_dropPortableMemory, &lv_font_montserrat_46, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_dropPortableMemory, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_dropPortableMemory, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_width(ui_dropPortableMemory, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_dropPortableMemory, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_dropPortableMemory, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_dropPortableMemory, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_set_style_text_color(lv_dropdown_get_list(ui_dropPortableMemory), lv_color_hex(0xFFFFFF),
                                 LV_PART_MAIN | LV_STATE_DEFAULT);

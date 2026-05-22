@@ -16,6 +16,7 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_btnNewVideo       , OnClickNew            , LV_EVENT_CLICKED },
         { ui_btnCloseVideo     , OnClickClose          , LV_EVENT_CLICKED },
         { ui_btnVideoRecordList, OnClickVideoRecordList, LV_EVENT_CLICKED },
+        { ui_btnSystemSetting  , OnClickSystemSetting  , LV_EVENT_CLICKED },
         { ui_btnRec            , OnClickOperator       , LV_EVENT_CLICKED },
         { ui_btnPlay           , OnClickOperator       , LV_EVENT_CLICKED },
         { ui_btnPause          , OnClickOperator       , LV_EVENT_CLICKED },
@@ -237,6 +238,11 @@ void MainScreen::OnClickStorageUSB(lv_event_t* event)
     {
         currentExtIndex = 0;
     }
+}
+
+void MainScreen::OnClickSystemSetting(lv_event_t* event)
+{
+    ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_SETTING);
 }
 
 void MainScreen::UpdateDate()

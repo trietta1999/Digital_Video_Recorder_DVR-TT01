@@ -15,6 +15,7 @@ private:
     static void OnClickOperator(lv_event_t* event);
     static void OnClickVideoRecordList(lv_event_t* event);
     static void OnClickStorageUSB(lv_event_t* event);
+    static void OnClickSystemSetting(lv_event_t* event);
 
     static void UpdateDate();
     static void UpdateTime();

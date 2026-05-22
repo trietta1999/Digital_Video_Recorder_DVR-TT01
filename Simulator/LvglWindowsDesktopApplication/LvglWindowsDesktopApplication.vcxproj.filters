@@ -848,8 +848,11 @@
     <ClInclude Include="View\VideoRecordListScreen.h">
       <Filter>UI\View</Filter>
     </ClInclude>
-    <ClInclude Include="ui\screens\ui_Blank.h">
+    <ClInclude Include="ui\screens\ui_Setting.h">
       <Filter>UI\UI_View\screens</Filter>
+    </ClInclude>
+    <ClInclude Include="View\SettingScreen.h">
+      <Filter>UI\View</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1670,8 +1673,6 @@
     <ClCompile Include="ui\images\ui_img_arrow_upward_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
-    <ClCompile Include="ui\images\ui_img_vertical_align_bottom_png.c" />
-    <ClCompile Include="ui\images\ui_img_vertical_align_top_png.c" />
     <ClCompile Include="ui\images\ui_img_check_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
@@ -1687,8 +1688,17 @@
     <ClCompile Include="ui\images\ui_img_folder_limited_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
-    <ClCompile Include="ui\screens\ui_Blank.c">
+    <ClCompile Include="ui\images\ui_img_vertical_align_bottom_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_vertical_align_top_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\screens\ui_Setting.c">
       <Filter>UI\UI_View\screens</Filter>
+    </ClCompile>
+    <ClCompile Include="View\SettingScreen.cpp">
+      <Filter>UI\View</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

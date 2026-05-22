@@ -165,18 +165,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         return -1;
     }
 
-    lv_indev_t* keypad_indev = lv_windows_acquire_keypad_indev(display);
-    if (!keypad_indev)
-    {
-        return -1;
-    }
-
-    lv_indev_t* encoder_indev = lv_windows_acquire_encoder_indev(display);
-    if (!encoder_indev)
-    {
-        return -1;
-    }
-
     // Set custom winproc
     OriginalWndProc = (WNDPROC)::SetWindowLongPtr(window_handle, GWLP_WNDPROC, (LONG_PTR)MyNewWinProc);
     if (!OriginalWndProc)
@@ -209,8 +197,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     InitService();
 
     // Change to main screen
-    lv_timer_handler();
-    ::Sleep(TIMECYCLE_10MS);
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);
 
 #ifdef _DEBUG

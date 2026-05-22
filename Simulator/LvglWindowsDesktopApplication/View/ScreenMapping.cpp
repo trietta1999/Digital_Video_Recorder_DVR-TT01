@@ -6,6 +6,7 @@
 #include "VideoInfoScreen.h"
 #include "KeyboardScreen.h"
 #include "VideoRecordListScreen.h"
+#include "SettingScreen.h"
 
 ScreenMapping& ScreenMapping::GetInstance()
 {
@@ -45,6 +46,13 @@ ScreenMapping::ScreenMapping()
             {
                 []() { return new VideoRecordListScreen(SCREEN_NAME::SCREEN_VIDEO_RECORDLIST); },
                 []() { _ui_screen_change(&ui_RecordList, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_RecordList_screen_init); },
+            },
+        },
+        {
+            SCREEN_NAME::SCREEN_SETTING,
+            {
+                []() { return new SettingScreen(SCREEN_NAME::SCREEN_SETTING); },
+                []() { _ui_screen_change(&ui_Setting, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_Setting_screen_init); },
             },
         },
     };

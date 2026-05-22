@@ -1,8 +1,8 @@
-SET(SOURCES screens/ui_Blank.c
-    screens/ui_Main.c
+SET(SOURCES screens/ui_Main.c
     screens/ui_VideoInput.c
     screens/ui_Keyboard.c
     screens/ui_RecordList.c
+    screens/ui_Setting.c
     ui.c
     components/ui_comp_hook.c
     ui_helpers.c
@@ -24,7 +24,6 @@ SET(SOURCES screens/ui_Blank.c
     images/ui_img_edit_note_png.c
     images/ui_img_check_circle_png.c
     images/ui_img_input_png.c
-    images/ui_img_all_match_png.c
     images/ui_img_arrow_back_png.c
     images/ui_img_arrow_forward_png.c
     images/ui_img_space_bar_png.c
@@ -44,6 +43,7 @@ SET(SOURCES screens/ui_Blank.c
     images/ui_img_replace_video_png.c
     images/ui_img_delete_png.c
     images/ui_img_drive_file_move_png.c
-    images/ui_img_dukto_png.c)
+    images/ui_img_dukto_png.c
+    images/ui_img_all_match_png.c)
 
 add_library(ui ${SOURCES})

@@ -18,11 +18,11 @@ extern "C" {
 
 ///////////////////// SCREENS ////////////////////
 
-#include "screens/ui_Blank.h"
 #include "screens/ui_Main.h"
 #include "screens/ui_VideoInput.h"
 #include "screens/ui_Keyboard.h"
 #include "screens/ui_RecordList.h"
+#include "screens/ui_Setting.h"
 
 ///////////////////// VARIABLES ////////////////////
 
@@ -49,7 +49,6 @@ LV_IMG_DECLARE(ui_img_usb_png);    // assets/usb.png
 LV_IMG_DECLARE(ui_img_edit_note_png);    // assets/edit_note.png
 LV_IMG_DECLARE(ui_img_check_circle_png);    // assets/check_circle.png
 LV_IMG_DECLARE(ui_img_input_png);    // assets/input.png
-LV_IMG_DECLARE(ui_img_all_match_png);    // assets/all_match.png
 LV_IMG_DECLARE(ui_img_arrow_back_png);    // assets/arrow_back.png
 LV_IMG_DECLARE(ui_img_arrow_forward_png);    // assets/arrow_forward.png
 LV_IMG_DECLARE(ui_img_space_bar_png);    // assets/space_bar.png
@@ -70,6 +69,7 @@ LV_IMG_DECLARE(ui_img_replace_video_png);    // assets/replace_video.png
 LV_IMG_DECLARE(ui_img_delete_png);    // assets/delete.png
 LV_IMG_DECLARE(ui_img_drive_file_move_png);    // assets/drive_file_move.png
 LV_IMG_DECLARE(ui_img_dukto_png);    // assets/dukto.png
+LV_IMG_DECLARE(ui_img_all_match_png);    // assets/all_match.png
 
 // UI INIT
 void ui_init(void);

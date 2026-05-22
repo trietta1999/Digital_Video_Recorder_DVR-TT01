@@ -185,6 +185,9 @@ void ui_VideoInput_screen_init(void)
     lv_obj_set_style_text_font(ui_lblVideoEvent, &lv_font_montserrat_46, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_lblVideoEvent, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_lblVideoEvent, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_lblVideoEvent, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_lblVideoEvent, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_lblVideoEvent, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btnVideoEvent = lv_button_create(ui_Panel1);
     lv_obj_set_width(ui_btnVideoEvent, 80);
@@ -238,6 +241,9 @@ void ui_VideoInput_screen_init(void)
     lv_obj_set_style_text_font(ui_lblVideoName, &lv_font_montserrat_46, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_lblVideoName, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_lblVideoName, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_lblVideoName, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_lblVideoName, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_lblVideoName, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btnVideoName = lv_button_create(ui_Panel1);
     lv_obj_set_width(ui_btnVideoName, 80);
@@ -291,6 +297,9 @@ void ui_VideoInput_screen_init(void)
     lv_obj_set_style_text_font(ui_lblVideoCategory, &lv_font_montserrat_46, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_lblVideoCategory, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_lblVideoCategory, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_lblVideoCategory, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_lblVideoCategory, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_lblVideoCategory, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btnVideoCategory = lv_button_create(ui_Panel1);
     lv_obj_set_width(ui_btnVideoCategory, 80);
@@ -331,7 +340,7 @@ void ui_VideoInput_screen_init(void)
     ui_lblVideoDesc = lv_label_create(ui_Panel1);
     lv_obj_set_width(ui_lblVideoDesc, 825);
     lv_obj_set_height(ui_lblVideoDesc, 180);
-    lv_obj_set_x(ui_lblVideoDesc, 29);
+    lv_obj_set_x(ui_lblVideoDesc, 28);
     lv_obj_set_y(ui_lblVideoDesc, 207);
     lv_obj_set_align(ui_lblVideoDesc, LV_ALIGN_CENTER);
     lv_label_set_long_mode(ui_lblVideoDesc, LV_LABEL_LONG_DOT);
@@ -344,6 +353,9 @@ void ui_VideoInput_screen_init(void)
     lv_obj_set_style_text_font(ui_lblVideoDesc, &lv_font_montserrat_46, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_lblVideoDesc, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_lblVideoDesc, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_lblVideoDesc, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_lblVideoDesc, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_lblVideoDesc, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btnVideoDesc = lv_button_create(ui_Panel1);
     lv_obj_set_width(ui_btnVideoDesc, 80);
@@ -397,6 +409,9 @@ void ui_VideoInput_screen_init(void)
     lv_obj_set_style_text_font(ui_lblVideoAuthor, &lv_font_montserrat_46, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_lblVideoAuthor, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_lblVideoAuthor, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_lblVideoAuthor, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_lblVideoAuthor, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_lblVideoAuthor, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btnVideoAuthor = lv_button_create(ui_Panel1);
     lv_obj_set_width(ui_btnVideoAuthor, 80);

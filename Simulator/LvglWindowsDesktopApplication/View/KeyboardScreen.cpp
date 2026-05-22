@@ -149,10 +149,6 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         lv_obj_remove_state(ui_btnKeyboardKeyCaps, LV_STATE_CHECKED);
     }
 
-    // Init acceptable punctuation
-    lv_obj_add_flag(ui_imgAcceptPunct, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui_txtAcceptPunct, LV_OBJ_FLAG_HIDDEN);
-
     // Auto update text input
     timerUpdateInput = lv_timer_create([](lv_timer_t* timer) {
         auto input = keyboard_lib::GetInputChar();
