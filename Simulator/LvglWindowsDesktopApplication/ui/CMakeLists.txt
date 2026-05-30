@@ -43,7 +43,6 @@ SET(SOURCES screens/ui_Main.c
     images/ui_img_replace_video_png.c
     images/ui_img_delete_png.c
     images/ui_img_drive_file_move_png.c
-    images/ui_img_dukto_png.c
-    images/ui_img_all_match_png.c)
+    images/ui_img_dukto_png.c)
 
 add_library(ui ${SOURCES})

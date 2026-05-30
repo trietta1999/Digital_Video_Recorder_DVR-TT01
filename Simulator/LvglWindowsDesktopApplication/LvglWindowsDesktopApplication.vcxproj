@@ -732,13 +732,11 @@
     <ClCompile Include="ui/**/*.cpp" />
     <ClCompile Include="LvglWindowsDesktopApplication.cpp" />
     <ClCompile Include="ui\components\ui_comp_hook.c" />
-    <ClCompile Include="ui\images\ui_img_all_match_png.c" />
     <ClCompile Include="ui\images\ui_img_arrow_back_png.c" />
     <ClCompile Include="ui\images\ui_img_arrow_downward_png.c" />
     <ClCompile Include="ui\images\ui_img_arrow_forward_png.c" />
     <ClCompile Include="ui\images\ui_img_arrow_upward_png.c" />
     <ClCompile Include="ui\images\ui_img_backspace_png.c" />
-    <ClCompile Include="ui\images\ui_img_bandicam_png.c" />
     <ClCompile Include="ui\images\ui_img_brand_awareness_png.c" />
     <ClCompile Include="ui\images\ui_img_cancel_png.c" />
     <ClCompile Include="ui\images\ui_img_check_circle_png.c" />
@@ -771,7 +769,6 @@
     <ClCompile Include="ui\images\ui_img_usb_png.c" />
     <ClCompile Include="ui\images\ui_img_vertical_align_bottom_png.c" />
     <ClCompile Include="ui\images\ui_img_vertical_align_top_png.c" />
-    <ClCompile Include="ui\images\ui_img_virtualvcr_png.c" />
     <ClCompile Include="ui\screens\ui_Keyboard.c" />
     <ClCompile Include="ui\screens\ui_Main.c" />
     <ClCompile Include="ui\screens\ui_RecordList.c" />

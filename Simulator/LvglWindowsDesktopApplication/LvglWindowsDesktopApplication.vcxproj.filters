@@ -1562,9 +1562,6 @@
     <ClCompile Include="ui\screens\ui_RecordList.c">
       <Filter>UI\UI_View\screens</Filter>
     </ClCompile>
-    <ClCompile Include="ui\images\ui_img_all_match_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
     <ClCompile Include="ui\images\ui_img_arrow_back_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
@@ -1572,9 +1569,6 @@
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
     <ClCompile Include="ui\images\ui_img_backspace_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_bandicam_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
     <ClCompile Include="ui\images\ui_img_cancel_png.c">
@@ -1635,9 +1629,6 @@
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
     <ClCompile Include="ui\images\ui_img_storage_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\images\ui_img_virtualvcr_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
     <ClCompile Include="Library\VideoRecordLibrary.cpp">
