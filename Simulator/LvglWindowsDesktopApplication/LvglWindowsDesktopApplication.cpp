@@ -193,6 +193,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     // Create UI
     ui_init();
 
+    // Setup dropdownlist
+    dropdownlist_lib::SetupDropdownList();
+
     // Init service
     InitService();
 

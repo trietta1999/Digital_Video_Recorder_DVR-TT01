@@ -2,6 +2,7 @@
 #define _COMMON_LIBRARY_H
 
 #include <lvgl.h>
+#include "CData.h"
 #include "CommonDataType.h"
 
 namespace keyboard_lib
@@ -96,6 +97,21 @@ namespace recordlist_lib
 {
     std::vector<videoinfo_lib::videoinfo_t> GetVideoInfoListData();
     bool ExportVideoToExternalDrive(std::string id, std::string name, std::string driveLetter);
+}
+
+namespace dropdownlist_lib
+{
+    struct dropdown_info_t
+    {
+        lv_obj_t* dropdownObj;
+        std::vector<std::string> options;
+        CData<std::string>* data;
+    };
+
+    void SetupDropdownList();
+    const dropdown_info_t& GetDropdownInfo(DROPDOWNLIST_NAME name);
+    std::string GetDropdownSelected(DROPDOWNLIST_NAME name);
+    void UpdateDropdownData(lv_obj_t* obj);
 }
 
 namespace config_lib

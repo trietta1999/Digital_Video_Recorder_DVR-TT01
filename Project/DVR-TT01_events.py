@@ -27,3 +27,7 @@ def CommonOnLoaded(event_struct):
 def CommonButtonOnRelase(event_struct):
     return
 
+
+def CommonDropdownOnValueChange(event_struct):
+    return
+

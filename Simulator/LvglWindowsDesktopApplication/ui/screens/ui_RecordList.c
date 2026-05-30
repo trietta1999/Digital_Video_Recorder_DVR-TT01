@@ -63,7 +63,7 @@ void ui_event_dropVideoFilter(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_VALUE_CHANGED) {
-        CommonButtonOnValueChange(e);
+        CommonDropdownOnValueChange(e);
     }
 }
 
@@ -297,7 +297,6 @@ void ui_RecordList_screen_init(void)
     lv_obj_set_style_border_width(ui_btnVideoSearch, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_dropVideoFilter = lv_dropdown_create(ui_RecordList);
-    lv_dropdown_set_options(ui_dropVideoFilter, "Event\nVideo name\nCategory\nDescription\nAuthor");
     lv_dropdown_set_selected_highlight(ui_dropVideoFilter, false);
     lv_obj_set_width(ui_dropVideoFilter, 360);
     lv_obj_set_height(ui_dropVideoFilter, 80);

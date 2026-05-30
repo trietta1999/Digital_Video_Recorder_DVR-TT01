@@ -42,6 +42,7 @@ namespace input_data
     CData<std::string> VideoDesc;
     CData<std::string> VideoAuthor;
     CData<std::string> VideoSearch;
+    CData<std::string> VideoSearchType;
 }
 
 namespace temp_data
@@ -95,6 +96,7 @@ void CommonDataUpdateAll()
     input_data::VideoDesc.ResetState();
     input_data::VideoAuthor.ResetState();
     input_data::VideoSearch.ResetState();
+    input_data::VideoSearchType.ResetState();
 
     temp_data::VideoEvent.ResetState();
     temp_data::VideoName.ResetState();

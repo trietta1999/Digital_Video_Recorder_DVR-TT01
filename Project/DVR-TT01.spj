@@ -21681,7 +21681,7 @@
               {
                 "nid": 1020,
                 "strtype": "DROPDOWN/Options",
-                "strval": "Event\\nVideo name\\nCategory\\nDescription\\nAuthor",
+                "strval": "",
                 "InheritedType": 10
               },
               {
@@ -21883,7 +21883,7 @@
                       {
                         "nid": 1002351,
                         "strtype": "CALL FUNCTION/Function_name",
-                        "strval": "CommonButtonOnValueChange",
+                        "strval": "CommonDropdownOnValueChange",
                         "InheritedType": 10
                       },
                       {
@@ -30626,7 +30626,7 @@
                               {
                                 "nid": 1002351,
                                 "strtype": "CALL FUNCTION/Function_name",
-                                "strval": "CommonButtonOnValueChange",
+                                "strval": "CommonDropdownOnValueChange",
                                 "InheritedType": 10
                               },
                               {
@@ -31194,7 +31194,7 @@
                               {
                                 "nid": 1002351,
                                 "strtype": "CALL FUNCTION/Function_name",
-                                "strval": "CommonButtonOnValueChange",
+                                "strval": "CommonDropdownOnValueChange",
                                 "InheritedType": 10
                               },
                               {
@@ -33163,7 +33163,7 @@
                               {
                                 "nid": 1002351,
                                 "strtype": "CALL FUNCTION/Function_name",
-                                "strval": "CommonButtonOnValueChange",
+                                "strval": "CommonDropdownOnValueChange",
                                 "InheritedType": 10
                               },
                               {
@@ -33731,7 +33731,7 @@
                               {
                                 "nid": 1002351,
                                 "strtype": "CALL FUNCTION/Function_name",
-                                "strval": "CommonButtonOnValueChange",
+                                "strval": "CommonDropdownOnValueChange",
                                 "InheritedType": 10
                               },
                               {
@@ -35700,7 +35700,7 @@
                               {
                                 "nid": 1002351,
                                 "strtype": "CALL FUNCTION/Function_name",
-                                "strval": "CommonButtonOnValueChange",
+                                "strval": "CommonDropdownOnValueChange",
                                 "InheritedType": 10
                               },
                               {
@@ -36268,7 +36268,7 @@
                               {
                                 "nid": 1002351,
                                 "strtype": "CALL FUNCTION/Function_name",
-                                "strval": "CommonButtonOnValueChange",
+                                "strval": "CommonDropdownOnValueChange",
                                 "InheritedType": 10
                               },
                               {
@@ -38514,7 +38514,7 @@
     "uiExportFolderPath": "D:\\Git\\Digital_Video_Recorder_DVR-TT01\\Simulator\\LvglWindowsDesktopApplication\\ui",
     "projectExportFolderPath": "D:\\Git\\Digital_Video_Recorder_DVR-TT01\\Project",
     "custom_variable_prefix": "uic",
-    "backup_cnt": 467,
+    "backup_cnt": 469,
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "9.1.0",

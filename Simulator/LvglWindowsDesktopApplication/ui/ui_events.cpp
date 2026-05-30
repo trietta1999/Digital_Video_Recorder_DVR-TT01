@@ -5,6 +5,7 @@
 
 #include "ui.h"
 #include "ScreenMapping.h"
+#include "CommonLibrary.h"
 
 void CommonButtonOnClick(lv_event_t* e)
 {
@@ -36,7 +37,13 @@ void CommonButtonOnValueChange(lv_event_t* e)
     ScreenMapping::GetInstance().SetEvent(*e);
 }
 
-void CommonOnLoaded(lv_event_t * e)
+void CommonOnLoaded(lv_event_t* e)
 {
 
+}
+
+void CommonDropdownOnValueChange(lv_event_t* e)
+{
+    dropdownlist_lib::UpdateDropdownData((lv_obj_t*)(e->current_target));
+    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED);
 }

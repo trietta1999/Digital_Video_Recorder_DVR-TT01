@@ -724,6 +724,7 @@
     <ClCompile Include="Library\CommonData\CommonDataType.cpp" />
     <ClCompile Include="Library\CommonLibrary.cpp" />
     <ClCompile Include="Library\CommonService.cpp" />
+    <ClCompile Include="Library\DropdownListLibrary.cpp" />
     <ClCompile Include="Library\KeyboardLibrary.cpp" />
     <ClCompile Include="Library\StorageLibrary.cpp" />
     <ClCompile Include="Library\VideoInfoLibrary.cpp" />

@@ -47,7 +47,7 @@ void ui_event_dropDateFormat(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_VALUE_CHANGED) {
-        CommonButtonOnValueChange(e);
+        CommonDropdownOnValueChange(e);
     }
 }
 
@@ -56,7 +56,7 @@ void ui_event_dropDateSeparator(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_VALUE_CHANGED) {
-        CommonButtonOnValueChange(e);
+        CommonDropdownOnValueChange(e);
     }
 }
 
@@ -65,7 +65,7 @@ void ui_event_dropKeyboardType(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_VALUE_CHANGED) {
-        CommonButtonOnValueChange(e);
+        CommonDropdownOnValueChange(e);
     }
 }
 
@@ -74,7 +74,7 @@ void ui_event_dropT9AutoConfirm(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_VALUE_CHANGED) {
-        CommonButtonOnValueChange(e);
+        CommonDropdownOnValueChange(e);
     }
 }
 
@@ -83,7 +83,7 @@ void ui_event_dropNetworkType(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_VALUE_CHANGED) {
-        CommonButtonOnValueChange(e);
+        CommonDropdownOnValueChange(e);
     }
 }
 
@@ -92,7 +92,7 @@ void ui_event_dropSSID(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_VALUE_CHANGED) {
-        CommonButtonOnValueChange(e);
+        CommonDropdownOnValueChange(e);
     }
 }
 
