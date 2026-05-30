@@ -76,6 +76,7 @@ void ScreenMapping::ChangeScreen(SCREEN_NAME screen)
         // Create new screen info
         currentScreenInfo.first = screen;
         mapScreenInfo[screen].second(); // Call change screen
+        lv_timer_handler();
         currentScreenInfo.second = mapScreenInfo[screen].first(); // Create screen class
     }
     else if (common_lib::CheckInRangeNumber((int)screen, (int)SCREEN_NAME::MIN_KBSCREEN, (int)SCREEN_NAME::MAX_KBSCREEN))
@@ -85,6 +86,7 @@ void ScreenMapping::ChangeScreen(SCREEN_NAME screen)
         // Create keyboard screen info
         currentScreenInfo.first = SCREEN_NAME::SCREEN_KEYBOARD;
         mapScreenInfo[SCREEN_NAME::SCREEN_KEYBOARD].second(); // Call change screen
+        lv_timer_handler();
         currentScreenInfo.second = mapScreenInfo[SCREEN_NAME::SCREEN_KEYBOARD].first(); // Create screen class
     }
 }
