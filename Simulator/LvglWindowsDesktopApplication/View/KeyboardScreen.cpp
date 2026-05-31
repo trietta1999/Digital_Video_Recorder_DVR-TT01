@@ -1,9 +1,15 @@
-﻿#include <ctype.h>
+﻿#include "CData.h"
 #include "ui.h"
 #include "CommonData.h"
 #include "CommonLibrary.h"
 #include "ScreenMapping.h"
 #include "KeyboardScreen.h"
+
+typedef struct
+{
+    std::string title;
+    CData<std::string>* data;
+} KbInfo;
 
 static std::unordered_map<SCREEN_NAME, KbInfo> mapKbInit = {};
 static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
@@ -60,27 +66,17 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_btnKeyboardKeyBackspace, OnLongPressRepeatKey, LV_EVENT_LONG_PRESSED_REPEAT },
         { ui_btnKeyboardKeyBack     , OnLongPressRepeatKey, LV_EVENT_LONG_PRESSED_REPEAT },
         { ui_btnKeyboardKeyForward  , OnLongPressRepeatKey, LV_EVENT_LONG_PRESSED_REPEAT },
-        { ui_btnKeyboardKey0        , OnReleaseKey        , LV_EVENT_RELEASED            },
-        { ui_btnKeyboardKey1        , OnReleaseKey        , LV_EVENT_RELEASED            },
-        { ui_btnKeyboardKey2        , OnReleaseKey        , LV_EVENT_RELEASED            },
-        { ui_btnKeyboardKey3        , OnReleaseKey        , LV_EVENT_RELEASED            },
-        { ui_btnKeyboardKey4        , OnReleaseKey        , LV_EVENT_RELEASED            },
-        { ui_btnKeyboardKey5        , OnReleaseKey        , LV_EVENT_RELEASED            },
-        { ui_btnKeyboardKey6        , OnReleaseKey        , LV_EVENT_RELEASED            },
-        { ui_btnKeyboardKey7        , OnReleaseKey        , LV_EVENT_RELEASED            },
-        { ui_btnKeyboardKey8        , OnReleaseKey        , LV_EVENT_RELEASED            },
-        { ui_btnKeyboardKey9        , OnReleaseKey        , LV_EVENT_RELEASED            },
     };
 
     ListDataUpdateCallback = {};
 
     mapKbInit = {
-        { SCREEN_NAME::KBSCREEN_VIDEO_EVENT   , { "Event"       , []() { return temp_data::VideoEvent.GetValue(); }    } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_NAME    , { "Video name"  , []() { return temp_data::VideoName.GetValue(); }     } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_CATEGORY, { "New category", []() { return temp_data::VideoCategory.GetValue(); } } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_DESC    , { "Description" , []() { return temp_data::VideoDesc.GetValue(); }     } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR  , { "Author"      , []() { return temp_data::VideoAuthor.GetValue(); }   } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_SEARCH  , { "Search video", []() { return input_data::VideoSearch.GetValue(); }  } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_EVENT   , { "Event"       , &temp_data::VideoEvent    } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_NAME    , { "Video name"  , &temp_data::VideoName     } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_CATEGORY, { "New category", &temp_data::VideoCategory } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_DESC    , { "Description" , &temp_data::VideoDesc     } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR  , { "Author"      , &temp_data::VideoAuthor   } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_SEARCH  , { "Search video", &input_data::VideoSearch  } },
     };
 
     listVkCode = {
@@ -110,7 +106,7 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
 
     // Init text input
     lv_label_set_text(ui_lblKeyboardTitle, mapKbInit[system_data::CurrentKbScreen.GetValue()].title.c_str());
-    lv_textarea_set_text(ui_txtKeyboardInput, mapKbInit[system_data::CurrentKbScreen.GetValue()].cdataGetValueCallback().c_str());
+    lv_textarea_set_text(ui_txtKeyboardInput, mapKbInit[system_data::CurrentKbScreen.GetValue()].data->GetValue().c_str());
 
     // Init numpad key
     lv_obj_add_state(ui_btnKeyboardKey0, LV_STATE_DISABLED);
@@ -197,10 +193,10 @@ void KeyboardScreen::OnClickCancel(lv_event_t* event)
 
 void KeyboardScreen::OnClickOK(lv_event_t* event)
 {
-    // Apply input data
-    auto input = std::string(lv_textarea_get_text(ui_txtKeyboardInput));
+    auto input = lv_textarea_get_text(ui_txtKeyboardInput);
 
-    SetKbData(system_data::CurrentKbScreen.GetValue(), (void*)&input);
+    // Set input to common data
+    mapKbInit[system_data::CurrentKbScreen.GetValue()].data->SetValue(input);
 
     ScreenMapping::GetInstance().ChangeScreen(system_data::CurrentScreen.GetValue());
 }
@@ -296,37 +292,5 @@ void KeyboardScreen::OnLongPressRepeatKey(lv_event_t* event)
     else if (obj == ui_btnKeyboardKeyForward)
     {
         lv_textarea_cursor_right(ui_txtKeyboardInput);
-    }
-}
-
-void KeyboardScreen::OnReleaseKey(lv_event_t* event)
-{
-
-}
-
-void KeyboardScreen::SetKbData(SCREEN_NAME screen, void* data)
-{
-    switch (screen)
-    {
-    case SCREEN_NAME::KBSCREEN_VIDEO_EVENT:
-        temp_data::VideoEvent.SetValue(*(std::string*)data);
-        break;
-    case SCREEN_NAME::KBSCREEN_VIDEO_NAME:
-        temp_data::VideoName.SetValue(*(std::string*)data);
-        break;
-    case SCREEN_NAME::KBSCREEN_VIDEO_CATEGORY:
-        temp_data::VideoCategory.SetValue(*(std::string*)data);
-        break;
-    case SCREEN_NAME::KBSCREEN_VIDEO_DESC:
-        temp_data::VideoDesc.SetValue(*(std::string*)data);
-        break;
-    case SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR:
-        temp_data::VideoAuthor.SetValue(*(std::string*)data);
-        break;
-    case SCREEN_NAME::KBSCREEN_VIDEO_SEARCH:
-        input_data::VideoSearch.SetValue(*(std::string*)data);
-        break;
-    default:
-        break;
     }
 }

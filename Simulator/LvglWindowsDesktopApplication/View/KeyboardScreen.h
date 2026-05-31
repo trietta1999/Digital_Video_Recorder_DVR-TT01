@@ -3,12 +3,6 @@
 
 #include "BaseScreen.h"
 
-typedef struct
-{
-    std::string title;
-    std::function<std::string(void)> cdataGetValueCallback;
-} KbInfo;
-
 class KeyboardScreen : public BaseScreen
 {
 public:
@@ -21,9 +15,6 @@ private:
     static void OnClickKey(lv_event_t* event);
     static void OnLongPressKey(lv_event_t* event);
     static void OnLongPressRepeatKey(lv_event_t* event);
-    static void OnReleaseKey(lv_event_t* event);
-
-    static void SetKbData(SCREEN_NAME screen, void* data);
 };
 
 #endif // _KEYBOARD_SCREEN_H
