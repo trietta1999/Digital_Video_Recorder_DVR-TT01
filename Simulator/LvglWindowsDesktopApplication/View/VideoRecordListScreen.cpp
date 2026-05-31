@@ -98,6 +98,7 @@ static lv_obj_t* dummyUpKey = nullptr;
 static lv_obj_t* dummyDownKey = nullptr;
 static lv_obj_t* dummyTopKey = nullptr;
 static lv_obj_t* dummyBottomKey = nullptr;
+static int totalItemHeight = 0;
 static int totalRowHeight = 0;
 static short deleteTimeCounter = 0;
 static int copyItemCount = 0;
@@ -214,28 +215,27 @@ static RowInfo_t CreateRowUI()
     return info;
 }
 
-static std::string GetFilterValue(videoinfo_lib::videoinfo_t item, std::string key)
+static std::string GetFilterValue(videoinfo_lib::videoinfo_t item, short key)
 {
-    const auto& options = dropdownlist_lib::GetDropdownInfo(DROPDOWNLIST_NAME::DD_VIDEO_SEARCH).options;
     std::string filter = "";
 
-    if (key == options[0])
+    if (key == (short)dropdownlist_lib::DD_VIDEO_SEARCH_e::Event)
     {
         filter = item.videoEvent;
     }
-    else if (key == options[1])
+    else if (key == (short)dropdownlist_lib::DD_VIDEO_SEARCH_e::Video_name)
     {
         filter = item.videoName;
     }
-    else if (key == options[2])
+    else if (key == (short)dropdownlist_lib::DD_VIDEO_SEARCH_e::Category)
     {
         filter = item.videoCategory;
     }
-    else if (key == options[3])
+    else if (key == (short)dropdownlist_lib::DD_VIDEO_SEARCH_e::Description)
     {
         filter = item.videoDesc;
     }
-    else if (key == options[4])
+    else if (key == (short)dropdownlist_lib::DD_VIDEO_SEARCH_e::Author)
     {
         filter = item.videoAuthor;
     }
@@ -302,6 +302,12 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
     system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
 
     lv_obj_update_layout(ui_conRL); // Forcing component recalculation after screen changes
+
+    // Calculate row height
+    auto rowSpacing = lv_obj_get_style_pad_row(ui_conRL, LV_STYLE_PAD_ROW);
+    auto rowHeight = lv_obj_get_height(ui_lblRLItemName1);
+    auto borderWidth = lv_obj_get_style_border_width(ui_conRLItemRow1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    totalItemHeight = rowHeight + borderWidth * 2 + rowSpacing;
 }
 
 VideoRecordListScreen::~VideoRecordListScreen()
@@ -810,15 +816,9 @@ void VideoRecordListScreen::UpdateVideoInfoList()
     // Update search label
     lv_label_set_text(ui_lblVideoSearch, input_data::VideoSearch.GetValue().c_str());
 
-    // Calculate row height
-    auto rowSpacing = lv_obj_get_style_pad_row(ui_conRL, LV_STYLE_PAD_ROW);
-    auto rowHeight = lv_obj_get_height(ui_lblRLItemName1);
-    auto borderWidth = lv_obj_get_style_border_width(ui_conRLItemRow1, LV_PART_MAIN | LV_STATE_DEFAULT);
-    auto totalHeight = rowHeight + borderWidth * 2 + rowSpacing;
-    totalRowHeight = 0;
-
     auto listVideoInfo = recordlist_lib::GetVideoInfoListData(); // Get video info from data
     auto searchKey = input_data::VideoSearch.GetValue();
+    totalRowHeight = 0;
 
     // Clear template item
     lv_obj_clean(ui_conRL);
@@ -861,9 +861,9 @@ void VideoRecordListScreen::UpdateVideoInfoList()
         listRowInfo.push_back(rowInfo);
 
         // Calculate the total height for one item
-        totalRowHeight += totalHeight;
+        totalRowHeight += totalItemHeight;
     }
 
     // Excluding the total height for the first page
-    totalRowHeight -= totalHeight * RL_ITEM_PER_PAGE;
+    totalRowHeight -= totalItemHeight * RL_ITEM_PER_PAGE;
 }

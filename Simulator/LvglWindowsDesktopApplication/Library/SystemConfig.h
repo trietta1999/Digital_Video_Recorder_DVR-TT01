@@ -8,6 +8,5 @@
 #define SYSTEM_SECTION L"System"
 
 // Key name
-#define STORAGE_DRIVE L"STORAGE_DRIVE"
 
 #endif // _SYSTEM_CONFIG_H

@@ -10,6 +10,52 @@ static lv_timer_t* timerGetSystemData = nullptr;
 static int currentExtIndex = 0;
 static std::vector<storage_lib::RemovableDriveInfo_t> listExtDrive = {};
 
+static void CreateDateTimeStr(std::string& dateStr, std::string& timeStr)
+{
+    char buffDate[MAX_PATH] = { 0 };
+    char buffTime[MAX_PATH] = { 0 };
+    char separator = 0;
+    auto systime = common_lib::GetSystemDateTime();
+
+    switch (setting_data::DateSeparator.GetValue())
+    {
+    case (short)dropdownlist_lib::DD_DATE_SEPARATOR_e::Period:
+        separator = '.';
+        break;
+    case (short)dropdownlist_lib::DD_DATE_SEPARATOR_e::Slash:
+        separator = '/';
+        break;
+    case (short)dropdownlist_lib::DD_DATE_SEPARATOR_e::Dash:
+        separator = '-';
+        break;
+    case (short)dropdownlist_lib::DD_DATE_SEPARATOR_e::Space:
+        separator = ' ';
+        break;
+    default:
+        break;
+    }
+
+    switch (setting_data::DateFormat.GetValue())
+    {
+    case (short)dropdownlist_lib::DD_DATE_FORMAT_e::DDMMYYYY:
+        sprintf(buffDate, "%02d%c%02d%c%04d", systime.wDay, separator, systime.wMonth, separator, systime.wYear);
+        break;
+    case (short)dropdownlist_lib::DD_DATE_FORMAT_e::MMDDYYYY:
+        sprintf(buffDate, "%02d%c%02d%c%04d", systime.wMonth, separator, systime.wDay, separator, systime.wYear);
+        break;
+    case (short)dropdownlist_lib::DD_DATE_FORMAT_e::YYYYMMDD:
+        sprintf(buffDate, "%04d%c%02d%c%02d", systime.wYear, separator, systime.wMonth, separator, systime.wDay);
+        break;
+    default:
+        break;
+    }
+
+    sprintf(buffTime, "%02d:%02d:%02d", systime.wHour, systime.wMinute, systime.wSecond);
+
+    dateStr = buffDate;
+    timeStr = buffTime;
+}
+
 MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
     ListButtonCallback = {
@@ -64,18 +110,17 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
     // Init state
     system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
 
-    // Show review sub-screen
-    videorecord_lib::StartExternalWindow(ui_wndReview, REVIEW_SCREENNAME, "");
+    if (setting_data::PreviewVideoState.GetValue())
+    {
+        // Show review sub-screen
+        videorecord_lib::StartExternalWindow(ui_wndReview, REVIEW_SCREENNAME, "");
+    }
 
     // Create get system timer
     timerGetSystemData = lv_timer_create([](lv_timer_t* timer) {
-        char buffDate[MAX_PATH] = { 0 };
-        char buffTime[MAX_PATH] = { 0 };
+        std::string buffDate = "", buffTime = "";
 
-        auto systime = common_lib::GetSystemDateTime();
-
-        sprintf(buffDate, "%02d.%02d.%04d", systime.wDay, systime.wMonth, systime.wYear); // @todo: wait setting
-        sprintf(buffTime, "%02d.%02d.%02d", systime.wHour, systime.wMinute, systime.wSecond); // @todo: wait setting
+        CreateDateTimeStr(buffDate, buffTime);
 
         system_data::CurrentDate.SetValue(buffDate);
         system_data::CurrentTime.SetValue(buffTime);
@@ -194,11 +239,54 @@ void MainScreen::OnClickOperator(lv_event_t* event)
             || (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)
             )
         {
-            // Show review sub-screen
-            videorecord_lib::StartExternalWindow(ui_wndReview, REVIEW_SCREENNAME, "");
-        }
+            if (system_data::CurrentState.GetValue() == STATE_TYPE::S_RECORD)
+            {
+                if (setting_data::PlayVideoState.GetValue())
+                {
+                    // Show play sub-screen
+                    videorecord_lib::StartExternalWindow(ui_wndReview, PLAY_SCREENNAME, current_videoinfo_data::VideoID.GetValue());
 
-        system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
+                    system_data::CurrentState.SetValue(STATE_TYPE::S_PLAY);
+                }
+                else if (setting_data::PreviewVideoState.GetValue())
+                {
+                    // Show review sub-screen
+                    videorecord_lib::StartExternalWindow(ui_wndReview, REVIEW_SCREENNAME, "");
+
+                    system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
+                }
+            }
+            else if ((system_data::CurrentState.GetValue() == STATE_TYPE::S_PLAY)
+                || (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)
+                )
+            {
+                if (setting_data::PreviewVideoState.GetValue())
+                {
+                    // Show review sub-screen
+                    videorecord_lib::StartExternalWindow(ui_wndReview, REVIEW_SCREENNAME, "");
+                }
+                else
+                {
+                    videorecord_lib::StopExternalWindow();
+                }
+
+                system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
+            }
+        }
+        else if (system_data::CurrentState.GetValue() == STATE_TYPE::S_RECORD)
+        {
+            if (setting_data::PlayVideoState.GetValue())
+            {
+                // Show play sub-screen
+                videorecord_lib::StartExternalWindow(ui_wndReview, PLAY_SCREENNAME, current_videoinfo_data::VideoID.GetValue());
+
+                system_data::CurrentState.SetValue(STATE_TYPE::S_PLAY);
+            }
+            else
+            {
+                system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
+            }
+        }
     }
     else if (event->current_target == ui_btnSound)
     {
@@ -242,6 +330,7 @@ void MainScreen::OnClickStorageUSB(lv_event_t* event)
 
 void MainScreen::OnClickSystemSetting(lv_event_t* event)
 {
+    systemsetting_lib::SetupTempSetting();
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_SETTING);
 }
 

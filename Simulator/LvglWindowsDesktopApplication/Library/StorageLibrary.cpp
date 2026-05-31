@@ -1,7 +1,6 @@
 ﻿#include <shlwapi.h>
 #include "CommonData.h"
 #include "CommonLibrary.h"
-#include "SystemConfig.h"
 
 namespace storage_lib
 {

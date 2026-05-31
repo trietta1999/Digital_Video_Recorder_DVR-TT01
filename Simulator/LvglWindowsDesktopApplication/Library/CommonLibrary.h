@@ -105,13 +105,54 @@ namespace dropdownlist_lib
     {
         lv_obj_t* dropdownObj;
         std::vector<std::string> options;
-        CData<std::string>* data;
+        CData<short>* data;
+    };
+
+    enum class DD_VIDEO_SEARCH_e
+    {
+        Event,
+        Video_name,
+        Category,
+        Description,
+        Author,
+    };
+
+    enum class DD_DATE_FORMAT_e
+    {
+        DDMMYYYY,
+        MMDDYYYY,
+        YYYYMMDD,
+    };
+
+    enum class DD_DATE_SEPARATOR_e
+    {
+        Period,
+        Slash,
+        Dash,
+        Space,
     };
 
     void SetupDropdownList();
+    void UpdateDropdownList(std::vector<DROPDOWNLIST_NAME> listName);
     const dropdown_info_t& GetDropdownInfo(DROPDOWNLIST_NAME name);
-    std::string GetDropdownSelected(DROPDOWNLIST_NAME name);
+    short GetDropdownSelectedIndex(DROPDOWNLIST_NAME name);
     void UpdateDropdownData(lv_obj_t* obj);
+}
+
+namespace systemsetting_lib
+{
+    struct setting_info_t
+    {
+        CData<short>* tempData;
+        CData<short>* settingData;
+        std::wstring configName;
+        short configValue;
+    };
+
+    void SetupSystemData();
+    void SetupSetting();
+    void SetupTempSetting();
+    void SaveSetting();
 }
 
 namespace config_lib

@@ -155,6 +155,8 @@ enum
 
 #define DEF_DROPDOWNLIST_NAME(e, CREATE) \
         CREATE(e, DD_VIDEO_SEARCH) \
+        CREATE(e, DD_DATE_FORMAT) \
+        CREATE(e, DD_DATE_SEPARATOR) \
 
 enum class SCREEN_NAME
 {

@@ -24,6 +24,31 @@ namespace dropdownlist_lib
                     &input_data::VideoSearchType,
                 },
             },
+            {
+                DROPDOWNLIST_NAME::DD_DATE_FORMAT,
+                {
+                    ui_dropDateFormat,
+                    {
+                        "DD MM YYYY",
+                        "MM DD YYYY",
+                        "YYYY MM DD",
+                    },
+                    &temp_data::DateFormat,
+                },
+            },
+            {
+                DROPDOWNLIST_NAME::DD_DATE_SEPARATOR,
+                {
+                    ui_dropDateSeparator,
+                    {
+                        ".",
+                        "/",
+                        "-",
+                        "Space",
+                    },
+                    &temp_data::DateSeparator,
+                },
+            },
         };
 
         // Init dropdown options
@@ -35,10 +60,32 @@ namespace dropdownlist_lib
 
             for (int i = 0; i < tempInfo.options.size(); i++)
             {
-                if (tempInfo.options[i] == tempInfo.data->GetValue())
+                if (tempInfo.data->GetValue() == i)
                 {
                     lv_dropdown_set_selected(tempInfo.dropdownObj, i);
                     break;
+                }
+            }
+        }
+    }
+
+    void UpdateDropdownList(std::vector<DROPDOWNLIST_NAME> listName)
+    {
+        for (auto& info : mapDropdownInfo)
+        {
+            if (std::find(listName.begin(), listName.end(), info.first) != listName.end())
+            {
+                auto& tempInfo = info.second;
+
+                lv_dropdown_set_options(tempInfo.dropdownObj, common_lib::JoinString("\n", tempInfo.options).c_str());
+
+                for (int i = 0; i < tempInfo.options.size(); i++)
+                {
+                    if (tempInfo.data->GetValue() == i)
+                    {
+                        lv_dropdown_set_selected(tempInfo.dropdownObj, i);
+                        break;
+                    }
                 }
             }
         }
@@ -49,12 +96,9 @@ namespace dropdownlist_lib
         return mapDropdownInfo[name];
     }
 
-    std::string GetDropdownSelected(DROPDOWNLIST_NAME name)
+    short GetDropdownSelectedIndex(DROPDOWNLIST_NAME name)
     {
-        char option[MAX_PATH] = { 0 };
-        lv_dropdown_get_selected_str(mapDropdownInfo[name].dropdownObj, option, sizeof(option));
-
-        return option;
+        return lv_dropdown_get_selected(mapDropdownInfo[name].dropdownObj);
     }
 
     void UpdateDropdownData(lv_obj_t* obj)
@@ -63,7 +107,7 @@ namespace dropdownlist_lib
         {
             if (info.second.dropdownObj == obj)
             {
-                info.second.data->SetValue(GetDropdownSelected(info.first));
+                info.second.data->SetValue(GetDropdownSelectedIndex(info.first));
                 break;
             }
         }

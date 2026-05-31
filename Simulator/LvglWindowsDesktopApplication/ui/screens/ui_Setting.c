@@ -60,6 +60,33 @@ void ui_event_dropDateSeparator(lv_event_t * e)
     }
 }
 
+void ui_event_swInitAudState(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        CommonButtonOnClick(e);
+    }
+}
+
+void ui_event_swPreviewVideo(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        CommonButtonOnClick(e);
+    }
+}
+
+void ui_event_swPlayVideo(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        CommonButtonOnClick(e);
+    }
+}
+
 void ui_event_dropKeyboardType(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -75,6 +102,33 @@ void ui_event_dropT9AutoConfirm(lv_event_t * e)
 
     if(event_code == LV_EVENT_VALUE_CHANGED) {
         CommonDropdownOnValueChange(e);
+    }
+}
+
+void ui_event_swKeyboardExitShortcut(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        CommonButtonOnClick(e);
+    }
+}
+
+void ui_event_swDoubleSpace(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        CommonButtonOnClick(e);
+    }
+}
+
+void ui_event_swAutoCloseBracket(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        CommonButtonOnClick(e);
     }
 }
 
@@ -202,7 +256,6 @@ void ui_Setting_screen_init(void)
     lv_obj_set_style_text_font(ui_Label5, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_dropDateFormat = lv_dropdown_create(ui_tabGeneral);
-    lv_dropdown_set_selected_highlight(ui_dropDateFormat, false);
     lv_obj_set_width(ui_dropDateFormat, 500);
     lv_obj_set_height(ui_dropDateFormat, 80);
     lv_obj_set_x(ui_dropDateFormat, -194);
@@ -245,7 +298,6 @@ void ui_Setting_screen_init(void)
     lv_obj_set_style_text_font(ui_Label6, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_dropDateSeparator = lv_dropdown_create(ui_tabGeneral);
-    lv_dropdown_set_selected_highlight(ui_dropDateSeparator, false);
     lv_obj_set_width(ui_dropDateSeparator, 500);
     lv_obj_set_height(ui_dropDateSeparator, 80);
     lv_obj_set_x(ui_dropDateSeparator, -194);
@@ -372,7 +424,6 @@ void ui_Setting_screen_init(void)
     lv_obj_set_style_text_font(ui_Label10, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_dropKeyboardType = lv_dropdown_create(ui_tabKeyboard);
-    lv_dropdown_set_selected_highlight(ui_dropKeyboardType, false);
     lv_obj_set_width(ui_dropKeyboardType, 500);
     lv_obj_set_height(ui_dropKeyboardType, 80);
     lv_obj_set_x(ui_dropKeyboardType, -194);
@@ -415,7 +466,6 @@ void ui_Setting_screen_init(void)
     lv_obj_set_style_text_font(ui_Label11, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_dropT9AutoConfirm = lv_dropdown_create(ui_tabKeyboard);
-    lv_dropdown_set_selected_highlight(ui_dropT9AutoConfirm, false);
     lv_obj_set_width(ui_dropT9AutoConfirm, 500);
     lv_obj_set_height(ui_dropT9AutoConfirm, 80);
     lv_obj_set_x(ui_dropT9AutoConfirm, -194);
@@ -542,7 +592,6 @@ void ui_Setting_screen_init(void)
     lv_obj_set_style_text_font(ui_Label15, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_dropNetworkType = lv_dropdown_create(ui_tabNetwork);
-    lv_dropdown_set_selected_highlight(ui_dropNetworkType, false);
     lv_obj_set_width(ui_dropNetworkType, 500);
     lv_obj_set_height(ui_dropNetworkType, 80);
     lv_obj_set_x(ui_dropNetworkType, -194);
@@ -585,7 +634,6 @@ void ui_Setting_screen_init(void)
     lv_obj_set_style_text_font(ui_Label21, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_dropSSID = lv_dropdown_create(ui_tabNetwork);
-    lv_dropdown_set_selected_highlight(ui_dropSSID, false);
     lv_obj_set_width(ui_dropSSID, 500);
     lv_obj_set_height(ui_dropSSID, 80);
     lv_obj_set_x(ui_dropSSID, -194);
@@ -730,8 +778,14 @@ void ui_Setting_screen_init(void)
 
     lv_obj_add_event_cb(ui_dropDateFormat, ui_event_dropDateFormat, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_dropDateSeparator, ui_event_dropDateSeparator, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_swInitAudState, ui_event_swInitAudState, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_swPreviewVideo, ui_event_swPreviewVideo, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_swPlayVideo, ui_event_swPlayVideo, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_dropKeyboardType, ui_event_dropKeyboardType, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_dropT9AutoConfirm, ui_event_dropT9AutoConfirm, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_swKeyboardExitShortcut, ui_event_swKeyboardExitShortcut, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_swDoubleSpace, ui_event_swDoubleSpace, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_swAutoCloseBracket, ui_event_swAutoCloseBracket, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_dropNetworkType, ui_event_dropNetworkType, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_dropSSID, ui_event_dropSSID, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_btnWifiPass, ui_event_btnWifiPass, LV_EVENT_ALL, NULL);

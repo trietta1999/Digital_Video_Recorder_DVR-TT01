@@ -21693,7 +21693,7 @@
               {
                 "nid": 1040,
                 "strtype": "DROPDOWN/Show_selected",
-                "strval": "False",
+                "strval": "True",
                 "InheritedType": 2
               },
               {
@@ -30436,7 +30436,7 @@
                       {
                         "nid": 1040,
                         "strtype": "DROPDOWN/Show_selected",
-                        "strval": "False",
+                        "strval": "True",
                         "InheritedType": 2
                       },
                       {
@@ -31004,7 +31004,7 @@
                       {
                         "nid": 1040,
                         "strtype": "DROPDOWN/Show_selected",
-                        "strval": "False",
+                        "strval": "True",
                         "InheritedType": 2
                       },
                       {
@@ -31585,6 +31585,71 @@
                         "strtype": "SWITCH/Style_knob",
                         "strval": "lv.PART.KNOB, Rectangle, Pad",
                         "InheritedType": 11
+                      },
+                      {
+                        "disabled": false,
+                        "nid": 1002688,
+                        "strtype": "_event/EventHandler",
+                        "strval": "CLICKED",
+                        "childs": [
+                          {
+                            "nid": 1002689,
+                            "strtype": "_event/name",
+                            "strval": "Event16",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002690,
+                            "strtype": "_event/condition_C",
+                            "strval": "",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002691,
+                            "strtype": "_event/condition_P",
+                            "strval": "",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002692,
+                            "strtype": "_event/action",
+                            "strval": "CALL FUNCTION",
+                            "childs": [
+                              {
+                                "nid": 1002693,
+                                "strtype": "CALL FUNCTION/Name",
+                                "strval": "CALL FUNCTION",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002694,
+                                "strtype": "CALL FUNCTION/Call",
+                                "strval": "<{Function_name}>( event_struct )",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002695,
+                                "strtype": "CALL FUNCTION/CallC",
+                                "strval": "<{Function_name}>( e );",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002696,
+                                "strtype": "CALL FUNCTION/Function_name",
+                                "strval": "CommonButtonOnClick",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002697,
+                                "strtype": "CALL FUNCTION/Dont_export_function",
+                                "strval": "False",
+                                "InheritedType": 2
+                              }
+                            ],
+                            "InheritedType": 10
+                          }
+                        ],
+                        "InheritedType": 4
                       }
                     ],
                     "saved_objtypeKey": "SWITCH"
@@ -31961,6 +32026,71 @@
                         "strtype": "SWITCH/Style_knob",
                         "strval": "lv.PART.KNOB, Rectangle, Pad",
                         "InheritedType": 11
+                      },
+                      {
+                        "disabled": false,
+                        "nid": 1002698,
+                        "strtype": "_event/EventHandler",
+                        "strval": "CLICKED",
+                        "childs": [
+                          {
+                            "nid": 1002699,
+                            "strtype": "_event/name",
+                            "strval": "Event17",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002700,
+                            "strtype": "_event/condition_C",
+                            "strval": "",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002701,
+                            "strtype": "_event/condition_P",
+                            "strval": "",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002702,
+                            "strtype": "_event/action",
+                            "strval": "CALL FUNCTION",
+                            "childs": [
+                              {
+                                "nid": 1002703,
+                                "strtype": "CALL FUNCTION/Name",
+                                "strval": "CALL FUNCTION",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002704,
+                                "strtype": "CALL FUNCTION/Call",
+                                "strval": "<{Function_name}>( event_struct )",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002705,
+                                "strtype": "CALL FUNCTION/CallC",
+                                "strval": "<{Function_name}>( e );",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002706,
+                                "strtype": "CALL FUNCTION/Function_name",
+                                "strval": "CommonButtonOnClick",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002707,
+                                "strtype": "CALL FUNCTION/Dont_export_function",
+                                "strval": "False",
+                                "InheritedType": 2
+                              }
+                            ],
+                            "InheritedType": 10
+                          }
+                        ],
+                        "InheritedType": 4
                       }
                     ],
                     "saved_objtypeKey": "SWITCH"
@@ -32337,6 +32467,71 @@
                         "strtype": "SWITCH/Style_knob",
                         "strval": "lv.PART.KNOB, Rectangle, Pad",
                         "InheritedType": 11
+                      },
+                      {
+                        "disabled": false,
+                        "nid": 1002708,
+                        "strtype": "_event/EventHandler",
+                        "strval": "CLICKED",
+                        "childs": [
+                          {
+                            "nid": 1002709,
+                            "strtype": "_event/name",
+                            "strval": "Event18",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002710,
+                            "strtype": "_event/condition_C",
+                            "strval": "",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002711,
+                            "strtype": "_event/condition_P",
+                            "strval": "",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002712,
+                            "strtype": "_event/action",
+                            "strval": "CALL FUNCTION",
+                            "childs": [
+                              {
+                                "nid": 1002713,
+                                "strtype": "CALL FUNCTION/Name",
+                                "strval": "CALL FUNCTION",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002714,
+                                "strtype": "CALL FUNCTION/Call",
+                                "strval": "<{Function_name}>( event_struct )",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002715,
+                                "strtype": "CALL FUNCTION/CallC",
+                                "strval": "<{Function_name}>( e );",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002716,
+                                "strtype": "CALL FUNCTION/Function_name",
+                                "strval": "CommonButtonOnClick",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002717,
+                                "strtype": "CALL FUNCTION/Dont_export_function",
+                                "strval": "False",
+                                "InheritedType": 2
+                              }
+                            ],
+                            "InheritedType": 10
+                          }
+                        ],
+                        "InheritedType": 4
                       }
                     ],
                     "saved_objtypeKey": "SWITCH"
@@ -32973,7 +33168,7 @@
                       {
                         "nid": 1040,
                         "strtype": "DROPDOWN/Show_selected",
-                        "strval": "False",
+                        "strval": "True",
                         "InheritedType": 2
                       },
                       {
@@ -33541,7 +33736,7 @@
                       {
                         "nid": 1040,
                         "strtype": "DROPDOWN/Show_selected",
-                        "strval": "False",
+                        "strval": "True",
                         "InheritedType": 2
                       },
                       {
@@ -34121,6 +34316,71 @@
                         "strtype": "SWITCH/Style_knob",
                         "strval": "lv.PART.KNOB, Rectangle, Pad",
                         "InheritedType": 11
+                      },
+                      {
+                        "disabled": false,
+                        "nid": 1002718,
+                        "strtype": "_event/EventHandler",
+                        "strval": "CLICKED",
+                        "childs": [
+                          {
+                            "nid": 1002719,
+                            "strtype": "_event/name",
+                            "strval": "Event19",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002720,
+                            "strtype": "_event/condition_C",
+                            "strval": "",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002721,
+                            "strtype": "_event/condition_P",
+                            "strval": "",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002722,
+                            "strtype": "_event/action",
+                            "strval": "CALL FUNCTION",
+                            "childs": [
+                              {
+                                "nid": 1002723,
+                                "strtype": "CALL FUNCTION/Name",
+                                "strval": "CALL FUNCTION",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002724,
+                                "strtype": "CALL FUNCTION/Call",
+                                "strval": "<{Function_name}>( event_struct )",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002725,
+                                "strtype": "CALL FUNCTION/CallC",
+                                "strval": "<{Function_name}>( e );",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002726,
+                                "strtype": "CALL FUNCTION/Function_name",
+                                "strval": "CommonButtonOnClick",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002727,
+                                "strtype": "CALL FUNCTION/Dont_export_function",
+                                "strval": "False",
+                                "InheritedType": 2
+                              }
+                            ],
+                            "InheritedType": 10
+                          }
+                        ],
+                        "InheritedType": 4
                       }
                     ],
                     "saved_objtypeKey": "SWITCH"
@@ -34497,6 +34757,71 @@
                         "strtype": "SWITCH/Style_knob",
                         "strval": "lv.PART.KNOB, Rectangle, Pad",
                         "InheritedType": 11
+                      },
+                      {
+                        "disabled": false,
+                        "nid": 1002728,
+                        "strtype": "_event/EventHandler",
+                        "strval": "CLICKED",
+                        "childs": [
+                          {
+                            "nid": 1002729,
+                            "strtype": "_event/name",
+                            "strval": "Event20",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002730,
+                            "strtype": "_event/condition_C",
+                            "strval": "",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002731,
+                            "strtype": "_event/condition_P",
+                            "strval": "",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002732,
+                            "strtype": "_event/action",
+                            "strval": "CALL FUNCTION",
+                            "childs": [
+                              {
+                                "nid": 1002733,
+                                "strtype": "CALL FUNCTION/Name",
+                                "strval": "CALL FUNCTION",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002734,
+                                "strtype": "CALL FUNCTION/Call",
+                                "strval": "<{Function_name}>( event_struct )",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002735,
+                                "strtype": "CALL FUNCTION/CallC",
+                                "strval": "<{Function_name}>( e );",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002736,
+                                "strtype": "CALL FUNCTION/Function_name",
+                                "strval": "CommonButtonOnClick",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002737,
+                                "strtype": "CALL FUNCTION/Dont_export_function",
+                                "strval": "False",
+                                "InheritedType": 2
+                              }
+                            ],
+                            "InheritedType": 10
+                          }
+                        ],
+                        "InheritedType": 4
                       }
                     ],
                     "saved_objtypeKey": "SWITCH"
@@ -34874,6 +35199,71 @@
                         "strtype": "SWITCH/Style_knob",
                         "strval": "lv.PART.KNOB, Rectangle, Pad",
                         "InheritedType": 11
+                      },
+                      {
+                        "disabled": false,
+                        "nid": 1002738,
+                        "strtype": "_event/EventHandler",
+                        "strval": "CLICKED",
+                        "childs": [
+                          {
+                            "nid": 1002739,
+                            "strtype": "_event/name",
+                            "strval": "Event21",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002740,
+                            "strtype": "_event/condition_C",
+                            "strval": "",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002741,
+                            "strtype": "_event/condition_P",
+                            "strval": "",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1002742,
+                            "strtype": "_event/action",
+                            "strval": "CALL FUNCTION",
+                            "childs": [
+                              {
+                                "nid": 1002743,
+                                "strtype": "CALL FUNCTION/Name",
+                                "strval": "CALL FUNCTION",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002744,
+                                "strtype": "CALL FUNCTION/Call",
+                                "strval": "<{Function_name}>( event_struct )",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002745,
+                                "strtype": "CALL FUNCTION/CallC",
+                                "strval": "<{Function_name}>( e );",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002746,
+                                "strtype": "CALL FUNCTION/Function_name",
+                                "strval": "CommonButtonOnClick",
+                                "InheritedType": 10
+                              },
+                              {
+                                "nid": 1002747,
+                                "strtype": "CALL FUNCTION/Dont_export_function",
+                                "strval": "False",
+                                "InheritedType": 2
+                              }
+                            ],
+                            "InheritedType": 10
+                          }
+                        ],
+                        "InheritedType": 4
                       }
                     ],
                     "saved_objtypeKey": "SWITCH"
@@ -35510,7 +35900,7 @@
                       {
                         "nid": 1040,
                         "strtype": "DROPDOWN/Show_selected",
-                        "strval": "False",
+                        "strval": "True",
                         "InheritedType": 2
                       },
                       {
@@ -36078,7 +36468,7 @@
                       {
                         "nid": 1040,
                         "strtype": "DROPDOWN/Show_selected",
-                        "strval": "False",
+                        "strval": "True",
                         "InheritedType": 2
                       },
                       {
@@ -38514,7 +38904,7 @@
     "uiExportFolderPath": "D:\\Git\\Digital_Video_Recorder_DVR-TT01\\Simulator\\LvglWindowsDesktopApplication\\ui",
     "projectExportFolderPath": "D:\\Git\\Digital_Video_Recorder_DVR-TT01\\Project",
     "custom_variable_prefix": "uic",
-    "backup_cnt": 469,
+    "backup_cnt": 470,
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "9.1.0",
@@ -38532,7 +38922,7 @@
     "naming": "Name",
     "naming_force_lowercase": false,
     "naming_add_subcomponent": false,
-    "nidcnt": 1002688,
+    "nidcnt": 1002748,
     "BitDepth": 16,
     "Name": "SquareLine_Project"
   }

@@ -48,7 +48,16 @@ namespace input_data
     extern CData<std::string> VideoDesc;
     extern CData<std::string> VideoAuthor;
     extern CData<std::string> VideoSearch;
-    extern CData<std::string> VideoSearchType;
+    extern CData<short> VideoSearchType;
+}
+
+namespace setting_data
+{
+    extern CData<short> DateFormat;
+    extern CData<short> DateSeparator;
+    extern CData<short> InitAudState;
+    extern CData<short> PreviewVideoState;
+    extern CData<short> PlayVideoState;
 }
 
 namespace temp_data
@@ -58,22 +67,18 @@ namespace temp_data
     extern CData<std::string> VideoCategory;
     extern CData<std::string> VideoDesc;
     extern CData<std::string> VideoAuthor;
+
+    extern CData<short> DateFormat;
+    extern CData<short> DateSeparator;
+    extern CData<short> InitAudState;
+    extern CData<short> PreviewVideoState;
+    extern CData<short> PlayVideoState;
 }
 
 namespace debug_data
 {
     extern CData<std::vector<std::string>> InputParamList;
 }
-
-//extern CData<uint8_t> Brightness;
-//extern CData<STATE_TYPE> CurrentState;
-//extern CData<bool> GuiBlockState;
-//extern CData<bool> SoundEnable;
-//extern CData<bool> MusicEnable;
-//extern CData<uint32_t> CurrentMusicIndex;
-//extern CData<uint8_t> CurrentMusicPercent;
-//extern CData<MUSIC_STATE_TYPE> MusicState;
-//extern CData<std::vector<std::string>> Playlist;
 
 void CommonDataUpdateAll();
 

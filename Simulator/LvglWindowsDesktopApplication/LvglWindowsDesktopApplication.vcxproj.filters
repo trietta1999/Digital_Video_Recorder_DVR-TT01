@@ -1694,6 +1694,9 @@
     <ClCompile Include="Library\DropdownListLibrary.cpp">
       <Filter>Library</Filter>
     </ClCompile>
+    <ClCompile Include="Library\SystemSettingLibrary.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="LvglWindowsDesktopApplication.manifest" />

@@ -42,7 +42,16 @@ namespace input_data
     CData<std::string> VideoDesc;
     CData<std::string> VideoAuthor;
     CData<std::string> VideoSearch;
-    CData<std::string> VideoSearchType;
+    CData<short> VideoSearchType;
+}
+
+namespace setting_data
+{
+    CData<short> DateFormat;
+    CData<short> DateSeparator;
+    CData<short> InitAudState;
+    CData<short> PreviewVideoState;
+    CData<short> PlayVideoState;
 }
 
 namespace temp_data
@@ -53,6 +62,12 @@ namespace temp_data
     CData<std::string> VideoDesc;
     CData<std::string> VideoAuthor;
     CData<std::string> VideoSearch;
+
+    CData<short> DateFormat;
+    CData<short> DateSeparator;
+    CData<short> InitAudState;
+    CData<short> PreviewVideoState;
+    CData<short> PlayVideoState;
 }
 
 namespace debug_data
@@ -98,9 +113,21 @@ void CommonDataUpdateAll()
     input_data::VideoSearch.ResetState();
     input_data::VideoSearchType.ResetState();
 
+    setting_data::DateFormat.ResetState();
+    setting_data::DateSeparator.ResetState();
+    setting_data::InitAudState.ResetState();
+    setting_data::PreviewVideoState.ResetState();
+    setting_data::PlayVideoState.ResetState();
+
     temp_data::VideoEvent.ResetState();
     temp_data::VideoName.ResetState();
     temp_data::VideoCategory.ResetState();
     temp_data::VideoDesc.ResetState();
     temp_data::VideoAuthor.ResetState();
+
+    temp_data::DateFormat.ResetState();
+    temp_data::DateSeparator.ResetState();
+    temp_data::InitAudState.ResetState();
+    temp_data::PreviewVideoState.ResetState();
+    temp_data::PlayVideoState.ResetState();
 }
