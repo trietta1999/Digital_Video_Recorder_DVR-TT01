@@ -22,12 +22,12 @@ lv_obj_t * ui_swPlayVideo = NULL;
 lv_obj_t * ui_tabKeyboard = NULL;
 lv_obj_t * ui_Label10 = NULL;
 lv_obj_t * ui_dropKeyboardType = NULL;
-lv_obj_t * ui_Label11 = NULL;
+lv_obj_t * ui_lblT9AutoConfirm = NULL;
 lv_obj_t * ui_dropT9AutoConfirm = NULL;
 lv_obj_t * ui_Label12 = NULL;
 lv_obj_t * ui_swKeyboardExitShortcut = NULL;
 lv_obj_t * ui_Label13 = NULL;
-lv_obj_t * ui_swDoubleSpace = NULL;
+lv_obj_t * ui_swInsSpaceAfterPunc = NULL;
 lv_obj_t * ui_Label14 = NULL;
 lv_obj_t * ui_swAutoCloseBracket = NULL;
 lv_obj_t * ui_tabNetwork = NULL;
@@ -114,7 +114,7 @@ void ui_event_swKeyboardExitShortcut(lv_event_t * e)
     }
 }
 
-void ui_event_swDoubleSpace(lv_event_t * e)
+void ui_event_swInsSpaceAfterPunc(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -451,19 +451,22 @@ void ui_Setting_screen_init(void)
                               LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_dropKeyboardType), 255,  LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Label11 = lv_label_create(ui_tabKeyboard);
-    lv_obj_set_width(ui_Label11, 720);
-    lv_obj_set_height(ui_Label11, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Label11, 70);
-    lv_obj_set_y(ui_Label11, 187);
-    lv_obj_set_align(ui_Label11, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label11, "T9 auto-confirm speed");
-    lv_obj_remove_flag(ui_Label11, LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
-                       LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
+    ui_lblT9AutoConfirm = lv_label_create(ui_tabKeyboard);
+    lv_obj_set_width(ui_lblT9AutoConfirm, 720);
+    lv_obj_set_height(ui_lblT9AutoConfirm, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_lblT9AutoConfirm, 70);
+    lv_obj_set_y(ui_lblT9AutoConfirm, 187);
+    lv_obj_set_align(ui_lblT9AutoConfirm, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_lblT9AutoConfirm, "T9 auto-confirm speed");
+    lv_obj_remove_flag(ui_lblT9AutoConfirm,
+                       LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE | LV_OBJ_FLAG_SNAPPABLE |
+                       LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
                        LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
-    lv_obj_set_style_text_color(ui_Label11, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_Label11, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_Label11, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_lblT9AutoConfirm, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_lblT9AutoConfirm, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_lblT9AutoConfirm, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_lblT9AutoConfirm, lv_color_hex(0x616161), LV_PART_MAIN | LV_STATE_DISABLED);
+    lv_obj_set_style_text_opa(ui_lblT9AutoConfirm, 255, LV_PART_MAIN | LV_STATE_DISABLED);
 
     ui_dropT9AutoConfirm = lv_dropdown_create(ui_tabKeyboard);
     lv_obj_set_width(ui_dropT9AutoConfirm, 500);
@@ -525,7 +528,7 @@ void ui_Setting_screen_init(void)
     lv_obj_set_x(ui_Label13, 70);
     lv_obj_set_y(ui_Label13, 187);
     lv_obj_set_align(ui_Label13, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label13, "Double-space period");
+    lv_label_set_text(ui_Label13, "Insert space after punctuation");
     lv_obj_remove_flag(ui_Label13, LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
                        LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
                        LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
@@ -533,17 +536,17 @@ void ui_Setting_screen_init(void)
     lv_obj_set_style_text_opa(ui_Label13, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Label13, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_swDoubleSpace = lv_switch_create(ui_tabKeyboard);
-    lv_obj_set_width(ui_swDoubleSpace, 160);
-    lv_obj_set_height(ui_swDoubleSpace, 80);
-    lv_obj_set_x(ui_swDoubleSpace, 185);
-    lv_obj_set_y(ui_swDoubleSpace, 45);
-    lv_obj_set_align(ui_swDoubleSpace, LV_ALIGN_CENTER);
-    lv_obj_set_style_bg_color(ui_swDoubleSpace, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_swDoubleSpace, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_swDoubleSpace, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_opa(ui_swDoubleSpace, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_width(ui_swDoubleSpace, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_swInsSpaceAfterPunc = lv_switch_create(ui_tabKeyboard);
+    lv_obj_set_width(ui_swInsSpaceAfterPunc, 160);
+    lv_obj_set_height(ui_swInsSpaceAfterPunc, 80);
+    lv_obj_set_x(ui_swInsSpaceAfterPunc, 185);
+    lv_obj_set_y(ui_swInsSpaceAfterPunc, 45);
+    lv_obj_set_align(ui_swInsSpaceAfterPunc, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_swInsSpaceAfterPunc, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_swInsSpaceAfterPunc, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_swInsSpaceAfterPunc, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_swInsSpaceAfterPunc, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_swInsSpaceAfterPunc, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Label14 = lv_label_create(ui_tabKeyboard);
     lv_obj_set_width(ui_Label14, 1060);
@@ -784,7 +787,7 @@ void ui_Setting_screen_init(void)
     lv_obj_add_event_cb(ui_dropKeyboardType, ui_event_dropKeyboardType, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_dropT9AutoConfirm, ui_event_dropT9AutoConfirm, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_swKeyboardExitShortcut, ui_event_swKeyboardExitShortcut, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_swDoubleSpace, ui_event_swDoubleSpace, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_swInsSpaceAfterPunc, ui_event_swInsSpaceAfterPunc, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_swAutoCloseBracket, ui_event_swAutoCloseBracket, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_dropNetworkType, ui_event_dropNetworkType, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_dropSSID, ui_event_dropSSID, LV_EVENT_ALL, NULL);
@@ -816,12 +819,12 @@ void ui_Setting_screen_destroy(void)
     ui_tabKeyboard = NULL;
     ui_Label10 = NULL;
     ui_dropKeyboardType = NULL;
-    ui_Label11 = NULL;
+    ui_lblT9AutoConfirm = NULL;
     ui_dropT9AutoConfirm = NULL;
     ui_Label12 = NULL;
     ui_swKeyboardExitShortcut = NULL;
     ui_Label13 = NULL;
-    ui_swDoubleSpace = NULL;
+    ui_swInsSpaceAfterPunc = NULL;
     ui_Label14 = NULL;
     ui_swAutoCloseBracket = NULL;
     ui_tabNetwork = NULL;

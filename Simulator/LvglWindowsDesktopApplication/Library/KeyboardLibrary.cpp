@@ -216,6 +216,21 @@ namespace keyboard_lib
         return state;
     }
 
+    short GetAutoConfirmTimeMs()
+    {
+        switch (setting_data::T9AutoConfirmSpeed.GetValue())
+        {
+        case (short)dropdownlist_lib::DD_T9_AUTO_CONFIRM_SPEED_e::Slow:
+            return TIMECYCLE_700MS + TIMECYCLE_200MS;
+        case (short)dropdownlist_lib::DD_T9_AUTO_CONFIRM_SPEED_e::Normal:
+            return TIMECYCLE_500MS + TIMECYCLE_100MS;
+        case (short)dropdownlist_lib::DD_T9_AUTO_CONFIRM_SPEED_e::Fast:
+            return TIMECYCLE_200MS;
+        default:
+            return 0;
+        }
+    }
+
     void SetListVkCode(const std::vector<std::pair<lv_obj_t*, int>>& list)
     {
         listVkCode = list;
@@ -236,7 +251,7 @@ namespace keyboard_lib
         KillTimer(hwnd, TID_KEYDOWN);
 
         if ((system_data::CurrentKbScreen.GetValue() != SCREEN_NAME::MIN_KBSCREEN)
-            && (system_data::KeyboardType.GetValue() != KEYBOARD_TYPE::STANDARD_KEYBOARD))
+            && (setting_data::KeyboardType.GetValue() != (short)dropdownlist_lib::DD_KEYBOARD_TYPE_e::Standard_keyboard))
         {
             lv_event_t e = { 0 };
 
@@ -373,7 +388,7 @@ namespace keyboard_lib
                     e.code = LV_EVENT_SHORT_CLICKED;
                     ScreenMapping::GetInstance().SetEvent(e);
 
-                    ::SetTimer(hwnd, TID_KEYDOWN, system_data::T9ConfirmTimeout.GetValue(), AutoConfirmKey);
+                    ::SetTimer(hwnd, TID_KEYDOWN, GetAutoConfirmTimeMs(), AutoConfirmKey);
                 }
 
                 isLongPress = false;

@@ -16,6 +16,8 @@ private:
     void InitGeneralSetting();
     void InitKeyboardSetting();
     void InitNetworkSetting();
+
+    static void UpdateKeyboardSetting();
 };
 
 #endif // _SETTING_SCREEN_H

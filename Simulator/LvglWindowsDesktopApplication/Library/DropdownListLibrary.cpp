@@ -49,6 +49,30 @@ namespace dropdownlist_lib
                     &temp_data::DateSeparator,
                 },
             },
+            {
+                DROPDOWNLIST_NAME::DD_KEYBOARD_TYPE,
+                {
+                    ui_dropKeyboardType,
+                    {
+                        "Internal numpad",
+                        "Standard numpad",
+                        "Standard keyboard",
+                    },
+                    &temp_data::KeyboardType,
+                },
+            },
+            {
+                DROPDOWNLIST_NAME::DD_T9_AUTO_CONFIRM_SPEED,
+                {
+                    ui_dropT9AutoConfirm,
+                    {
+                        "Slow",
+                        "Normal",
+                        "Fast",
+                    },
+                    &temp_data::T9AutoConfirmSpeed,
+                },
+            },
         };
 
         // Init dropdown options

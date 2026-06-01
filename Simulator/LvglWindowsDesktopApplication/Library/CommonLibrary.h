@@ -13,6 +13,7 @@ namespace keyboard_lib
     char GetCombineChar();
     void SetKeyboardKeyState(int vk, bool state);
     bool GetKeyboardCapsState();
+    short GetAutoConfirmTimeMs();
     void SetListVkCode(const std::vector<std::pair<lv_obj_t*, int>>& list);
     const std::vector<std::pair<lv_obj_t*, int>>& GetListVkCode();
     const std::vector<std::pair<std::pair<int, int>, char>>& GetListSpacialChar();
@@ -130,6 +131,20 @@ namespace dropdownlist_lib
         Slash,
         Dash,
         Space,
+    };
+
+    enum class DD_KEYBOARD_TYPE_e
+    {
+        Internal_numpad,
+        Standard_numpad,
+        Standard_keyboard,
+    };
+
+    enum class DD_T9_AUTO_CONFIRM_SPEED_e
+    {
+        Slow,
+        Normal,
+        Fast,
     };
 
     void SetupDropdownList();

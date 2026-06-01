@@ -33385,7 +33385,7 @@
                       {
                         "nid": 10,
                         "strtype": "OBJECT/Name",
-                        "strval": "Label11",
+                        "strval": "lblT9AutoConfirm",
                         "InheritedType": 10
                       },
                       {
@@ -33527,7 +33527,6 @@
                       },
                       {
                         "nid": 320,
-                        "flags": 1048576,
                         "strtype": "OBJECT/States",
                         "InheritedType": 1
                       },
@@ -33572,6 +33571,25 @@
                                 "strtype": "_style/Text_Font",
                                 "strval": "montserrat_48",
                                 "InheritedType": 3
+                              }
+                            ],
+                            "InheritedType": 1
+                          },
+                          {
+                            "nid": 40000,
+                            "strtype": "_style/StyleState",
+                            "strval": "DISABLED",
+                            "childs": [
+                              {
+                                "nid": 40410,
+                                "strtype": "_style/Text_Color",
+                                "intarray": [
+                                  97,
+                                  97,
+                                  97,
+                                  255
+                                ],
+                                "InheritedType": 7
                               }
                             ],
                             "InheritedType": 1
@@ -33712,7 +33730,6 @@
                       },
                       {
                         "nid": 320,
-                        "flags": 1048576,
                         "strtype": "OBJECT/States",
                         "InheritedType": 1
                       },
@@ -34554,7 +34571,7 @@
                       {
                         "nid": 1030,
                         "strtype": "LABEL/Text",
-                        "strval": "Double-space period",
+                        "strval": "Insert space after punctuation",
                         "InheritedType": 10
                       },
                       {
@@ -34603,7 +34620,7 @@
                       {
                         "nid": 10,
                         "strtype": "OBJECT/Name",
-                        "strval": "swDoubleSpace",
+                        "strval": "swInsSpaceAfterPunc",
                         "InheritedType": 10
                       },
                       {
@@ -38904,7 +38921,7 @@
     "uiExportFolderPath": "D:\\Git\\Digital_Video_Recorder_DVR-TT01\\Simulator\\LvglWindowsDesktopApplication\\ui",
     "projectExportFolderPath": "D:\\Git\\Digital_Video_Recorder_DVR-TT01\\Project",
     "custom_variable_prefix": "uic",
-    "backup_cnt": 470,
+    "backup_cnt": 471,
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "9.1.0",

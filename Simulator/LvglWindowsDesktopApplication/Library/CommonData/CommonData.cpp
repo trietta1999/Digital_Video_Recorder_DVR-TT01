@@ -7,8 +7,6 @@ namespace system_data
     CData<SCREEN_NAME> CurrentScreen;
     CData<std::string> CurrentDate;
     CData<std::string> CurrentTime;
-    CData<KEYBOARD_TYPE> KeyboardType;
-    CData<short> T9ConfirmTimeout;
     CData<std::string> FreeStorage;
     CData<std::string> FreeUSBStorage;
     CData<STATE_TYPE> CurrentState;
@@ -52,6 +50,11 @@ namespace setting_data
     CData<short> InitAudState;
     CData<short> PreviewVideoState;
     CData<short> PlayVideoState;
+    CData<short> KeyboardType;
+    CData<short> T9AutoConfirmSpeed;
+    CData<short> KeyboardExitShortcutState;
+    CData<short> InsSpaceAfterPuncState;
+    CData<short> AutoCloseBracketState;
 }
 
 namespace temp_data
@@ -68,6 +71,11 @@ namespace temp_data
     CData<short> InitAudState;
     CData<short> PreviewVideoState;
     CData<short> PlayVideoState;
+    CData<short> KeyboardType;
+    CData<short> T9AutoConfirmSpeed;
+    CData<short> KeyboardExitShortcutState;
+    CData<short> InsSpaceAfterPuncState;
+    CData<short> AutoCloseBracketState;
 }
 
 namespace debug_data
@@ -82,8 +90,6 @@ void CommonDataUpdateAll()
     system_data::CurrentScreen.ResetState();
     system_data::CurrentDate.ResetState();
     system_data::CurrentTime.ResetState();
-    system_data::KeyboardType.ResetState();
-    system_data::T9ConfirmTimeout.ResetState();
     system_data::FreeStorage.ResetState();
     system_data::FreeUSBStorage.ResetState();
     system_data::CurrentState.ResetState();
@@ -118,6 +124,11 @@ void CommonDataUpdateAll()
     setting_data::InitAudState.ResetState();
     setting_data::PreviewVideoState.ResetState();
     setting_data::PlayVideoState.ResetState();
+    setting_data::KeyboardType.ResetState();
+    setting_data::T9AutoConfirmSpeed.ResetState();
+    setting_data::KeyboardExitShortcutState.ResetState();
+    setting_data::InsSpaceAfterPuncState.ResetState();
+    setting_data::AutoCloseBracketState.ResetState();
 
     temp_data::VideoEvent.ResetState();
     temp_data::VideoName.ResetState();
@@ -130,4 +141,9 @@ void CommonDataUpdateAll()
     temp_data::InitAudState.ResetState();
     temp_data::PreviewVideoState.ResetState();
     temp_data::PlayVideoState.ResetState();
+    temp_data::KeyboardType.ResetState();
+    temp_data::T9AutoConfirmSpeed.ResetState();
+    temp_data::KeyboardExitShortcutState.ResetState();
+    temp_data::InsSpaceAfterPuncState.ResetState();
+    temp_data::AutoCloseBracketState.ResetState();
 }

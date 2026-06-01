@@ -20,6 +20,44 @@ static lv_obj_t* dummyCancelKey = nullptr;
 static lv_obj_t* dummyCharKey = nullptr;
 static lv_obj_t* dummySpaceKey = nullptr;
 
+static char GetCloseBracket(char input)
+{
+    switch (input)
+    {
+    case '(':
+        return ')';
+    case '[':
+        return ']';
+    default:
+        return 0;
+    }
+}
+
+static void AutoCloseBracket(char input)
+{
+    if (setting_data::AutoCloseBracketState.GetValue())
+    {
+        auto closeBracket = GetCloseBracket(input);
+        if (closeBracket)
+        {
+            lv_textarea_add_char(ui_txtKeyboardInput, closeBracket);
+            lv_textarea_cursor_left(ui_txtKeyboardInput);
+
+        }
+    }
+}
+
+static void AutoAddSpaceAfterPeriod()
+{
+    if (setting_data::InsSpaceAfterPuncState.GetValue())
+    {
+        if (lv_textarea_get_current_char(ui_txtKeyboardInput) == '.')
+        {
+            lv_textarea_add_char(ui_txtKeyboardInput, ' ');
+        }
+    }
+}
+
 KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
     dummyConfirmKey = lv_button_create(nullptr);
@@ -27,9 +65,6 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
     dummyCancelKey = lv_button_create(nullptr);
     dummyCharKey = lv_button_create(nullptr);
     dummySpaceKey = lv_button_create(nullptr);
-
-    system_data::KeyboardType.SetValue(KEYBOARD_TYPE::STANDARD_KEYBOARD); //@todo: wait setting
-    system_data::T9ConfirmTimeout.SetValue(750); //@todo: wait setting
 
     ListButtonCallback = {
         { ui_btnKeyboardCancel      , OnClickCancel       , LV_EVENT_CLICKED             },
@@ -49,8 +84,8 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_btnKeyboardKeyBack     , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
         { ui_btnKeyboardKeyForward  , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
         { dummyConfirmKey           , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
-        { dummyOkKey                , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
-        { dummyCancelKey            , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { dummyOkKey                , OnShortcutKey       , LV_EVENT_SHORT_CLICKED       },
+        { dummyCancelKey            , OnShortcutKey       , LV_EVENT_SHORT_CLICKED       },
         { dummyCharKey              , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
         { dummySpaceKey             , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
         { ui_btnKeyboardKey0        , OnLongPressKey      , LV_EVENT_LONG_PRESSED        },
@@ -120,8 +155,9 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
     lv_obj_add_state(ui_btnKeyboardKey8, LV_STATE_DISABLED);
     lv_obj_add_state(ui_btnKeyboardKey9, LV_STATE_DISABLED);
 
-    if ((system_data::KeyboardType.GetValue() == KEYBOARD_TYPE::INTERNAL_NUMPAD)
-        || (system_data::KeyboardType.GetValue() == KEYBOARD_TYPE::STANDARD_NUMPAD))
+    if ((setting_data::KeyboardType.GetValue() == (short)dropdownlist_lib::DD_KEYBOARD_TYPE_e::Internal_numpad)
+        || (setting_data::KeyboardType.GetValue() == (short)dropdownlist_lib::DD_KEYBOARD_TYPE_e::Standard_numpad)
+        )
     {
         lv_obj_remove_state(ui_btnKeyboardKey0, LV_STATE_DISABLED);
         lv_obj_remove_state(ui_btnKeyboardKey1, LV_STATE_DISABLED);
@@ -145,13 +181,26 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         lv_obj_remove_state(ui_btnKeyboardKeyCaps, LV_STATE_CHECKED);
     }
 
+    // Init shortcut image
+    if (setting_data::KeyboardExitShortcutState.GetValue())
+    {
+        lv_obj_remove_flag(ui_imgCancelKey, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(ui_imgEnterKey, LV_OBJ_FLAG_HIDDEN);
+    }
+    else
+    {
+        lv_obj_add_flag(ui_imgCancelKey, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui_imgEnterKey, LV_OBJ_FLAG_HIDDEN);
+    }
+
     // Auto update text input
     timerUpdateInput = lv_timer_create([](lv_timer_t* timer) {
         auto input = keyboard_lib::GetInputChar();
         auto combine = keyboard_lib::GetCombineChar();
 
-        if ((system_data::KeyboardType.GetValue() == KEYBOARD_TYPE::INTERNAL_NUMPAD)
-            || (system_data::KeyboardType.GetValue() == KEYBOARD_TYPE::STANDARD_NUMPAD))
+        if ((setting_data::KeyboardType.GetValue() == (short)dropdownlist_lib::DD_KEYBOARD_TYPE_e::Internal_numpad)
+            || (setting_data::KeyboardType.GetValue() == (short)dropdownlist_lib::DD_KEYBOARD_TYPE_e::Standard_numpad)
+            )
         {
             if (input)
             {
@@ -161,6 +210,8 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
             if (combine)
             {
                 lv_textarea_add_char(ui_txtKeyboardInput, combine);
+                AutoCloseBracket(combine);
+                AutoAddSpaceAfterPeriod();
             }
         }
         else
@@ -168,6 +219,8 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
             if (input)
             {
                 lv_textarea_add_char(ui_txtKeyboardInput, input);
+                AutoCloseBracket(input);
+                AutoAddSpaceAfterPeriod();
             }
         }
         }, TIMECYCLE_10MS, nullptr);
@@ -210,14 +263,6 @@ void KeyboardScreen::OnClickKey(lv_event_t* event)
         // Clear temp input
         lv_textarea_set_text(ui_txtKeyboardTempInput, "");
     }
-    else if (obj == dummyOkKey)
-    {
-        OnClickOK(event);
-    }
-    else if (obj == dummyCancelKey)
-    {
-        OnClickCancel(event);
-    }
     else if (obj == ui_btnKeyboardKeyBackspace)
     {
         // Delete the latest character
@@ -257,7 +302,7 @@ void KeyboardScreen::OnClickKey(lv_event_t* event)
         if (item.first == obj)
         {
             keyboard_lib::SendKeyMessage(item.second, LV_EVENT_SHORT_CLICKED);
-            ::SetTimer(system_data::WindowHandle.GetValue(), TID_KEYDOWN, system_data::T9ConfirmTimeout.GetValue(), keyboard_lib::AutoConfirmKey);
+            ::SetTimer(system_data::WindowHandle.GetValue(), TID_KEYDOWN, keyboard_lib::GetAutoConfirmTimeMs(), keyboard_lib::AutoConfirmKey);
             break;
         }
     }
@@ -292,5 +337,22 @@ void KeyboardScreen::OnLongPressRepeatKey(lv_event_t* event)
     else if (obj == ui_btnKeyboardKeyForward)
     {
         lv_textarea_cursor_right(ui_txtKeyboardInput);
+    }
+}
+
+void KeyboardScreen::OnShortcutKey(lv_event_t* event)
+{
+    if (setting_data::KeyboardExitShortcutState.GetValue())
+    {
+        auto obj = (lv_obj_t*)(event->current_target);
+
+        if (obj == dummyOkKey)
+        {
+            OnClickOK(event);
+        }
+        else if (obj == dummyCancelKey)
+        {
+            OnClickCancel(event);
+        }
     }
 }

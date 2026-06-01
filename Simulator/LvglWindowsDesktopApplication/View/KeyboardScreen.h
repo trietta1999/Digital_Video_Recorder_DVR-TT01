@@ -15,6 +15,7 @@ private:
     static void OnClickKey(lv_event_t* event);
     static void OnLongPressKey(lv_event_t* event);
     static void OnLongPressRepeatKey(lv_event_t* event);
+    static void OnShortcutKey(lv_event_t* event);
 };
 
 #endif // _KEYBOARD_SCREEN_H

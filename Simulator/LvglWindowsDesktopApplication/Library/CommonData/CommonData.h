@@ -13,8 +13,6 @@ namespace system_data
     extern CData<SCREEN_NAME> CurrentScreen;
     extern CData<std::string> CurrentDate;
     extern CData<std::string> CurrentTime;
-    extern CData<KEYBOARD_TYPE> KeyboardType;
-    extern CData<short> T9ConfirmTimeout;
     extern CData<std::string> FreeStorage;
     extern CData<std::string> FreeUSBStorage;
     extern CData<STATE_TYPE> CurrentState;
@@ -58,6 +56,11 @@ namespace setting_data
     extern CData<short> InitAudState;
     extern CData<short> PreviewVideoState;
     extern CData<short> PlayVideoState;
+    extern CData<short> KeyboardType;
+    extern CData<short> T9AutoConfirmSpeed;
+    extern CData<short> KeyboardExitShortcutState;
+    extern CData<short> InsSpaceAfterPuncState;
+    extern CData<short> AutoCloseBracketState;
 }
 
 namespace temp_data
@@ -73,6 +76,11 @@ namespace temp_data
     extern CData<short> InitAudState;
     extern CData<short> PreviewVideoState;
     extern CData<short> PlayVideoState;
+    extern CData<short> KeyboardType;
+    extern CData<short> T9AutoConfirmSpeed;
+    extern CData<short> KeyboardExitShortcutState;
+    extern CData<short> InsSpaceAfterPuncState;
+    extern CData<short> AutoCloseBracketState;
 }
 
 namespace debug_data
