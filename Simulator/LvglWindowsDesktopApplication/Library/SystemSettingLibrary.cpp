@@ -15,6 +15,7 @@ namespace systemsetting_lib
         { &temp_data::KeyboardExitShortcutState, &setting_data::KeyboardExitShortcutState, L"KeyboardExitShortcutState", 0 },
         { &temp_data::InsSpaceAfterPuncState   , &setting_data::InsSpaceAfterPuncState   , L"InsSpaceAfterPuncState"   , 0 },
         { &temp_data::AutoCloseBracketState    , &setting_data::AutoCloseBracketState    , L"AutoCloseBracketState"    , 0 },
+        { &temp_data::NetworkType              , &setting_data::NetworkType              , L"NetworkType"              , 0 },
     };
 
     void SetupSystemData()

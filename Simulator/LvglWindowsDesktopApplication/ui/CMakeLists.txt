@@ -32,7 +32,6 @@ SET(SOURCES screens/ui_Main.c
     images/ui_img_esc_png.c
     images/ui_img_enter_png.c
     images/ui_img_search_png.c
-    images/ui_img_filter_png.c
     images/ui_img_check_png.c
     images/ui_img_folder_check_png.c
     images/ui_img_folder_limited_png.c
@@ -43,6 +42,9 @@ SET(SOURCES screens/ui_Main.c
     images/ui_img_replace_video_png.c
     images/ui_img_delete_png.c
     images/ui_img_drive_file_move_png.c
-    images/ui_img_dukto_png.c)
+    images/ui_img_dukto_png.c
+    images/ui_img_router_png.c
+    images/ui_img_sync_png.c
+    images/ui_img_router_off_png.c)
 
 add_library(ui ${SOURCES})

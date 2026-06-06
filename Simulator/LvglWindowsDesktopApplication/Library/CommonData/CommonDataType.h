@@ -25,12 +25,13 @@
 
 #define debug_println(a) std::cout << std::string(a) << "\n"
 
-#define TIMECYCLE_1SEC 1000
-#define TIMECYCLE_700MS 700
-#define TIMECYCLE_500MS 500
-#define TIMECYCLE_200MS 200
-#define TIMECYCLE_100MS 100
 #define TIMECYCLE_10MS 10
+#define TIMECYCLE_100MS 100
+#define TIMECYCLE_200MS 200
+#define TIMECYCLE_500MS 500
+#define TIMECYCLE_700MS 700
+#define TIMECYCLE_1SEC 1000
+#define TIMECYCLE_5SEC 5000
 
 #define TID_KEYDOWN 1
 
@@ -49,6 +50,8 @@
 #define SCROLL_Y_STEP 200
 
 #define STANDARD_PERCENT 100
+
+#define WIFI_CONNECT_CHECK_RETRY_MAX 10
 
 #ifdef _DEBUG
 #define SCRIPT_DIRECTORY L"debug_script"
@@ -141,6 +144,10 @@ enum
         CREATE(e, KBSCREEN_VIDEO_DESC) \
         CREATE(e, KBSCREEN_VIDEO_AUTHOR) \
         CREATE(e, KBSCREEN_VIDEO_SEARCH) \
+        CREATE(e, KBSCREEN_SSID_PASSWORD) \
+        CREATE(e, KBSCREEN_IPV4_ADDR) \
+        CREATE(e, KBSCREEN_SUBNET_MASK_ADDR) \
+        CREATE(e, KBSCREEN_DEFAULT_GATEWAY_ADDR) \
 
 #define DEF_STATE_TYPE(e, CREATE) \
         CREATE(e, S_STOP) \
@@ -155,6 +162,8 @@ enum
         CREATE(e, DD_DATE_SEPARATOR) \
         CREATE(e, DD_KEYBOARD_TYPE) \
         CREATE(e, DD_T9_AUTO_CONFIRM_SPEED) \
+        CREATE(e, DD_NETWORK_TYPE) \
+        CREATE(e, DD_SSID) \
 
 enum class SCREEN_NAME
 {

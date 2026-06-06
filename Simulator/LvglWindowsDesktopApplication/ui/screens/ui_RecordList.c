@@ -9,7 +9,6 @@ lv_obj_t * ui_RecordList = NULL;
 lv_obj_t * ui_lblVideoSearch = NULL;
 lv_obj_t * ui_btnVideoSearch = NULL;
 lv_obj_t * ui_dropVideoFilter = NULL;
-lv_obj_t * ui_Image2 = NULL;
 lv_obj_t * ui_cbRLItemAll = NULL;
 lv_obj_t * ui_conRL = NULL;
 lv_obj_t * ui_conRLItemRow1 = NULL;
@@ -254,7 +253,7 @@ void ui_RecordList_screen_init(void)
     lv_obj_set_style_bg_opa(ui_RecordList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_lblVideoSearch = lv_label_create(ui_RecordList);
-    lv_obj_set_width(ui_lblVideoSearch, 680);
+    lv_obj_set_width(ui_lblVideoSearch, 745);
     lv_obj_set_height(ui_lblVideoSearch, 80);
     lv_obj_set_x(ui_lblVideoSearch, 107);
     lv_obj_set_y(ui_lblVideoSearch, 177);
@@ -323,16 +322,6 @@ void ui_RecordList_screen_init(void)
     lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_dropVideoFilter), lv_color_hex(0x424242),
                               LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_dropVideoFilter), 255,  LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_Image2 = lv_image_create(ui_RecordList);
-    lv_image_set_src(ui_Image2, &ui_img_filter_png);
-    lv_obj_set_width(ui_Image2, 55);
-    lv_obj_set_height(ui_Image2, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Image2, 599);
-    lv_obj_set_y(ui_Image2, -234);
-    lv_obj_set_align(ui_Image2, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_Image2, LV_OBJ_FLAG_CLICKABLE);     /// Flags
-    lv_obj_remove_flag(ui_Image2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_cbRLItemAll = lv_checkbox_create(ui_RecordList);
     lv_obj_set_width(ui_cbRLItemAll, 60);
@@ -949,7 +938,6 @@ void ui_RecordList_screen_destroy(void)
     ui_lblVideoSearch = NULL;
     ui_btnVideoSearch = NULL;
     ui_dropVideoFilter = NULL;
-    ui_Image2 = NULL;
     ui_cbRLItemAll = NULL;
     ui_conRL = NULL;
     ui_conRLItemRow1 = NULL;

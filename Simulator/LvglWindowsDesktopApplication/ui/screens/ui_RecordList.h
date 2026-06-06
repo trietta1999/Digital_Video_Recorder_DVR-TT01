@@ -20,7 +20,6 @@ extern void ui_event_btnVideoSearch(lv_event_t * e);
 extern lv_obj_t * ui_btnVideoSearch;
 extern void ui_event_dropVideoFilter(lv_event_t * e);
 extern lv_obj_t * ui_dropVideoFilter;
-extern lv_obj_t * ui_Image2;
 extern void ui_event_cbRLItemAll(lv_event_t * e);
 extern lv_obj_t * ui_cbRLItemAll;
 extern lv_obj_t * ui_conRL;

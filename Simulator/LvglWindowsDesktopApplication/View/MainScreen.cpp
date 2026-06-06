@@ -5,6 +5,7 @@
 #include "MainScreen.h"
 #include "VideoInfoScreen.h"
 #include "VideoRecordListScreen.h"
+#include "SettingScreen.h"
 
 static lv_timer_t* timerGetSystemData = nullptr;
 static int currentExtIndex = 0;
@@ -332,6 +333,7 @@ void MainScreen::OnClickSystemSetting(lv_event_t* event)
 {
     systemsetting_lib::SetupTempSetting();
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_SETTING);
+    SettingScreen::InitSettingScreen();
 }
 
 void MainScreen::UpdateDate()

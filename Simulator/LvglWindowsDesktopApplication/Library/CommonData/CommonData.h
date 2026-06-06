@@ -61,6 +61,8 @@ namespace setting_data
     extern CData<short> KeyboardExitShortcutState;
     extern CData<short> InsSpaceAfterPuncState;
     extern CData<short> AutoCloseBracketState;
+    extern CData<short> NetworkType;
+    extern CData<short> SSID;
 }
 
 namespace temp_data
@@ -81,6 +83,9 @@ namespace temp_data
     extern CData<short> KeyboardExitShortcutState;
     extern CData<short> InsSpaceAfterPuncState;
     extern CData<short> AutoCloseBracketState;
+    extern CData<short> NetworkType;
+    extern CData<short> SSID;
+    extern CData<std::string> WiFiPassword;
 }
 
 namespace debug_data

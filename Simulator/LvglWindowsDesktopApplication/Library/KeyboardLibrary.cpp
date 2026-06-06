@@ -10,7 +10,7 @@ namespace keyboard_lib
         char upper;
     } TextType_t;
 
-    std::vector<std::pair<int, char>> listNumber = {
+    static std::vector<std::pair<int, char>> listNumber = {
         { VK_NUMPAD0, '0' },
         { VK_NUMPAD1, '1' },
         { VK_NUMPAD2, '2' },
@@ -23,7 +23,7 @@ namespace keyboard_lib
         { VK_NUMPAD9, '9' },
     };
 
-    std::vector<std::pair<std::string, TextType_t>> listCombineChar = {
+    static std::vector<std::pair<std::string, TextType_t>> listCombineChar = {
         { "0"     , { ' ', ' ' } },
         { "00"    , { '(', '(' } },
         { "000"   , { ')', ')' } },
@@ -61,7 +61,7 @@ namespace keyboard_lib
         { "9999"  , { 'z', 'Z' } },
     };
 
-    std::vector<std::pair<std::pair<int, int>, char>> listSpecialChar = {
+    static std::vector<std::pair<std::pair<int, int>, char>> listSpecialChar = {
         { { 0       , VK_OEM_PERIOD }, '.' },
         { { VK_SHIFT, VK_OEM_MINUS  }, '_' },
         { { 0       , VK_OEM_MINUS  }, '-' },
@@ -72,10 +72,11 @@ namespace keyboard_lib
         { { VK_SHIFT, '0'           }, ')' },
     };
 
+    static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
+
     static std::string buff = "";
     static char inputChar = 0;
     static char combineChar = 0;
-    static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
     static bool isLongPress = false;
     static unsigned long long keydownTime = 0;
     static unsigned long long keydownTimeRepeat = 0;
@@ -236,16 +237,6 @@ namespace keyboard_lib
         listVkCode = list;
     }
 
-    const std::vector<std::pair<lv_obj_t*, int>>& GetListVkCode()
-    {
-        return listVkCode;
-    }
-
-    const std::vector<std::pair<std::pair<int, int>, char>>& GetListSpacialChar()
-    {
-        return listSpecialChar;
-    }
-
     void CALLBACK AutoConfirmKey(HWND hwnd, UINT uMsg, UINT_PTR timerId, DWORD dwTime)
     {
         KillTimer(hwnd, TID_KEYDOWN);
@@ -256,7 +247,7 @@ namespace keyboard_lib
             lv_event_t e = { 0 };
 
             // Match VK code with real button on screen keypad
-            for (const auto& item : keyboard_lib::GetListVkCode())
+            for (const auto& item : listVkCode)
             {
                 if (item.second == VK_CONVERT)
                 {
@@ -287,7 +278,7 @@ namespace keyboard_lib
                 bool isRepeat = (lParam & (1 << 30)) != 0;
 
                 // Match VK code with real button on screen keypad
-                for (const auto& item : keyboard_lib::GetListVkCode())
+                for (const auto& item : listVkCode)
                 {
                     if (item.second == wParam)
                     {
@@ -308,7 +299,7 @@ namespace keyboard_lib
                     if ((keydownTimeRepeat != 0) && (::GetTickCount64() - keydownTimeRepeat >= TIMECYCLE_100MS))
                     {
                         // Match VK code with real button on screen keypad
-                        for (const auto& item : keyboard_lib::GetListVkCode())
+                        for (const auto& item : listVkCode)
                         {
                             if (item.second == wParam)
                             {
@@ -359,7 +350,7 @@ namespace keyboard_lib
                     else
                     {
                         // Match VK code to char
-                        for (const auto& item : keyboard_lib::GetListSpacialChar())
+                        for (const auto& item : listSpecialChar)
                         {
                             if (item.first.second == wParam)
                             {
@@ -376,7 +367,7 @@ namespace keyboard_lib
                     }
 
                     // Match VK code with real button on screen keypad
-                    for (const auto& item : keyboard_lib::GetListVkCode())
+                    for (const auto& item : listVkCode)
                     {
                         if (item.second == wParam)
                         {

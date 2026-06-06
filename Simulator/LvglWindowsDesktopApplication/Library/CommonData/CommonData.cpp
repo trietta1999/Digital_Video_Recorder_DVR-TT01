@@ -55,6 +55,8 @@ namespace setting_data
     CData<short> KeyboardExitShortcutState;
     CData<short> InsSpaceAfterPuncState;
     CData<short> AutoCloseBracketState;
+    CData<short> NetworkType;
+    CData<short> SSID;
 }
 
 namespace temp_data
@@ -76,6 +78,9 @@ namespace temp_data
     CData<short> KeyboardExitShortcutState;
     CData<short> InsSpaceAfterPuncState;
     CData<short> AutoCloseBracketState;
+    CData<short> NetworkType;
+    CData<short> SSID;
+    CData<std::string> WiFiPassword;
 }
 
 namespace debug_data
@@ -129,6 +134,8 @@ void CommonDataUpdateAll()
     setting_data::KeyboardExitShortcutState.ResetState();
     setting_data::InsSpaceAfterPuncState.ResetState();
     setting_data::AutoCloseBracketState.ResetState();
+    setting_data::NetworkType.ResetState();
+    setting_data::SSID.ResetState();
 
     temp_data::VideoEvent.ResetState();
     temp_data::VideoName.ResetState();
@@ -146,4 +153,7 @@ void CommonDataUpdateAll()
     temp_data::KeyboardExitShortcutState.ResetState();
     temp_data::InsSpaceAfterPuncState.ResetState();
     temp_data::AutoCloseBracketState.ResetState();
+    temp_data::NetworkType.ResetState();
+    temp_data::SSID.ResetState();
+    temp_data::WiFiPassword.ResetState();
 }

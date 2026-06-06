@@ -139,6 +139,25 @@ namespace common_lib
 
         return path;
     }
+
+    std::string ExecuteCMD(std::string cmd)
+    {
+        char buffer[MAX_PATH];
+        std::string result = "";
+
+        std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd.c_str(), "r"), _pclose);
+        if (!pipe)
+        {
+            return "";
+        }
+
+        while (fgets(buffer, sizeof(buffer), pipe.get()) != nullptr)
+        {
+            result += buffer;
+        }
+
+        return result;
+    }
 }
 
 //std::queue<bool> queueTimerExist = { };

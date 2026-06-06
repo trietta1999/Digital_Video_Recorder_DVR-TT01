@@ -112,6 +112,7 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { SCREEN_NAME::KBSCREEN_VIDEO_DESC    , { "Description" , &temp_data::VideoDesc     } },
         { SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR  , { "Author"      , &temp_data::VideoAuthor   } },
         { SCREEN_NAME::KBSCREEN_VIDEO_SEARCH  , { "Search video", &input_data::VideoSearch  } },
+        { SCREEN_NAME::KBSCREEN_SSID_PASSWORD  , { "Password"   , &temp_data::WiFiPassword  } },
     };
 
     listVkCode = {

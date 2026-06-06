@@ -1,7 +1,7 @@
 ﻿#ifndef _COMMON_LIBRARY_H
 #define _COMMON_LIBRARY_H
 
-#include <lvgl.h>
+#include <wlanapi.h>
 #include "CData.h"
 #include "CommonDataType.h"
 
@@ -15,8 +15,6 @@ namespace keyboard_lib
     bool GetKeyboardCapsState();
     short GetAutoConfirmTimeMs();
     void SetListVkCode(const std::vector<std::pair<lv_obj_t*, int>>& list);
-    const std::vector<std::pair<lv_obj_t*, int>>& GetListVkCode();
-    const std::vector<std::pair<std::pair<int, int>, char>>& GetListSpacialChar();
     void CALLBACK AutoConfirmKey(HWND hwnd, UINT uMsg, UINT_PTR timerId, DWORD dwTime);
     void HardwareKeyboardProcess(HWND hwnd, int uMsg, int wParam, lv_event_code_t lParam);
     void ResetAll();
@@ -149,7 +147,7 @@ namespace dropdownlist_lib
 
     void SetupDropdownList();
     void UpdateDropdownList(std::vector<DROPDOWNLIST_NAME> listName);
-    const dropdown_info_t& GetDropdownInfo(DROPDOWNLIST_NAME name);
+    dropdown_info_t& GetDropdownInfo(DROPDOWNLIST_NAME name);
     short GetDropdownSelectedIndex(DROPDOWNLIST_NAME name);
     void UpdateDropdownData(lv_obj_t* obj);
 }
@@ -169,6 +167,52 @@ namespace systemsetting_lib
     void SetupTempSetting();
     void SaveSetting();
 }
+
+namespace network_lib
+{
+    struct ip_info_t
+    {
+        std::string ip = "0.0.0.0";
+        std::string mask = "0.0.0.0";
+        std::string gateway = "0.0.0.0";
+    };
+
+    struct lan_info_t
+    {
+        short type;
+        std::string name;
+        std::string description;
+        IF_OPER_STATUS status;
+        unsigned long metric;
+    };
+
+    struct wifi_info_t
+    {
+        std::string ssid;
+        std::string password;
+        std::string auth;
+        std::string cipher;
+        short signalQuality;
+
+        bool IsAnyNone() const
+        {
+            return (ssid.empty() || password.empty() || auth.empty() || cipher.empty());
+        }
+    };
+
+    extern std::vector<lan_info_t> listLanInfo;
+    extern std::vector<wifi_info_t> listWiFiInfo;
+
+    void GetLANConnections();
+    void GetWiFiSSIDs();
+    std::string GetCipherAlgorithmString(DOT11_CIPHER_ALGORITHM cipher);
+    std::string GetAuthAlgorithmString(DOT11_AUTH_ALGORITHM auth);
+    ip_info_t GetNetworkIPByName(std::string targetAdapterName = "");
+    std::vector<std::string> CreateNetworkTypeDropdownOptions();
+    std::vector<std::string> CreateSSIDDropdownOptions();
+    bool ConnectWiFiWithTemplate(const wifi_info_t& info);
+    bool IsWiFiConnectedTo(std::string targetSsid = "");
+};
 
 namespace config_lib
 {
@@ -205,6 +249,7 @@ namespace common_lib
     std::string GenerateGUID();
     std::wstring GetFullPath(std::wstring file);
     std::wstring GetSystemPath();
+    std::string ExecuteCMD(std::string cmd);
 }
 
 #endif // !_COMMON_LIBRARY_H

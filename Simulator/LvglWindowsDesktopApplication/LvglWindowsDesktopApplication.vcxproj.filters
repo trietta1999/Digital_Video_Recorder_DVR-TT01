@@ -1592,9 +1592,6 @@
     <ClCompile Include="ui\images\ui_img_esc_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
-    <ClCompile Include="ui\images\ui_img_filter_png.c">
-      <Filter>UI\UI_View\images</Filter>
-    </ClCompile>
     <ClCompile Include="ui\images\ui_img_input_png.c">
       <Filter>UI\UI_View\images</Filter>
     </ClCompile>
@@ -1695,6 +1692,18 @@
       <Filter>Library</Filter>
     </ClCompile>
     <ClCompile Include="Library\SystemSettingLibrary.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_router_off_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_router_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\images\ui_img_sync_png.c">
+      <Filter>UI\UI_View\images</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\NetworkLibrary.cpp">
       <Filter>Library</Filter>
     </ClCompile>
   </ItemGroup>

@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iomanip>
 #include <LvglWindowsIconResource.h>
+#include <dbghelp.h>
 
 #include "ui/ui.h"
 #include "CommonData.h"
@@ -107,7 +108,7 @@ static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
         storage_lib::CollectExternalDrivesList();
         system_data::DeviceChange.SetValue(true);
     }
-        break;
+    break;
     case WM_DEVICECHANGE_DONE:
         system_data::DeviceChange.SetValue(false);
         break;
@@ -125,11 +126,34 @@ static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     return CallWindowProc(OriginalWndProc, hwnd, uMsg, wParam, lParam);
 }
 
+static LONG WINAPI OurCrashHandler(EXCEPTION_POINTERS* pExceptionInfo)
+{
+    std::wstring dumpFileName = L"crash_report.dmp";
+
+    HANDLE hFile = CreateFileW(dumpFileName.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+    if (hFile != INVALID_HANDLE_VALUE)
+    {
+        MINIDUMP_EXCEPTION_INFORMATION dumpInfo;
+        dumpInfo.ThreadId = GetCurrentThreadId();
+        dumpInfo.ExceptionPointers = pExceptionInfo;
+        dumpInfo.ClientPointers = TRUE;
+
+        BOOL success = MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, MiniDumpWithDataSegs, &dumpInfo, NULL, NULL);
+
+        CloseHandle(hFile);
+    }
+
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
     UNREFERENCED_PARAMETER(nShowCmd);
+
+    ::SetUnhandledExceptionFilter(OurCrashHandler);
 
     lv_init();
 

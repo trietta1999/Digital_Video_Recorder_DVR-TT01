@@ -57,7 +57,6 @@ LV_IMG_DECLARE(ui_img_backspace_png);    // assets/backspace.png
 LV_IMG_DECLARE(ui_img_esc_png);    // assets/esc.png
 LV_IMG_DECLARE(ui_img_enter_png);    // assets/enter.png
 LV_IMG_DECLARE(ui_img_search_png);    // assets/search.png
-LV_IMG_DECLARE(ui_img_filter_png);    // assets/filter.png
 LV_IMG_DECLARE(ui_img_check_png);    // assets/check.png
 LV_IMG_DECLARE(ui_img_folder_check_png);    // assets/folder_check.png
 LV_IMG_DECLARE(ui_img_folder_limited_png);    // assets/folder_limited.png
@@ -69,6 +68,9 @@ LV_IMG_DECLARE(ui_img_replace_video_png);    // assets/replace_video.png
 LV_IMG_DECLARE(ui_img_delete_png);    // assets/delete.png
 LV_IMG_DECLARE(ui_img_drive_file_move_png);    // assets/drive_file_move.png
 LV_IMG_DECLARE(ui_img_dukto_png);    // assets/dukto.png
+LV_IMG_DECLARE(ui_img_router_png);    // assets/router.png
+LV_IMG_DECLARE(ui_img_sync_png);    // assets/sync.png
+LV_IMG_DECLARE(ui_img_router_off_png);    // assets/router_off.png
 
 // UI INIT
 void ui_init(void);

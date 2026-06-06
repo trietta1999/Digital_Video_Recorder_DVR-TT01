@@ -102,6 +102,7 @@ static int totalItemHeight = 0;
 static int totalRowHeight = 0;
 static short deleteTimeCounter = 0;
 static int copyItemCount = 0;
+static bool isInit = false;
 
 static RowInfo_t CreateRowUI()
 {
@@ -308,6 +309,8 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
     auto rowHeight = lv_obj_get_height(ui_lblRLItemName1);
     auto borderWidth = lv_obj_get_style_border_width(ui_conRLItemRow1, LV_PART_MAIN | LV_STATE_DEFAULT);
     totalItemHeight = rowHeight + borderWidth * 2 + rowSpacing;
+
+    isInit = true;
 }
 
 VideoRecordListScreen::~VideoRecordListScreen()
@@ -813,57 +816,67 @@ void VideoRecordListScreen::UpdateExtDevice()
 
 void VideoRecordListScreen::UpdateVideoInfoList()
 {
-    // Update search label
-    lv_label_set_text(ui_lblVideoSearch, input_data::VideoSearch.GetValue().c_str());
-
-    auto listVideoInfo = recordlist_lib::GetVideoInfoListData(); // Get video info from data
-    auto searchKey = input_data::VideoSearch.GetValue();
-    totalRowHeight = 0;
-
-    // Clear template item
-    lv_obj_clean(ui_conRL);
-
-    if (!searchKey.empty())
+    if (input_data::VideoSearch.GetState()
+        || input_data::VideoSearchType.GetState()
+        || isInit
+        )
     {
-        // Remove elements that do NOT meet the search criteria.
-        std::erase_if(listVideoInfo, [&](const videoinfo_lib::videoinfo_t& item) {
-            // StrStrI returns nullptr if search key is NOT found
-            // Return true (to delete) when StrStrIA == nullptr
-            return (::StrStrI(common_lib::ConvertStringToWString(GetFilterValue(item, input_data::VideoSearchType.GetValue())).c_str(), common_lib::ConvertStringToWString(searchKey).c_str()) == nullptr);
-            });
-    }
+        // Update search label
+        lv_label_set_text(ui_lblVideoSearch, input_data::VideoSearch.GetValue().c_str());
 
-    // Create video info list
-    for (const auto& videoInfo : listVideoInfo)
-    {
-        char datetime[MAX_PATH] = { 0 };
-        auto rowInfo = CreateRowUI();
+        auto listVideoInfo = recordlist_lib::GetVideoInfoListData(); // Get video info from data
+        auto searchKey = input_data::VideoSearch.GetValue();
+        totalRowHeight = 0;
 
-        sprintf(datetime, "%02d.%02d.%02d\n%02d:%02d:%02d",
-            videoInfo.datetime.wDay, videoInfo.datetime.wMonth, videoInfo.datetime.wYear,
-            videoInfo.datetime.wHour, videoInfo.datetime.wMinute, videoInfo.datetime.wSecond); // @todo: wait setting
+        // Clear template item
+        lv_obj_clean(ui_conRL);
 
-        rowInfo.CreateData(datetime, videoInfo.videoName, videoInfo.videoID);
+        listRowInfo.clear();
 
-        // Find if the latest transfer state is exist
-        auto find = std::find_if(listTransferState.begin(), listTransferState.end(),
-            [rowInfo](const std::pair<std::string, bool>& item) {
-                return rowInfo.id == item.first;
-            });
-
-        // Update transfer state
-        if (find != listTransferState.end())
+        if (!searchKey.empty())
         {
-            rowInfo.isTransfered = find->second;
-            rowInfo.UpdateTransferState();
+            // Remove elements that do NOT meet the search criteria.
+            std::erase_if(listVideoInfo, [&](const videoinfo_lib::videoinfo_t& item) {
+                // StrStrI returns nullptr if search key is NOT found
+                // Return true (to delete) when StrStrIA == nullptr
+                return (::StrStrI(common_lib::ConvertStringToWString(GetFilterValue(item, input_data::VideoSearchType.GetValue())).c_str(), common_lib::ConvertStringToWString(searchKey).c_str()) == nullptr);
+                });
         }
 
-        listRowInfo.push_back(rowInfo);
+        // Create video info list
+        for (const auto& videoInfo : listVideoInfo)
+        {
+            char datetime[MAX_PATH] = { 0 };
+            auto rowInfo = CreateRowUI();
 
-        // Calculate the total height for one item
-        totalRowHeight += totalItemHeight;
+            sprintf(datetime, "%02d.%02d.%02d\n%02d:%02d:%02d",
+                videoInfo.datetime.wDay, videoInfo.datetime.wMonth, videoInfo.datetime.wYear,
+                videoInfo.datetime.wHour, videoInfo.datetime.wMinute, videoInfo.datetime.wSecond); // @todo: wait setting
+
+            rowInfo.CreateData(datetime, videoInfo.videoName, videoInfo.videoID);
+
+            // Find if the latest transfer state is exist
+            auto find = std::find_if(listTransferState.begin(), listTransferState.end(),
+                [rowInfo](const std::pair<std::string, bool>& item) {
+                    return rowInfo.id == item.first;
+                });
+
+            // Update transfer state
+            if (find != listTransferState.end())
+            {
+                rowInfo.isTransfered = find->second;
+                rowInfo.UpdateTransferState();
+            }
+
+            listRowInfo.push_back(rowInfo);
+
+            // Calculate the total height for one item
+            totalRowHeight += totalItemHeight;
+        }
+
+        // Excluding the total height for the first page
+        totalRowHeight -= totalItemHeight * RL_ITEM_PER_PAGE;
+
+        isInit = false;
     }
-
-    // Excluding the total height for the first page
-    totalRowHeight -= totalItemHeight * RL_ITEM_PER_PAGE;
 }

@@ -73,6 +73,22 @@ namespace dropdownlist_lib
                     &temp_data::T9AutoConfirmSpeed,
                 },
             },
+            {
+                DROPDOWNLIST_NAME::DD_NETWORK_TYPE,
+                {
+                    ui_dropNetworkType,
+                    {},
+                    &temp_data::NetworkType,
+                },
+            },
+            {
+                DROPDOWNLIST_NAME::DD_SSID,
+                {
+                    ui_dropSSID,
+                    {},
+                    &temp_data::SSID,
+                },
+            },
         };
 
         // Init dropdown options
@@ -115,7 +131,7 @@ namespace dropdownlist_lib
         }
     }
 
-    const dropdown_info_t& GetDropdownInfo(DROPDOWNLIST_NAME name)
+    dropdown_info_t& GetDropdownInfo(DROPDOWNLIST_NAME name)
     {
         return mapDropdownInfo[name];
     }

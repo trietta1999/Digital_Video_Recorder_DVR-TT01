@@ -7,17 +7,22 @@ class SettingScreen : public BaseScreen
 {
 public:
     SettingScreen(SCREEN_NAME screen);
-    ~SettingScreen() = default;
+    ~SettingScreen();
+
+    static void InitSettingScreen();
 
 private:
     static void OnClickCancel(lv_event_t* event);
     static void OnClickSave(lv_event_t* event);
+    static void OnClickEdit(lv_event_t* event);
 
-    void InitGeneralSetting();
-    void InitKeyboardSetting();
-    void InitNetworkSetting();
+    static void InitGeneralSetting();
+    static void InitKeyboardSetting();
+    static void InitNetworkSetting();
 
     static void UpdateKeyboardSetting();
+    static void UpdateNetworkState();
+    static void UpdateWiFiInfo();
 };
 
 #endif // _SETTING_SCREEN_H
