@@ -6,7 +6,7 @@
 #include "ScreenMapping.h"
 #include "VideoRecordListScreen.h"
 
-struct RowInfo_t
+struct row_info_t
 {
     lv_obj_t* rowObj;
     lv_obj_t* checkboxObj;
@@ -19,7 +19,7 @@ struct RowInfo_t
     std::string name;
     std::string id;
 
-    bool operator==(const RowInfo_t& other)
+    bool operator==(const row_info_t& other)
     {
         return ((other.isCheck == this->isCheck)
             && (other.datetime == this->datetime)
@@ -89,8 +89,8 @@ struct RowInfo_t
     }
 };
 
-static std::vector<RowInfo_t> listRowInfo = {};
-static std::vector<RowInfo_t> listRowInfoSelected = {};
+static std::vector<row_info_t> listRowInfo = {};
+static std::vector<row_info_t> listRowInfoSelected = {};
 static std::vector<std::pair<std::string, bool>> listTransferState = {};
 static std::vector<storage_lib::RemovableDriveInfo_t> listExtDrive = {};
 static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
@@ -104,7 +104,7 @@ static short deleteTimeCounter = 0;
 static int copyItemCount = 0;
 static bool isInit = false;
 
-static RowInfo_t CreateRowUI()
+static row_info_t CreateRowUI()
 {
     auto ui_conRLItemCustomRow1 = lv_obj_create(ui_conRL);
     lv_obj_remove_style_all(ui_conRLItemCustomRow1);
@@ -210,7 +210,7 @@ static RowInfo_t CreateRowUI()
     lv_obj_set_style_bg_color(ui_lblRLItemCustomName1, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_lblRLItemCustomName1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    RowInfo_t info = { 0 };
+    row_info_t info = { 0 };
     info.CreateUI(ui_conRLItemCustomRow1, ui_cbRLItemCustom1, ui_cbRLItemCustomTransfer1, ui_lblRLItemCustomDateTime1, ui_lblRLItemCustomName1);
 
     return info;
@@ -395,7 +395,7 @@ void VideoRecordListScreen::OnClickItem(lv_event_t* event)
             else
             {
                 // Use a lambda to find and erase the matching row based on unique attributes
-                std::erase_if(listRowInfoSelected, [&](const RowInfo_t& it) {
+                std::erase_if(listRowInfoSelected, [&](const row_info_t& it) {
                     return ((it.isCheck != rowInfo.isCheck)
                         && (it.datetime == rowInfo.datetime)
                         && (it.name == rowInfo.name)

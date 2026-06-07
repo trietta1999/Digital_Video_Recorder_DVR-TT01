@@ -256,6 +256,12 @@ void MainScreen::OnClickOperator(lv_event_t* event)
 
                     system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
                 }
+                else
+                {
+                    videorecord_lib::StopExternalWindow();
+
+                    system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
+                }
             }
             else if ((system_data::CurrentState.GetValue() == STATE_TYPE::S_PLAY)
                 || (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)

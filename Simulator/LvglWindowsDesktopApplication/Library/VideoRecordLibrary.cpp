@@ -145,9 +145,6 @@ namespace videorecord_lib
 
                     keybd_event(vkey, scanCode, 0, 0);
                     keybd_event(vkey, scanCode, KEYEVENTF_KEYUP, 0);
-#ifdef _DEBUG
-                    ::Sleep(TIMECYCLE_1SEC);
-#endif
 
                     SetWindowFocus(system_data::WindowHandle.GetValue());
                 }
