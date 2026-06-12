@@ -264,7 +264,9 @@ namespace keyboard_lib
     void HardwareKeyboardProcess(HWND hwnd, int uMsg, int wParam, lv_event_code_t lParam)
     {
         if ((system_data::CurrentKbScreen.GetValue() != SCREEN_NAME::MIN_KBSCREEN)
-            || system_data::CurrentScreen.GetValue() == SCREEN_NAME::SCREEN_VIDEO_RECORDLIST)
+            || (system_data::CurrentScreen.GetValue() == SCREEN_NAME::SCREEN_MAIN)
+            || (system_data::CurrentScreen.GetValue() == SCREEN_NAME::SCREEN_VIDEO_RECORDLIST)
+            )
         {
             lv_event_t e = { 0 };
 

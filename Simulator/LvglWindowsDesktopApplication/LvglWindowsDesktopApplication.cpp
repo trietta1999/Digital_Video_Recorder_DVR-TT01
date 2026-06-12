@@ -14,7 +14,6 @@
 #include "ScreenMapping.h"
 
 WNDPROC OriginalWndProc = NULL;
-HWND ClientHandle = NULL;
 
 #ifdef _DEBUG
 static void DebugConsoleProcess();
@@ -206,6 +205,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     // Redraw window
     ::SetWindowPos(window_handle, HWND_TOPMOST, 0, 0, HORIZON_MAX_RESOLUTION, VERTICAL_MAX_RESOLUTION, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 #endif
+
+    soundvolume_lib::CreateSoundVolumeWindow();
 
 #ifdef _DEBUG
     AttachConsoleWindow();

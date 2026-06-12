@@ -214,6 +214,14 @@ namespace network_lib
     bool IsWiFiConnectedTo(std::string targetSsid = "");
 };
 
+namespace soundvolume_lib
+{
+    void CreateSoundVolumeWindow();
+    void SetSystemVolume(int percent);
+    int GetSystemVolume();
+    void ChangeVolume(bool up, bool down);
+}
+
 namespace config_lib
 {
     std::wstring GetWStringConfig(std::wstring section, std::wstring key, std::wstring file);

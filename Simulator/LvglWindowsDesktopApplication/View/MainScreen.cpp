@@ -10,6 +10,9 @@
 static lv_timer_t* timerGetSystemData = nullptr;
 static int currentExtIndex = 0;
 static std::vector<storage_lib::RemovableDriveInfo_t> listExtDrive = {};
+static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
+static lv_obj_t* dummyVolumeUpKey = nullptr;
+static lv_obj_t* dummyVolumeDownKey = nullptr;
 
 static void CreateDateTimeStr(std::string& dateStr, std::string& timeStr)
 {
@@ -59,19 +62,24 @@ static void CreateDateTimeStr(std::string& dateStr, std::string& timeStr)
 
 MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
+    dummyVolumeUpKey = lv_button_create(nullptr);
+    dummyVolumeDownKey = lv_button_create(nullptr);
+
     ListButtonCallback = {
-        { ui_btnNewVideo       , OnClickNew            , LV_EVENT_CLICKED },
-        { ui_btnCloseVideo     , OnClickClose          , LV_EVENT_CLICKED },
-        { ui_btnVideoRecordList, OnClickVideoRecordList, LV_EVENT_CLICKED },
-        { ui_btnSystemSetting  , OnClickSystemSetting  , LV_EVENT_CLICKED },
-        { ui_btnRec            , OnClickOperator       , LV_EVENT_CLICKED },
-        { ui_btnPlay           , OnClickOperator       , LV_EVENT_CLICKED },
-        { ui_btnPause          , OnClickOperator       , LV_EVENT_CLICKED },
-        { ui_btnStop           , OnClickOperator       , LV_EVENT_CLICKED },
-        { ui_btnSound          , OnClickOperator       , LV_EVENT_CLICKED },
-        { ui_btnFastForward    , OnClickOperator       , LV_EVENT_CLICKED },
-        { ui_btnFastRewind     , OnClickOperator       , LV_EVENT_CLICKED },
-        { ui_btnStorageUSB     , OnClickStorageUSB     , LV_EVENT_CLICKED },
+        { ui_btnNewVideo       , OnClickNew                                                       , LV_EVENT_CLICKED       },
+        { ui_btnCloseVideo     , OnClickClose                                                     , LV_EVENT_CLICKED       },
+        { ui_btnVideoRecordList, OnClickVideoRecordList                                           , LV_EVENT_CLICKED       },
+        { ui_btnSystemSetting  , OnClickSystemSetting                                             , LV_EVENT_CLICKED       },
+        { ui_btnRec            , OnClickOperator                                                  , LV_EVENT_CLICKED       },
+        { ui_btnPlay           , OnClickOperator                                                  , LV_EVENT_CLICKED       },
+        { ui_btnPause          , OnClickOperator                                                  , LV_EVENT_CLICKED       },
+        { ui_btnStop           , OnClickOperator                                                  , LV_EVENT_CLICKED       },
+        { ui_btnSound          , OnClickOperator                                                  , LV_EVENT_CLICKED       },
+        { ui_btnFastForward    , OnClickOperator                                                  , LV_EVENT_CLICKED       },
+        { ui_btnFastRewind     , OnClickOperator                                                  , LV_EVENT_CLICKED       },
+        { ui_btnStorageUSB     , OnClickStorageUSB                                                , LV_EVENT_CLICKED       },
+        { dummyVolumeUpKey     , [](lv_event_t* e) { soundvolume_lib::ChangeVolume(true, false); }, LV_EVENT_SHORT_CLICKED },
+        { dummyVolumeDownKey   , [](lv_event_t* e) { soundvolume_lib::ChangeVolume(false, true); }, LV_EVENT_SHORT_CLICKED },
     };
 
     ListDataUpdateCallback = {
@@ -84,6 +92,14 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { []() { return system_data::IsTempVideoInfo.GetState();   }, UpdateButton    },
         { []() { return system_data::CurrentSoundState.GetState(); }, UpdateButton    },
     };
+
+    listVkCode = {
+        { dummyVolumeUpKey  , VK_ADD      },
+        { dummyVolumeDownKey, VK_SUBTRACT },
+    };
+
+    // Copy list VK code library
+    keyboard_lib::SetListVkCode(listVkCode);
 
     lv_obj_update_layout(ui_wndReview); // Forcing component recalculation after screen changes
 

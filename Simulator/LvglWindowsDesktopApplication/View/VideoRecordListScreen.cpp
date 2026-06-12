@@ -98,6 +98,8 @@ static lv_obj_t* dummyUpKey = nullptr;
 static lv_obj_t* dummyDownKey = nullptr;
 static lv_obj_t* dummyTopKey = nullptr;
 static lv_obj_t* dummyBottomKey = nullptr;
+static lv_obj_t* dummyVolumeUpKey = nullptr;
+static lv_obj_t* dummyVolumeDownKey = nullptr;
 static int totalItemHeight = 0;
 static int totalRowHeight = 0;
 static short deleteTimeCounter = 0;
@@ -250,34 +252,38 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
     dummyDownKey = lv_button_create(nullptr);
     dummyTopKey = lv_button_create(nullptr);
     dummyBottomKey = lv_button_create(nullptr);
+    dummyVolumeUpKey = lv_button_create(nullptr);
+    dummyVolumeDownKey = lv_button_create(nullptr);
 
     ListButtonCallback = {
-        { ui_btnRLBack       , OnClickBack      , LV_EVENT_CLICKED             },
-        { ui_btnRLTopPage    , OnClickPageChange, LV_EVENT_CLICKED             },
-        { ui_btnRLBottomPage , OnClickPageChange, LV_EVENT_CLICKED             },
-        { ui_btnRLPrePage    , OnClickPageChange, LV_EVENT_SHORT_CLICKED       },
-        { ui_btnRLNextPage   , OnClickPageChange, LV_EVENT_SHORT_CLICKED       },
-        { ui_btnRLPrePage    , OnClickPageChange, LV_EVENT_LONG_PRESSED_REPEAT },
-        { ui_btnRLNextPage   , OnClickPageChange, LV_EVENT_LONG_PRESSED_REPEAT },
-        { ui_btnVideoSearch  , OnClickOperator  , LV_EVENT_CLICKED             },
-        { ui_btnRLPlay       , OnClickOperator  , LV_EVENT_CLICKED             },
-        { ui_btnRLPause      , OnClickOperator  , LV_EVENT_CLICKED             },
-        { ui_btnRLStop       , OnClickOperator  , LV_EVENT_CLICKED             },
-        { ui_btnRLSound      , OnClickOperator  , LV_EVENT_CLICKED             },
-        { ui_btnRLFastForward, OnClickOperator  , LV_EVENT_CLICKED             },
-        { ui_btnRLFastRewind , OnClickOperator  , LV_EVENT_CLICKED             },
-        { ui_btnRLDukto      , OnClickOperator  , LV_EVENT_CLICKED             },
-        { ui_btnRLNewRecord  , OnClickOperator  , LV_EVENT_CLICKED             },
-        { ui_btnRLTransfer   , OnClickTransfer  , LV_EVENT_CLICKED             },
-        { ui_barDeleteWaiting, OnDelete         , LV_EVENT_LONG_PRESSED_REPEAT },
-        { ui_barDeleteWaiting, OnDelete         , LV_EVENT_RELEASED            },
-        { ui_cbRLItemAll     , OnClickAllItem   , LV_EVENT_CLICKED             },
-        { dummyUpKey         , OnClickPageChange, LV_EVENT_LONG_PRESSED_REPEAT },
-        { dummyDownKey       , OnClickPageChange, LV_EVENT_LONG_PRESSED_REPEAT },
-        { dummyUpKey         , OnClickPageChange, LV_EVENT_SHORT_CLICKED       },
-        { dummyDownKey       , OnClickPageChange, LV_EVENT_SHORT_CLICKED       },
-        { dummyTopKey        , OnClickPageChange, LV_EVENT_SHORT_CLICKED       },
-        { dummyBottomKey     , OnClickPageChange, LV_EVENT_SHORT_CLICKED       },
+        { ui_btnRLBack       , OnClickBack                                                      , LV_EVENT_CLICKED             },
+        { ui_btnRLTopPage    , OnClickPageChange                                                , LV_EVENT_CLICKED             },
+        { ui_btnRLBottomPage , OnClickPageChange                                                , LV_EVENT_CLICKED             },
+        { ui_btnRLPrePage    , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnRLNextPage   , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnRLPrePage    , OnClickPageChange                                                , LV_EVENT_LONG_PRESSED_REPEAT },
+        { ui_btnRLNextPage   , OnClickPageChange                                                , LV_EVENT_LONG_PRESSED_REPEAT },
+        { ui_btnVideoSearch  , OnClickOperator                                                  , LV_EVENT_CLICKED             },
+        { ui_btnRLPlay       , OnClickOperator                                                  , LV_EVENT_CLICKED             },
+        { ui_btnRLPause      , OnClickOperator                                                  , LV_EVENT_CLICKED             },
+        { ui_btnRLStop       , OnClickOperator                                                  , LV_EVENT_CLICKED             },
+        { ui_btnRLSound      , OnClickOperator                                                  , LV_EVENT_CLICKED             },
+        { ui_btnRLFastForward, OnClickOperator                                                  , LV_EVENT_CLICKED             },
+        { ui_btnRLFastRewind , OnClickOperator                                                  , LV_EVENT_CLICKED             },
+        { ui_btnRLDukto      , OnClickOperator                                                  , LV_EVENT_CLICKED             },
+        { ui_btnRLNewRecord  , OnClickOperator                                                  , LV_EVENT_CLICKED             },
+        { ui_btnRLTransfer   , OnClickTransfer                                                  , LV_EVENT_CLICKED             },
+        { ui_barDeleteWaiting, OnDelete                                                         , LV_EVENT_LONG_PRESSED_REPEAT },
+        { ui_barDeleteWaiting, OnDelete                                                         , LV_EVENT_RELEASED            },
+        { ui_cbRLItemAll     , OnClickAllItem                                                   , LV_EVENT_CLICKED             },
+        { dummyUpKey         , OnClickPageChange                                                , LV_EVENT_LONG_PRESSED_REPEAT },
+        { dummyDownKey       , OnClickPageChange                                                , LV_EVENT_LONG_PRESSED_REPEAT },
+        { dummyUpKey         , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
+        { dummyDownKey       , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
+        { dummyTopKey        , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
+        { dummyBottomKey     , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
+        { dummyVolumeUpKey   , [](lv_event_t* e) { soundvolume_lib::ChangeVolume(true, false); }, LV_EVENT_SHORT_CLICKED       },
+        { dummyVolumeDownKey , [](lv_event_t* e) { soundvolume_lib::ChangeVolume(false, true); }, LV_EVENT_SHORT_CLICKED       },
     };
 
     ListDataUpdateCallback = {
@@ -290,10 +296,12 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
     };
 
     listVkCode = {
-        { dummyUpKey    , VK_UP    },
-        { dummyDownKey  , VK_DOWN  },
-        { dummyTopKey   , VK_PRIOR },
-        { dummyBottomKey, VK_NEXT  },
+        { dummyUpKey        , VK_UP       },
+        { dummyDownKey      , VK_DOWN     },
+        { dummyTopKey       , VK_PRIOR    },
+        { dummyBottomKey    , VK_NEXT     },
+        { dummyVolumeUpKey  , VK_ADD      },
+        { dummyVolumeDownKey, VK_SUBTRACT },
     };
 
     // Copy list VK code library

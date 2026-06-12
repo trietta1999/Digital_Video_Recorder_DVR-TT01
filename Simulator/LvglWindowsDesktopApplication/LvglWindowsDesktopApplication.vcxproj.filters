@@ -1706,6 +1706,9 @@
     <ClCompile Include="Library\NetworkLibrary.cpp">
       <Filter>Library</Filter>
     </ClCompile>
+    <ClCompile Include="Library\SoundVolumeLibrary.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="LvglWindowsDesktopApplication.manifest" />

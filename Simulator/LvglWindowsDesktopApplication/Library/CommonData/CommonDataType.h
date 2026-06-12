@@ -31,9 +31,11 @@
 #define TIMECYCLE_500MS 500
 #define TIMECYCLE_700MS 700
 #define TIMECYCLE_1SEC 1000
+#define TIMECYCLE_3SEC 3000
 #define TIMECYCLE_5SEC 5000
 
 #define TID_KEYDOWN 1
+#define TID_VOLUME_WND 2
 
 #define VK_CHAR 0x100
 #define VK_KEY0 '0'
@@ -48,6 +50,7 @@
 
 #define RL_ITEM_PER_PAGE 5
 #define SCROLL_Y_STEP 200
+#define VOLUME_STEP 2
 
 #define STANDARD_PERCENT 100
 

@@ -66,7 +66,6 @@ extern lv_obj_t * ui_btnRLDukto;
 extern lv_obj_t * ui_Label3;
 extern void ui_event_btnRLBack(lv_event_t * e);
 extern lv_obj_t * ui_btnRLBack;
-extern lv_obj_t * ui_wndRLBlock;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus
