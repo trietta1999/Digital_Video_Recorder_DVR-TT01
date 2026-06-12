@@ -3,3 +3,4 @@
 /Simulator/Output
 *.map
 *.pdb
+*.pyc

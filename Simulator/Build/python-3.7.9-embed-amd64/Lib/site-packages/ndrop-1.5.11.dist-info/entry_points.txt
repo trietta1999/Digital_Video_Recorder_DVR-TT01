@@ -1,0 +1,6 @@
+[console_scripts]
+ndrop = ndrop.__main__:run
+
+[gui_scripts]
+ndroptk = ndrop.__main_tk__:run
+
