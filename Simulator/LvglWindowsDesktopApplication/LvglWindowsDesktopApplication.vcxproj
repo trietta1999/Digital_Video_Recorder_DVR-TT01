@@ -745,9 +745,9 @@
     <ClCompile Include="ui\images\ui_img_cancel_png.c" />
     <ClCompile Include="ui\images\ui_img_check_circle_png.c" />
     <ClCompile Include="ui\images\ui_img_check_png.c" />
+    <ClCompile Include="ui\images\ui_img_cloud_upload_png.c" />
     <ClCompile Include="ui\images\ui_img_delete_png.c" />
     <ClCompile Include="ui\images\ui_img_drive_file_move_png.c" />
-    <ClCompile Include="ui\images\ui_img_dukto_png.c" />
     <ClCompile Include="ui\images\ui_img_edit_note_png.c" />
     <ClCompile Include="ui\images\ui_img_enter_png.c" />
     <ClCompile Include="ui\images\ui_img_esc_png.c" />

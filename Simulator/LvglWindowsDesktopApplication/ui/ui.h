@@ -67,7 +67,7 @@ LV_IMG_DECLARE(ui_img_vertical_align_bottom_png);    // assets/vertical_align_bo
 LV_IMG_DECLARE(ui_img_replace_video_png);    // assets/replace_video.png
 LV_IMG_DECLARE(ui_img_delete_png);    // assets/delete.png
 LV_IMG_DECLARE(ui_img_drive_file_move_png);    // assets/drive_file_move.png
-LV_IMG_DECLARE(ui_img_dukto_png);    // assets/dukto.png
+LV_IMG_DECLARE(ui_img_cloud_upload_png);    // assets/cloud_upload.png
 LV_IMG_DECLARE(ui_img_router_png);    // assets/router.png
 LV_IMG_DECLARE(ui_img_sync_png);    // assets/sync.png
 LV_IMG_DECLARE(ui_img_router_off_png);    // assets/router_off.png

@@ -1,2 +1,2 @@
-python -m pip install --upgrade pip
-python -m pip install --upgrade ndrop
+python -m pip install --upgrade --force-reinstall pip
+python -m pip install --upgrade --force-reinstall ndrop

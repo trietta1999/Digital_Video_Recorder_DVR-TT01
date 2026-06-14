@@ -106,13 +106,14 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
     ListDataUpdateCallback = {};
 
     mapKbInit = {
-        { SCREEN_NAME::KBSCREEN_VIDEO_EVENT   , { "Event"       , &temp_data::VideoEvent    } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_NAME    , { "Video name"  , &temp_data::VideoName     } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_CATEGORY, { "New category", &temp_data::VideoCategory } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_DESC    , { "Description" , &temp_data::VideoDesc     } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR  , { "Author"      , &temp_data::VideoAuthor   } },
-        { SCREEN_NAME::KBSCREEN_VIDEO_SEARCH  , { "Search video", &input_data::VideoSearch  } },
-        { SCREEN_NAME::KBSCREEN_SSID_PASSWORD  , { "Password"   , &temp_data::WiFiPassword  } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_EVENT   , { "Event"          , &temp_data::VideoEvent    } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_NAME    , { "Video name"     , &temp_data::VideoName     } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_CATEGORY, { "New category"   , &temp_data::VideoCategory } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_DESC    , { "Description"    , &temp_data::VideoDesc     } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR  , { "Author"         , &temp_data::VideoAuthor   } },
+        { SCREEN_NAME::KBSCREEN_VIDEO_SEARCH  , { "Search video"   , &input_data::VideoSearch  } },
+        { SCREEN_NAME::KBSCREEN_SSID_PASSWORD , { "Password"       , &temp_data::WiFiPassword  } },
+        { SCREEN_NAME::KBSCREEN_DUKTO_ADDR    , { "Dukto server IP", &temp_data::DuktoIP       } },
     };
 
     listVkCode = {

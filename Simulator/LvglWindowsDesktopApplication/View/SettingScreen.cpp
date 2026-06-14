@@ -105,6 +105,7 @@ SettingScreen::SettingScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_swInsSpaceAfterPunc   , SW_SET_DATA_CB(temp_data::InsSpaceAfterPuncState)   , LV_EVENT_CLICKED       },
         { ui_swAutoCloseBracket    , SW_SET_DATA_CB(temp_data::AutoCloseBracketState)    , LV_EVENT_CLICKED       },
         { ui_btnWifiPass           , OnClickEdit                                         , LV_EVENT_SHORT_CLICKED },
+        { ui_btnDuktoAddr          , OnClickEdit                                         , LV_EVENT_SHORT_CLICKED },
     };
 
     ListDataUpdateCallback = {
@@ -112,6 +113,7 @@ SettingScreen::SettingScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { []() { return temp_data::NetworkType.GetState();  }, UpdateNetworkState    },
         { []() { return temp_data::SSID.GetState();         }, UpdateWiFiInfo        },
         { []() { return temp_data::WiFiPassword.GetState(); }, UpdateWiFiInfo        },
+        { []() { return temp_data::DuktoIP.GetState();      }, SetDuktoServerIP      },
     };
 }
 
@@ -153,16 +155,13 @@ void SettingScreen::InitKeyboardSetting()
 
 void SettingScreen::InitNetworkSetting()
 {
+    // Get network info
     network_lib::GetLANConnections();
     network_lib::GetWiFiSSIDs();
 
+    // Init network type
     auto& dropNetworkTypeInfo = dropdownlist_lib::GetDropdownInfo(DROPDOWNLIST_NAME::DD_NETWORK_TYPE);
     dropNetworkTypeInfo.options = network_lib::CreateNetworkTypeDropdownOptions();
-
-    auto& dropSSIDInfo = dropdownlist_lib::GetDropdownInfo(DROPDOWNLIST_NAME::DD_SSID);
-    dropSSIDInfo.options = network_lib::CreateSSIDDropdownOptions();
-    dropSSIDInfo.options.insert(dropSSIDInfo.options.begin(), "-- No change --");
-    temp_data::SSID.SetValue(0);
 
     dropdownlist_lib::UpdateDropdownList({
         DROPDOWNLIST_NAME::DD_NETWORK_TYPE,
@@ -173,6 +172,19 @@ void SettingScreen::InitNetworkSetting()
     {
         temp_data::NetworkType.SetValue(0);
     }
+
+    // Init SSID
+    auto& dropSSIDInfo = dropdownlist_lib::GetDropdownInfo(DROPDOWNLIST_NAME::DD_SSID);
+    dropSSIDInfo.options = network_lib::CreateSSIDDropdownOptions();
+    dropSSIDInfo.options.insert(dropSSIDInfo.options.begin(), "-- No change --");
+    temp_data::SSID.SetValue(0);
+
+    // Init host name input
+    lv_label_set_text(ui_lblHostName, network_lib::GetLocalHostName().c_str());
+
+    // Init Dukto server IP input
+    auto strIP = network_lib::CalculateIPStrFromCombinedNum(temp_data::DuktoIPPart12.GetValue(), temp_data::DuktoIPPart34.GetValue());
+    temp_data::DuktoIP.SetValue(strIP);
 }
 
 void SettingScreen::OnClickCancel(lv_event_t* event)
@@ -191,6 +203,10 @@ void SettingScreen::OnClickEdit(lv_event_t* event)
     if (event->current_target == ui_btnWifiPass)
     {
         ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::KBSCREEN_SSID_PASSWORD);
+    }
+    else if (event->current_target == ui_btnDuktoAddr)
+    {
+        ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::KBSCREEN_DUKTO_ADDR);
     }
 }
 
@@ -254,4 +270,56 @@ void SettingScreen::UpdateWiFiInfo()
         network_lib::ConnectWiFiWithTemplate(wifiInfo);
         RunWifiConnectCheck();
     }
+}
+
+void SettingScreen::SetDuktoServerIP()
+{
+    auto value = temp_data::DuktoIP.GetValue();
+    auto periodCount = std::count(value.begin(), value.end(), '.');
+    bool isAllDigit = true;
+    std::string part1 = "";
+    std::string part2 = "";
+    std::string part3 = "";
+    std::string part4 = "";
+
+    temp_data::DuktoIPPart12.SetValue(0);
+    temp_data::DuktoIPPart34.SetValue(0);
+
+    if (periodCount == 3)
+    {
+        auto splits = common_lib::SplitString('.', value);
+
+        if (splits.size() == 4)
+        {
+            // Check if all part are digits
+            for (const auto& part : splits)
+            {
+                auto temp = common_lib::TrimString(part);
+
+                if (!std::all_of(temp.begin(), temp.end(), [](unsigned char c) { return std::isdigit(c); }))
+                {
+                    isAllDigit = false;
+                    break;
+                }
+            }
+
+            // Check part of IP to data
+            if (isAllDigit)
+            {
+                part1 = common_lib::TrimString(splits[0]);
+                part2 = common_lib::TrimString(splits[1]);
+                part3 = common_lib::TrimString(splits[2]);
+                part4 = common_lib::TrimString(splits[3]);
+
+                short part12 = static_cast<short>((std::stoi(part1) << 8) + std::stoi(part2));
+                short part34 = static_cast<short>((std::stoi(part3) << 8) + std::stoi(part4));
+
+                temp_data::DuktoIPPart12.SetValue(part12);
+                temp_data::DuktoIPPart34.SetValue(part34);
+                temp_data::DuktoIP.SetValue(network_lib::CalculateIPStrFromCombinedNum(part12, part34));
+            }
+        }
+    }
+
+    lv_label_set_text_fmt(ui_lblDuktoAddr, "%s.%s.%s.%s", part1.c_str(), part2.c_str(), part3.c_str(), part4.c_str());
 }

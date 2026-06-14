@@ -1,5 +1,7 @@
 ﻿#include <combaseapi.h>
 #include <shlwapi.h>
+#include <fstream>
+#include <sstream>
 #include "CommonLibrary.h"
 #include "CommonData.h"
 
@@ -75,6 +77,39 @@ namespace common_lib
         }
 
         return output;
+    }
+
+    std::vector<std::string> SplitString(char delimiter, std::string input)
+    {
+        std::vector<std::string> result;
+        std::stringstream ss(input);
+        std::string token;
+
+        while (std::getline(ss, token, delimiter))
+        {
+            result.push_back(token);
+        }
+
+        return result;
+    }
+
+    std::string TrimString(std::string input)
+    {
+        // Define all characters considered as whitespace (Space, Tab, Newline, Carriage Return)
+        const std::string whitespace = " \t\n\r";
+
+        // Find the first character that is NOT a whitespace
+        size_t start = input.find_first_not_of(whitespace);
+        if (start == std::string::npos)
+        {
+            return ""; // The string is completely empty or contains only whitespaces
+        }
+
+        // Find the last character that is NOT a whitespace
+        size_t end = input.find_last_not_of(whitespace);
+
+        // Extract the substring containing only the valid characters
+        return input.substr(start, end - start + 1);
     }
 
     SYSTEMTIME GetSystemDateTime()

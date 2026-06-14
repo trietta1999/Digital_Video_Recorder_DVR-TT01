@@ -96,6 +96,7 @@ namespace recordlist_lib
 {
     std::vector<videoinfo_lib::videoinfo_t> GetVideoInfoListData();
     bool ExportVideoToExternalDrive(std::string id, std::string name, std::string driveLetter);
+    bool SendVideoToNetwork(std::string id, std::string name);
 }
 
 namespace dropdownlist_lib
@@ -208,10 +209,13 @@ namespace network_lib
     std::string GetCipherAlgorithmString(DOT11_CIPHER_ALGORITHM cipher);
     std::string GetAuthAlgorithmString(DOT11_AUTH_ALGORITHM auth);
     ip_info_t GetNetworkIPByName(std::string targetAdapterName = "");
+    std::string GetLocalHostName();
     std::vector<std::string> CreateNetworkTypeDropdownOptions();
     std::vector<std::string> CreateSSIDDropdownOptions();
     bool ConnectWiFiWithTemplate(const wifi_info_t& info);
     bool IsWiFiConnectedTo(std::string targetSsid = "");
+    std::vector<short> CalculateIPFromCombinedNum(short part12, short part34);
+    std::string CalculateIPStrFromCombinedNum(short part12, short part34);
 };
 
 namespace soundvolume_lib
@@ -251,6 +255,8 @@ namespace common_lib
 {
     bool CheckInRangeNumber(int check, int min, int max);
     std::string JoinString(std::string delimeter, const std::vector<std::string>& list);
+    std::vector<std::string> SplitString(char delimiter, std::string input);
+    std::string TrimString(std::string input);
     SYSTEMTIME GetSystemDateTime();
     std::wstring ConvertStringToWString(std::string input);
     std::string ConvertWStringToString(std::wstring input);

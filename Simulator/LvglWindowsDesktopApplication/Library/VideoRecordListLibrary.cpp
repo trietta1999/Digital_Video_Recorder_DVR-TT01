@@ -53,4 +53,20 @@ namespace recordlist_lib
 
         return storage_lib::CopyFileWithProgress(inputPath, outputPath);
     }
+
+    bool SendVideoToNetwork(std::string id, std::string name)
+    {
+        char inputPath[MAX_CHARS] = { 0 };
+        char command1[MAX_CHARS * 2] = { 0 };
+        char command2[MAX_CHARS * 2] = { 0 };
+
+        sprintf_s(inputPath, "%s\\video_data\\%s", common_lib::ConvertWStringToString(common_lib::GetSystemPath()).c_str(), id.c_str());
+        sprintf_s(command1, "copy nul \"%s\\%s\"", inputPath, name.c_str());
+        sprintf_s(command2, "%s\\python.exe -m ndrop --mode dukto --send %s \"%s\"", common_lib::ConvertWStringToString(common_lib::GetFullPath(L"python-3.7.9-embed-amd64")).c_str(), temp_data::DuktoIP.GetValue().c_str(), inputPath);
+
+        ::system(command1); // Create video name empty file
+        ::system(command2); // Send to network
+
+        return true;
+    }
 }

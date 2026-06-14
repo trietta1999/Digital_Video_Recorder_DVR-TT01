@@ -63,6 +63,8 @@ namespace setting_data
     extern CData<short> AutoCloseBracketState;
     extern CData<short> NetworkType;
     extern CData<short> SSID;
+    extern CData<short> DuktoIPPart12;
+    extern CData<short> DuktoIPPart34;
 }
 
 namespace temp_data
@@ -86,6 +88,9 @@ namespace temp_data
     extern CData<short> NetworkType;
     extern CData<short> SSID;
     extern CData<std::string> WiFiPassword;
+    extern CData<std::string> DuktoIP;
+    extern CData<short> DuktoIPPart12;
+    extern CData<short> DuktoIPPart34;
 }
 
 namespace debug_data

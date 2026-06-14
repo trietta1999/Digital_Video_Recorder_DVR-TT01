@@ -23,6 +23,8 @@ private:
     static void UpdateKeyboardSetting();
     static void UpdateNetworkState();
     static void UpdateWiFiInfo();
+
+    static void SetDuktoServerIP();
 };
 
 #endif // _SETTING_SCREEN_H

@@ -270,9 +270,9 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
         { ui_btnRLSound      , OnClickOperator                                                  , LV_EVENT_CLICKED             },
         { ui_btnRLFastForward, OnClickOperator                                                  , LV_EVENT_CLICKED             },
         { ui_btnRLFastRewind , OnClickOperator                                                  , LV_EVENT_CLICKED             },
-        { ui_btnRLDukto      , OnClickOperator                                                  , LV_EVENT_CLICKED             },
         { ui_btnRLNewRecord  , OnClickOperator                                                  , LV_EVENT_CLICKED             },
         { ui_btnRLTransfer   , OnClickTransfer                                                  , LV_EVENT_CLICKED             },
+        { ui_btnRLNetwork    , OnClickNetworkTransfer                                           , LV_EVENT_CLICKED             },
         { ui_barDeleteWaiting, OnDelete                                                         , LV_EVENT_LONG_PRESSED_REPEAT },
         { ui_barDeleteWaiting, OnDelete                                                         , LV_EVENT_RELEASED            },
         { ui_cbRLItemAll     , OnClickAllItem                                                   , LV_EVENT_CLICKED             },
@@ -289,6 +289,8 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
     ListDataUpdateCallback = {
         { []() { return input_data::VideoSearch.GetState();        }, UpdateVideoInfoList    },
         { []() { return input_data::VideoSearchType.GetState();    }, UpdateVideoInfoList    },
+        { []() { return input_data::VideoSearch.GetState();        }, UpdateButton           },
+        { []() { return input_data::VideoSearchType.GetState();    }, UpdateButton           },
         { []() { return system_data::DeviceChange.GetState();      }, UpdateExtDevice        },
         { []() { return system_data::CurrentState.GetState();      }, UpdateButton           },
         { []() { return system_data::CurrentSoundState.GetState(); }, UpdateButton           },
@@ -532,34 +534,17 @@ void VideoRecordListScreen::OnClickOperator(lv_event_t* event)
 
         ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);
     }
-    else if (event->current_target == ui_btnRLDukto)
-    {
-        //::ShellExecute(NULL, L"open", L"\"C:\\Program Files (x86)\\Dukto\\dukto.exe\"", NULL, NULL, SW_SHOWNORMAL);
-        //videorecord_lib::StartExternalWindow(ui_conRL, DUKTO_SCREENNAME, "");
-        // @todo: wait setting
-    }
 }
 
 void VideoRecordListScreen::OnClickTransfer(lv_event_t* event)
 {
     system_data::CurrentState.SetValue(STATE_TYPE::S_TRANSFER);
 
-    char selectDrive[MAX_PATH] = { 0 };
-    std::string driveLetter = "";
     int totalPercent = listRowInfoSelected.size() * STANDARD_PERCENT;
 
-    // Get selected drive
-    lv_dropdown_get_selected_str(ui_dropPortableMemory, selectDrive, sizeof(selectDrive));
-
-    // Get drive letter from list
-    for (const auto& driveInfo : listExtDrive)
-    {
-        if (driveInfo.label == selectDrive)
-        {
-            driveLetter = driveInfo.letter;
-            break;
-        }
-    }
+    // Get selected drive info
+    const auto& driveInfo = listExtDrive[lv_dropdown_get_selected(ui_dropPortableMemory)];
+    const auto& driveLetter = driveInfo.letter;
 
     // Set total percent
     lv_bar_set_range(ui_barTransferProgress, 0, totalPercent);
@@ -570,6 +555,23 @@ void VideoRecordListScreen::OnClickTransfer(lv_event_t* event)
         for (auto& rowInfo : listRowInfoSelected)
         {
             rowInfo.isTransfered = recordlist_lib::ExportVideoToExternalDrive(rowInfo.id, rowInfo.name, driveLetter);
+            copyItemCount++;
+        }
+
+        copyItemCount = 0;
+        system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
+        }).detach();
+}
+
+void VideoRecordListScreen::OnClickNetworkTransfer(lv_event_t* event)
+{
+    system_data::CurrentState.SetValue(STATE_TYPE::S_TRANSFER);
+
+    // Execute transfer
+    std::thread([]() {
+        for (auto& rowInfo : listRowInfoSelected)
+        {
+            rowInfo.isTransfered = recordlist_lib::SendVideoToNetwork(rowInfo.id, rowInfo.name);;
             copyItemCount++;
         }
 
@@ -637,7 +639,7 @@ void VideoRecordListScreen::UpdateButton()
     lv_obj_remove_state(ui_btnRLNewRecord, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_dropPortableMemory, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_btnRLTransfer, LV_STATE_DISABLED);
-    lv_obj_remove_state(ui_btnRLDukto, LV_STATE_DISABLED);
+    lv_obj_remove_state(ui_btnRLNetwork, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_btnRLBack, LV_STATE_DISABLED);
 
     // Update Search button and Filter dropdown
@@ -716,10 +718,12 @@ void VideoRecordListScreen::UpdateButton()
         lv_obj_add_state(ui_btnRLTransfer, LV_STATE_DISABLED);
     }
 
-    // Update Dukto button
-    if (state != STATE_TYPE::S_STOP)
+    // Update Network button
+    if ((!listRowInfoSelected.size())
+        || (state != STATE_TYPE::S_STOP)
+        )
     {
-        lv_obj_add_state(ui_btnRLTransfer, LV_STATE_DISABLED);
+        lv_obj_add_state(ui_btnRLNetwork, LV_STATE_DISABLED);
     }
 
     // Update Back button
@@ -746,6 +750,9 @@ void VideoRecordListScreen::UpdateButton()
         }
     }
 
+    // Update selected count
+    lv_label_set_text(ui_lblSelectCount, std::to_string(listRowInfoSelected.size()).c_str());
+
     // Disable all button when transfering
     if (state == STATE_TYPE::S_TRANSFER)
     {
@@ -760,7 +767,7 @@ void VideoRecordListScreen::UpdateButton()
         lv_obj_add_state(ui_barDeleteWaiting, LV_STATE_DISABLED);
         lv_obj_add_state(ui_btnRLNewRecord, LV_STATE_DISABLED);
         lv_obj_add_state(ui_btnRLTransfer, LV_STATE_DISABLED);
-        lv_obj_add_state(ui_btnRLDukto, LV_STATE_DISABLED);
+        lv_obj_add_state(ui_btnRLNetwork, LV_STATE_DISABLED);
         lv_obj_add_state(ui_btnRLBack, LV_STATE_DISABLED);
     }
 

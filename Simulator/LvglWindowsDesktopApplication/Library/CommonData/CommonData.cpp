@@ -57,6 +57,8 @@ namespace setting_data
     CData<short> AutoCloseBracketState;
     CData<short> NetworkType;
     CData<short> SSID;
+    CData<short> DuktoIPPart12;
+    CData<short> DuktoIPPart34;
 }
 
 namespace temp_data
@@ -81,6 +83,9 @@ namespace temp_data
     CData<short> NetworkType;
     CData<short> SSID;
     CData<std::string> WiFiPassword;
+    CData<std::string> DuktoIP;
+    CData<short> DuktoIPPart12;
+    CData<short> DuktoIPPart34;
 }
 
 namespace debug_data
@@ -136,6 +141,8 @@ void CommonDataUpdateAll()
     setting_data::AutoCloseBracketState.ResetState();
     setting_data::NetworkType.ResetState();
     setting_data::SSID.ResetState();
+    setting_data::DuktoIPPart12.ResetState();
+    setting_data::DuktoIPPart34.ResetState();
 
     temp_data::VideoEvent.ResetState();
     temp_data::VideoName.ResetState();
@@ -156,4 +163,7 @@ void CommonDataUpdateAll()
     temp_data::NetworkType.ResetState();
     temp_data::SSID.ResetState();
     temp_data::WiFiPassword.ResetState();
+    temp_data::DuktoIP.ResetState();
+    temp_data::DuktoIPPart12.ResetState();
+    temp_data::DuktoIPPart34.ResetState();
 }

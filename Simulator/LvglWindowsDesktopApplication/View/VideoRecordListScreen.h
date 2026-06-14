@@ -18,6 +18,7 @@ private:
     static void OnClickOperator(lv_event_t* event);
     static void OnDelete(lv_event_t* event);
     static void OnClickTransfer(lv_event_t* event);
+    static void OnClickNetworkTransfer(lv_event_t* event);
 
     static void UpdateButton();
     static void UpdateTransferProgress();

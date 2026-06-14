@@ -284,6 +284,16 @@ namespace network_lib
         }
     }
 
+    std::string GetLocalHostName()
+    {
+        char buffer[MAX_PATH];
+        DWORD bufferSize = sizeof(buffer);
+
+        ::GetComputerNameA(buffer, &bufferSize);
+
+        return buffer;
+    }
+
     std::vector<std::string> CreateNetworkTypeDropdownOptions()
     {
         std::vector<std::string> result;
@@ -395,5 +405,28 @@ namespace network_lib
         }
 
         return false;
+    }
+
+    std::vector<short> CalculateIPFromCombinedNum(short part12, short part34)
+    {
+        std::vector<short> result = {
+            static_cast<short>((part12 >> 8) & 0x00ff),
+            static_cast<short>((part12 >> 0) & 0x00ff),
+            static_cast<short>((part34 >> 8) & 0x00ff),
+            static_cast<short>((part34 >> 0) & 0x00ff),
+        };
+
+        return result;
+    }
+
+    std::string CalculateIPStrFromCombinedNum(short part12, short part34)
+    {
+        std::string result =
+            std::to_string(static_cast<short>((part12 >> 8) & 0x00ff)) + "."
+            + std::to_string(static_cast<short>((part12 >> 0) & 0x00ff)) + "."
+            + std::to_string(static_cast<short>((part34 >> 8) & 0x00ff)) + "."
+            + std::to_string(static_cast<short>((part34 >> 0) & 0x00ff));
+
+        return result;
     }
 }

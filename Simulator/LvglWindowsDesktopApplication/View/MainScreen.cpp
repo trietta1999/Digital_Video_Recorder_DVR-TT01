@@ -349,6 +349,8 @@ void MainScreen::OnClickStorageUSB(lv_event_t* event)
     {
         currentExtIndex = 0;
     }
+
+    UpdateStorage();
 }
 
 void MainScreen::OnClickSystemSetting(lv_event_t* event)

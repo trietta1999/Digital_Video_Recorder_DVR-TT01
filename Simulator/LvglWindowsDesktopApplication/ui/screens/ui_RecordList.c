@@ -6,6 +6,7 @@
 #include "../ui.h"
 
 lv_obj_t * ui_RecordList = NULL;
+lv_obj_t * ui_lblSelectCount = NULL;
 lv_obj_t * ui_lblVideoSearch = NULL;
 lv_obj_t * ui_btnVideoSearch = NULL;
 lv_obj_t * ui_dropVideoFilter = NULL;
@@ -33,9 +34,7 @@ lv_obj_t * ui_barDeleteWaiting = NULL;
 lv_obj_t * ui_dropPortableMemory = NULL;
 lv_obj_t * ui_barTransferProgress = NULL;
 lv_obj_t * ui_btnRLTransfer = NULL;
-lv_obj_t * ui_Label1 = NULL;
-lv_obj_t * ui_btnRLDukto = NULL;
-lv_obj_t * ui_Label3 = NULL;
+lv_obj_t * ui_btnRLNetwork = NULL;
 lv_obj_t * ui_btnRLBack = NULL;
 // event funtions
 void ui_event_RecordList(lv_event_t * e)
@@ -221,7 +220,7 @@ void ui_event_btnRLTransfer(lv_event_t * e)
     }
 }
 
-void ui_event_btnRLDukto(lv_event_t * e)
+void ui_event_btnRLNetwork(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -251,8 +250,24 @@ void ui_RecordList_screen_init(void)
     lv_obj_set_style_bg_color(ui_RecordList, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_RecordList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_lblSelectCount = lv_label_create(ui_RecordList);
+    lv_obj_set_width(ui_lblSelectCount, 130);
+    lv_obj_set_height(ui_lblSelectCount, 50);
+    lv_obj_set_x(ui_lblSelectCount, -273);
+    lv_obj_set_y(ui_lblSelectCount, 208);
+    lv_obj_set_align(ui_lblSelectCount, LV_ALIGN_CENTER);
+    lv_label_set_long_mode(ui_lblSelectCount, LV_LABEL_LONG_DOT);
+    lv_label_set_text(ui_lblSelectCount, "");
+    lv_obj_remove_flag(ui_lblSelectCount,
+                       LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE | LV_OBJ_FLAG_SNAPPABLE |
+                       LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
+                       LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
+    lv_obj_set_style_text_color(ui_lblSelectCount, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_lblSelectCount, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_lblSelectCount, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     ui_lblVideoSearch = lv_label_create(ui_RecordList);
-    lv_obj_set_width(ui_lblVideoSearch, 745);
+    lv_obj_set_width(ui_lblVideoSearch, 600);
     lv_obj_set_height(ui_lblVideoSearch, 80);
     lv_obj_set_x(ui_lblVideoSearch, 107);
     lv_obj_set_y(ui_lblVideoSearch, 177);
@@ -830,49 +845,29 @@ void ui_RecordList_screen_init(void)
     lv_obj_set_style_border_opa(ui_btnRLTransfer, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_btnRLTransfer, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Label1 = lv_label_create(ui_RecordList);
-    lv_obj_set_width(ui_Label1, 5);
-    lv_obj_set_height(ui_Label1, 80);
-    lv_obj_set_x(ui_Label1, -273);
-    lv_obj_set_y(ui_Label1, 208);
-    lv_obj_set_align(ui_Label1, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label1, "");
-    lv_obj_set_style_bg_color(ui_Label1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_Label1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_btnRLDukto = lv_button_create(ui_RecordList);
-    lv_obj_set_width(ui_btnRLDukto, 80);
-    lv_obj_set_height(ui_btnRLDukto, 80);
-    lv_obj_set_x(ui_btnRLDukto, -47);
-    lv_obj_set_y(ui_btnRLDukto, 92);
-    lv_obj_set_align(ui_btnRLDukto, LV_ALIGN_CENTER);
-    lv_obj_set_flex_flow(ui_btnRLDukto, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(ui_btnRLDukto, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_btnRLDukto, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
+    ui_btnRLNetwork = lv_button_create(ui_RecordList);
+    lv_obj_set_width(ui_btnRLNetwork, 80);
+    lv_obj_set_height(ui_btnRLNetwork, 80);
+    lv_obj_set_x(ui_btnRLNetwork, -47);
+    lv_obj_set_y(ui_btnRLNetwork, 92);
+    lv_obj_set_align(ui_btnRLNetwork, LV_ALIGN_CENTER);
+    lv_obj_set_flex_flow(ui_btnRLNetwork, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(ui_btnRLNetwork, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_remove_flag(ui_btnRLNetwork, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM |
                        LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
-    lv_obj_set_style_bg_color(ui_btnRLDukto, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_btnRLDukto, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_grad_color(ui_btnRLDukto, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_main_stop(ui_btnRLDukto, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_grad_stop(ui_btnRLDukto, 140, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_grad_dir(ui_btnRLDukto, LV_GRAD_DIR_VER, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_image_src(ui_btnRLDukto, &ui_img_dukto_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_btnRLDukto, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_opa(ui_btnRLDukto, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_width(ui_btnRLDukto, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_Label3 = lv_label_create(ui_RecordList);
-    lv_obj_set_width(ui_Label3, 5);
-    lv_obj_set_height(ui_Label3, 80);
-    lv_obj_set_x(ui_Label3, -273);
-    lv_obj_set_y(ui_Label3, 208);
-    lv_obj_set_align(ui_Label3, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label3, "");
-    lv_obj_set_style_bg_color(ui_Label3, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_Label3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_btnRLNetwork, lv_color_hex(0xFFFF00), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_btnRLNetwork, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_grad_color(ui_btnRLNetwork, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_main_stop(ui_btnRLNetwork, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_grad_stop(ui_btnRLNetwork, 140, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_grad_dir(ui_btnRLNetwork, LV_GRAD_DIR_VER, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_src(ui_btnRLNetwork, &ui_img_cloud_upload_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_btnRLNetwork, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_btnRLNetwork, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_btnRLNetwork, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btnRLBack = lv_button_create(ui_RecordList);
-    lv_obj_set_width(ui_btnRLBack, 95);
+    lv_obj_set_width(ui_btnRLBack, 125);
     lv_obj_set_height(ui_btnRLBack, 80);
     lv_obj_set_x(ui_btnRLBack, -54);
     lv_obj_set_y(ui_btnRLBack, 94);
@@ -910,7 +905,7 @@ void ui_RecordList_screen_init(void)
     lv_obj_add_event_cb(ui_barDeleteWaiting, ui_event_barDeleteWaiting, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_dropPortableMemory, ui_event_dropPortableMemory, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_btnRLTransfer, ui_event_btnRLTransfer, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_btnRLDukto, ui_event_btnRLDukto, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_btnRLNetwork, ui_event_btnRLNetwork, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_btnRLBack, ui_event_btnRLBack, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_RecordList, ui_event_RecordList, LV_EVENT_ALL, NULL);
 
@@ -922,6 +917,7 @@ void ui_RecordList_screen_destroy(void)
 
     // NULL screen variables
     ui_RecordList = NULL;
+    ui_lblSelectCount = NULL;
     ui_lblVideoSearch = NULL;
     ui_btnVideoSearch = NULL;
     ui_dropVideoFilter = NULL;
@@ -949,9 +945,7 @@ void ui_RecordList_screen_destroy(void)
     ui_dropPortableMemory = NULL;
     ui_barTransferProgress = NULL;
     ui_btnRLTransfer = NULL;
-    ui_Label1 = NULL;
-    ui_btnRLDukto = NULL;
-    ui_Label3 = NULL;
+    ui_btnRLNetwork = NULL;
     ui_btnRLBack = NULL;
 
 }

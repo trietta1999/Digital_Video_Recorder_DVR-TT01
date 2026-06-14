@@ -16,11 +16,18 @@ namespace systemsetting_lib
         { &temp_data::InsSpaceAfterPuncState   , &setting_data::InsSpaceAfterPuncState   , L"InsSpaceAfterPuncState"   , 0 },
         { &temp_data::AutoCloseBracketState    , &setting_data::AutoCloseBracketState    , L"AutoCloseBracketState"    , 0 },
         { &temp_data::NetworkType              , &setting_data::NetworkType              , L"NetworkType"              , 0 },
+        { &temp_data::DuktoIPPart12            , &setting_data::DuktoIPPart12            , L"DuktoIPPart12"            , 0 },
+        { &temp_data::DuktoIPPart34            , &setting_data::DuktoIPPart34            , L"DuktoIPPart34"            , 0 },
     };
 
     void SetupSystemData()
     {
         COPY_CDATA_1TO2(setting_data::InitAudState, system_data::CurrentSoundState);
+        temp_data::DuktoIP.SetValue(network_lib::CalculateIPStrFromCombinedNum(
+            setting_data::DuktoIPPart12.GetValue(),
+            setting_data::DuktoIPPart34.GetValue()
+        ));
+
     }
 
     void SetupSetting()
