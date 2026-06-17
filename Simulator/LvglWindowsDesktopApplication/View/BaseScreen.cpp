@@ -7,7 +7,10 @@ void BaseScreen::ButtonOperator(lv_event_t* event)
     {
         if ((item.btnObj == event->current_target) && (item.btnEvent == event->code))
         {
-            item.btnCallback(event);
+            if ((lv_obj_get_state(item.btnObj) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
+            {
+                item.btnCallback(event);
+            }
         }
     }
 }

@@ -10,6 +10,7 @@
 
 static lv_timer_t* timerCheckWiFiConnect = nullptr;
 static bool isUpdateWiFiIP = false;
+static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
 
 static void UpdateIPInput(std::string targetAdapterName)
 {
@@ -98,6 +99,8 @@ SettingScreen::SettingScreen(SCREEN_NAME screen) : BaseScreen(screen)
     ListButtonCallback = {
         { ui_btnSettingCancel      , OnClickCancel                                       , LV_EVENT_CLICKED       },
         { ui_btnSettingSave        , OnClickSave                                         , LV_EVENT_CLICKED       },
+        { ui_btnSettingCancel      , OnClickCancel                                       , LV_EVENT_SHORT_CLICKED },
+        { ui_btnSettingSave        , OnClickSave                                         , LV_EVENT_SHORT_CLICKED },
         { ui_swInitAudState        , SW_SET_DATA_CB(temp_data::InitAudState)             , LV_EVENT_CLICKED       },
         { ui_swPreviewVideo        , SW_SET_DATA_CB(temp_data::PreviewVideoState)        , LV_EVENT_CLICKED       },
         { ui_swPlayVideo           , SW_SET_DATA_CB(temp_data::PlayVideoState)           , LV_EVENT_CLICKED       },
@@ -115,6 +118,14 @@ SettingScreen::SettingScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { []() { return temp_data::WiFiPassword.GetState(); }, UpdateWiFiInfo        },
         { []() { return temp_data::DuktoIP.GetState();      }, SetDuktoServerIP      },
     };
+
+    listVkCode = {
+        { ui_btnSettingCancel, VK_BROWSER_BACK },
+        { ui_btnSettingSave  , VK_APPS         },
+    };
+
+    // Copy list VK code library
+    keyboard_lib::SetListVkCode(listVkCode);
 }
 
 SettingScreen::~SettingScreen()

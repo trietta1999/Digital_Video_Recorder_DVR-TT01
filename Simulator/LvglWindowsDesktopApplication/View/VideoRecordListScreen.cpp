@@ -94,12 +94,9 @@ static std::vector<row_info_t> listRowInfoSelected = {};
 static std::vector<std::pair<std::string, bool>> listTransferState = {};
 static std::vector<storage_lib::RemovableDriveInfo_t> listExtDrive = {};
 static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
-static lv_obj_t* dummyUpKey = nullptr;
-static lv_obj_t* dummyDownKey = nullptr;
-static lv_obj_t* dummyTopKey = nullptr;
-static lv_obj_t* dummyBottomKey = nullptr;
 static lv_obj_t* dummyVolumeUpKey = nullptr;
 static lv_obj_t* dummyVolumeDownKey = nullptr;
+static lv_obj_t* dummyPlayPauseKey = nullptr;
 static int totalItemHeight = 0;
 static int totalRowHeight = 0;
 static short deleteTimeCounter = 0;
@@ -248,17 +245,15 @@ static std::string GetFilterValue(videoinfo_lib::videoinfo_t item, short key)
 
 VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
-    dummyUpKey = lv_button_create(nullptr);
-    dummyDownKey = lv_button_create(nullptr);
-    dummyTopKey = lv_button_create(nullptr);
-    dummyBottomKey = lv_button_create(nullptr);
     dummyVolumeUpKey = lv_button_create(nullptr);
     dummyVolumeDownKey = lv_button_create(nullptr);
+    dummyPlayPauseKey = lv_button_create(nullptr);
 
     ListButtonCallback = {
         { ui_btnRLBack       , OnClickBack                                                      , LV_EVENT_CLICKED             },
-        { ui_btnRLTopPage    , OnClickPageChange                                                , LV_EVENT_CLICKED             },
-        { ui_btnRLBottomPage , OnClickPageChange                                                , LV_EVENT_CLICKED             },
+        { ui_btnRLBack       , OnClickBack                                                      , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnRLTopPage    , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnRLBottomPage , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
         { ui_btnRLPrePage    , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
         { ui_btnRLNextPage   , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
         { ui_btnRLPrePage    , OnClickPageChange                                                , LV_EVENT_LONG_PRESSED_REPEAT },
@@ -268,42 +263,48 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
         { ui_btnRLPause      , OnClickOperator                                                  , LV_EVENT_CLICKED             },
         { ui_btnRLStop       , OnClickOperator                                                  , LV_EVENT_CLICKED             },
         { ui_btnRLSound      , OnClickOperator                                                  , LV_EVENT_CLICKED             },
+        { ui_btnRLSound      , OnClickOperator                                                  , LV_EVENT_SHORT_CLICKED       },
         { ui_btnRLFastForward, OnClickOperator                                                  , LV_EVENT_CLICKED             },
         { ui_btnRLFastRewind , OnClickOperator                                                  , LV_EVENT_CLICKED             },
+        { ui_btnRLFastForward, OnClickOperator                                                  , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnRLFastRewind , OnClickOperator                                                  , LV_EVENT_SHORT_CLICKED       },
         { ui_btnRLNewRecord  , OnClickOperator                                                  , LV_EVENT_CLICKED             },
         { ui_btnRLTransfer   , OnClickTransfer                                                  , LV_EVENT_CLICKED             },
         { ui_btnRLNetwork    , OnClickNetworkTransfer                                           , LV_EVENT_CLICKED             },
         { ui_barDeleteWaiting, OnDelete                                                         , LV_EVENT_LONG_PRESSED_REPEAT },
+        { ui_barDeleteWaiting, OnDelete                                                         , LV_EVENT_SHORT_CLICKED       },
         { ui_barDeleteWaiting, OnDelete                                                         , LV_EVENT_RELEASED            },
         { ui_cbRLItemAll     , OnClickAllItem                                                   , LV_EVENT_CLICKED             },
-        { dummyUpKey         , OnClickPageChange                                                , LV_EVENT_LONG_PRESSED_REPEAT },
-        { dummyDownKey       , OnClickPageChange                                                , LV_EVENT_LONG_PRESSED_REPEAT },
-        { dummyUpKey         , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
-        { dummyDownKey       , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
-        { dummyTopKey        , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
-        { dummyBottomKey     , OnClickPageChange                                                , LV_EVENT_SHORT_CLICKED       },
         { dummyVolumeUpKey   , [](lv_event_t* e) { soundvolume_lib::ChangeVolume(true, false); }, LV_EVENT_SHORT_CLICKED       },
         { dummyVolumeDownKey , [](lv_event_t* e) { soundvolume_lib::ChangeVolume(false, true); }, LV_EVENT_SHORT_CLICKED       },
+        { dummyPlayPauseKey  , OnClickOperator                                                  , LV_EVENT_SHORT_CLICKED       },
     };
 
     ListDataUpdateCallback = {
-        { []() { return input_data::VideoSearch.GetState();        }, UpdateVideoInfoList    },
-        { []() { return input_data::VideoSearchType.GetState();    }, UpdateVideoInfoList    },
-        { []() { return input_data::VideoSearch.GetState();        }, UpdateButton           },
-        { []() { return input_data::VideoSearchType.GetState();    }, UpdateButton           },
-        { []() { return system_data::DeviceChange.GetState();      }, UpdateExtDevice        },
-        { []() { return system_data::CurrentState.GetState();      }, UpdateButton           },
-        { []() { return system_data::CurrentSoundState.GetState(); }, UpdateButton           },
-        { []() { return system_data::TransferPercent.GetState();   }, UpdateTransferProgress },
+        { []() { return input_data::VideoSearch.GetState();      }, UpdateVideoInfoList    },
+        { []() { return input_data::VideoSearchType.GetState();  }, UpdateVideoInfoList    },
+        { []() { return input_data::VideoSearch.GetState();      }, UpdateButton           },
+        { []() { return input_data::VideoSearchType.GetState();  }, UpdateButton           },
+        { []() { return system_data::DeviceChange.GetState();    }, UpdateExtDevice        },
+        { []() { return system_data::CurrentState.GetState();    }, UpdateButton           },
+        { []() { return system_data::TransferPercent.GetState(); }, UpdateTransferProgress },
     };
 
     listVkCode = {
-        { dummyUpKey        , VK_UP       },
-        { dummyDownKey      , VK_DOWN     },
-        { dummyTopKey       , VK_PRIOR    },
-        { dummyBottomKey    , VK_NEXT     },
-        { dummyVolumeUpKey  , VK_ADD      },
-        { dummyVolumeDownKey, VK_SUBTRACT },
+        { ui_btnRLPrePage    , VK_UP               },
+        { ui_btnRLNextPage   , VK_DOWN             },
+        { ui_btnRLTopPage    , VK_PRIOR            },
+        { ui_btnRLBottomPage , VK_NEXT             },
+        { ui_btnRLSound      , VK_VOLUME_MUTE      },
+        { ui_barDeleteWaiting, VK_BACK             },
+        { ui_btnRLFastRewind , VK_LEFT             },
+        { ui_btnRLFastForward, VK_RIGHT            },
+        { ui_btnRLBack       , VK_BROWSER_BACK     },
+        { dummyVolumeUpKey   , VK_ADD              },
+        { dummyVolumeDownKey , VK_SUBTRACT         },
+        { dummyVolumeUpKey   , VK_VOLUME_UP        },
+        { dummyVolumeDownKey , VK_VOLUME_DOWN      },
+        { dummyPlayPauseKey  , VK_MEDIA_PLAY_PAUSE },
     };
 
     // Copy list VK code library
@@ -311,6 +312,8 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
 
     // Init state
     system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
+
+    UpdateSoundButton();
 
     lv_obj_update_layout(ui_conRL); // Forcing component recalculation after screen changes
 
@@ -340,7 +343,7 @@ void VideoRecordListScreen::OnClickPageChange(lv_event_t* event)
     auto y = lv_obj_get_scroll_y(ui_conRL);
 
     // Handle Scroll Up or Previous Page action
-    if ((event->current_target == ui_btnRLPrePage) || (event->current_target == dummyUpKey))
+    if (event->current_target == ui_btnRLPrePage)
     {
         if (y > 0)
         {
@@ -357,7 +360,7 @@ void VideoRecordListScreen::OnClickPageChange(lv_event_t* event)
         }
     }
     // Handle Scroll Down or Next Page action
-    else if ((event->current_target == ui_btnRLNextPage) || (event->current_target == dummyDownKey))
+    else if (event->current_target == ui_btnRLNextPage)
     {
         if (y < totalRowHeight)
         {
@@ -374,12 +377,12 @@ void VideoRecordListScreen::OnClickPageChange(lv_event_t* event)
         }
     }
     // Handle Scroll to Top action
-    else if ((event->current_target == ui_btnRLTopPage) || (event->current_target == dummyTopKey))
+    else if (event->current_target == ui_btnRLTopPage)
     {
         lv_obj_scroll_to_y(ui_conRL, 0, LV_ANIM_ON);
     }
     // Handle Scroll to Bottom action
-    else if ((event->current_target == ui_btnRLBottomPage) || (event->current_target == dummyBottomKey))
+    else if (event->current_target == ui_btnRLBottomPage)
     {
         lv_obj_scroll_to_y(ui_conRL, totalRowHeight, LV_ANIM_ON);
     }
@@ -484,6 +487,27 @@ void VideoRecordListScreen::OnClickOperator(lv_event_t* event)
 
         system_data::CurrentState.SetValue(STATE_TYPE::S_PAUSE);
     }
+    else if (event->current_target == dummyPlayPauseKey)
+    {
+        if ((system_data::CurrentState.GetValue() == STATE_TYPE::S_STOP)
+            || (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)
+            )
+        {
+            if ((lv_obj_get_state(ui_btnRLPlay) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
+            {
+                event->current_target = ui_btnRLPlay;
+                OnClickOperator(event);
+            }
+        }
+        else if (system_data::CurrentState.GetValue() == STATE_TYPE::S_PLAY)
+        {
+            if ((lv_obj_get_state(ui_btnRLPause) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
+            {
+                event->current_target = ui_btnRLPause;
+                OnClickOperator(event);
+            }
+        }
+    }
     else if (event->current_target == ui_btnRLStop)
     {
         if ((system_data::CurrentState.GetValue() == STATE_TYPE::S_PLAY)
@@ -498,16 +522,9 @@ void VideoRecordListScreen::OnClickOperator(lv_event_t* event)
     }
     else if (event->current_target == ui_btnRLSound)
     {
-        if ((lv_obj_get_state(ui_btnRLSound) & LV_STATE_CHECKED) == LV_STATE_CHECKED)
-        {
-            system_data::CurrentSoundState.SetValue(false);
-        }
-        else
-        {
-            system_data::CurrentSoundState.SetValue(true);
-        }
+        soundvolume_lib::ToggleMute();
 
-        videorecord_lib::SetSoundState();
+        UpdateSoundButton();
     }
     else if (event->current_target == ui_btnRLFastRewind)
     {
@@ -604,6 +621,10 @@ void VideoRecordListScreen::OnDelete(lv_event_t* event)
             listRowInfoSelected.clear();
             listRowInfo.clear();
 
+            // Re-init video info list
+            isInit = true;
+            UpdateVideoInfoList();
+
             // Refresh UI buttons to reflect the new state
             UpdateButton();
 
@@ -612,7 +633,7 @@ void VideoRecordListScreen::OnDelete(lv_event_t* event)
         }
     }
     // Reset the counter if the user releases the button early
-    else if (event->code == LV_EVENT_RELEASED)
+    else
     {
         deleteTimeCounter = 0;
     }
@@ -671,16 +692,6 @@ void VideoRecordListScreen::UpdateButton()
         lv_obj_add_state(ui_btnRLStop, LV_STATE_DISABLED);
     }
 
-    // Update Sound button
-    if (system_data::CurrentSoundState.GetValue())
-    {
-        lv_obj_remove_state(ui_btnRLSound, LV_STATE_CHECKED);
-    }
-    else
-    {
-        lv_obj_add_state(ui_btnRLSound, LV_STATE_CHECKED);
-    }
-
     // Update Seek button
     if (state != STATE_TYPE::S_PLAY)
     {
@@ -700,7 +711,10 @@ void VideoRecordListScreen::UpdateButton()
     if ((!listRowInfoSelected.size())
         || (state != STATE_TYPE::S_STOP))
     {
+        deleteTimeCounter = 0;
+
         lv_obj_add_state(ui_barDeleteWaiting, LV_STATE_DISABLED);
+        lv_bar_set_value(ui_barDeleteWaiting, deleteTimeCounter, LV_ANIM_ON);
     }
 
     // Update portable memory dropdown
@@ -893,5 +907,17 @@ void VideoRecordListScreen::UpdateVideoInfoList()
         totalRowHeight -= totalItemHeight * RL_ITEM_PER_PAGE;
 
         isInit = false;
+    }
+}
+
+void VideoRecordListScreen::UpdateSoundButton()
+{
+    if (soundvolume_lib::isMute)
+    {
+        lv_obj_add_state(ui_btnRLSound, LV_STATE_CHECKED);
+    }
+    else
+    {
+        lv_obj_remove_state(ui_btnRLSound, LV_STATE_CHECKED);
     }
 }

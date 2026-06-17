@@ -23979,7 +23979,7 @@
                     "disabled": false,
                     "nid": 1002165,
                     "strtype": "_event/EventHandler",
-                    "strval": "CLICKED",
+                    "strval": "SHORT_CLICKED",
                     "childs": [
                       {
                         "nid": 1002166,
@@ -24918,7 +24918,7 @@
                     "disabled": false,
                     "nid": 1002165,
                     "strtype": "_event/EventHandler",
-                    "strval": "CLICKED",
+                    "strval": "SHORT_CLICKED",
                     "childs": [
                       {
                         "nid": 1002166,

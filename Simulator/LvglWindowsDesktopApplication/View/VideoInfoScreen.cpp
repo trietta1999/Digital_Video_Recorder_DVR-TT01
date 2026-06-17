@@ -4,11 +4,15 @@
 #include "ScreenMapping.h"
 #include "VideoInfoScreen.h"
 
+static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
+
 VideoInfoScreen::VideoInfoScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
     ListButtonCallback = {
         { ui_btnVideoInputCancel, OnClickCancel   , LV_EVENT_CLICKED       },
         { ui_btnVideoInputOK    , OnClickOK       , LV_EVENT_CLICKED       },
+        { ui_btnVideoInputCancel, OnClickCancel   , LV_EVENT_SHORT_CLICKED },
+        { ui_btnVideoInputOK    , OnClickOK       , LV_EVENT_SHORT_CLICKED },
         { ui_btnVideoEvent      , OnClickInput    , LV_EVENT_SHORT_CLICKED },
         { ui_btnVideoName       , OnClickInput    , LV_EVENT_SHORT_CLICKED },
         { ui_btnVideoCategory   , OnClickInput    , LV_EVENT_SHORT_CLICKED },
@@ -28,6 +32,14 @@ VideoInfoScreen::VideoInfoScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { []() { return temp_data::VideoDesc.GetState();     }, UpdateVideoInfo },
         { []() { return temp_data::VideoAuthor.GetState();   }, UpdateVideoInfo },
     };
+
+    listVkCode = {
+        { ui_btnVideoInputCancel, VK_BROWSER_BACK },
+        { ui_btnVideoInputOK    , VK_APPS         },
+    };
+
+    // Copy list VK code library
+    keyboard_lib::SetListVkCode(listVkCode);
 }
 
 void VideoInfoScreen::VideoInfoScreenInit()

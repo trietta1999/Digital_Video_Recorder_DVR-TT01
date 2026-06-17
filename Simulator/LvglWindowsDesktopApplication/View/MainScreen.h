@@ -22,6 +22,7 @@ private:
     static void UpdateStorage();
     static void UpdateButton();
     static void UpdateExtDevice();
+    static void UpdateSoundButton();
 };
 
 #endif // _MAIN_SCREEN_H

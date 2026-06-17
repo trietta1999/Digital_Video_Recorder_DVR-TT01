@@ -206,8 +206,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     ::SetWindowPos(window_handle, HWND_TOPMOST, 0, 0, HORIZON_MAX_RESOLUTION, VERTICAL_MAX_RESOLUTION, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 #endif
 
-    soundvolume_lib::CreateSoundVolumeWindow();
-
 #ifdef _DEBUG
     AttachConsoleWindow();
 #endif
@@ -227,6 +225,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
     // Init service
     InitService();
+
+    soundvolume_lib::CreateSoundVolumeWindow();
 
     // Change to main screen
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);

@@ -13,6 +13,7 @@ static std::vector<storage_lib::RemovableDriveInfo_t> listExtDrive = {};
 static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
 static lv_obj_t* dummyVolumeUpKey = nullptr;
 static lv_obj_t* dummyVolumeDownKey = nullptr;
+static lv_obj_t* dummyPlayPauseKey = nullptr;
 
 static void CreateDateTimeStr(std::string& dateStr, std::string& timeStr)
 {
@@ -64,38 +65,49 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
     dummyVolumeUpKey = lv_button_create(nullptr);
     dummyVolumeDownKey = lv_button_create(nullptr);
+    dummyPlayPauseKey = lv_button_create(nullptr);
 
     ListButtonCallback = {
         { ui_btnNewVideo       , OnClickNew                                                       , LV_EVENT_CLICKED       },
         { ui_btnCloseVideo     , OnClickClose                                                     , LV_EVENT_CLICKED       },
         { ui_btnVideoRecordList, OnClickVideoRecordList                                           , LV_EVENT_CLICKED       },
+        { ui_btnVideoRecordList, OnClickVideoRecordList                                           , LV_EVENT_SHORT_CLICKED },
         { ui_btnSystemSetting  , OnClickSystemSetting                                             , LV_EVENT_CLICKED       },
         { ui_btnRec            , OnClickOperator                                                  , LV_EVENT_CLICKED       },
         { ui_btnPlay           , OnClickOperator                                                  , LV_EVENT_CLICKED       },
         { ui_btnPause          , OnClickOperator                                                  , LV_EVENT_CLICKED       },
         { ui_btnStop           , OnClickOperator                                                  , LV_EVENT_CLICKED       },
         { ui_btnSound          , OnClickOperator                                                  , LV_EVENT_CLICKED       },
+        { ui_btnSound          , OnClickOperator                                                  , LV_EVENT_SHORT_CLICKED },
         { ui_btnFastForward    , OnClickOperator                                                  , LV_EVENT_CLICKED       },
         { ui_btnFastRewind     , OnClickOperator                                                  , LV_EVENT_CLICKED       },
+        { ui_btnFastForward    , OnClickOperator                                                  , LV_EVENT_SHORT_CLICKED },
+        { ui_btnFastRewind     , OnClickOperator                                                  , LV_EVENT_SHORT_CLICKED },
         { ui_btnStorageUSB     , OnClickStorageUSB                                                , LV_EVENT_CLICKED       },
         { dummyVolumeUpKey     , [](lv_event_t* e) { soundvolume_lib::ChangeVolume(true, false); }, LV_EVENT_SHORT_CLICKED },
         { dummyVolumeDownKey   , [](lv_event_t* e) { soundvolume_lib::ChangeVolume(false, true); }, LV_EVENT_SHORT_CLICKED },
+        { dummyPlayPauseKey    , OnClickOperator                                                  , LV_EVENT_SHORT_CLICKED },
     };
 
     ListDataUpdateCallback = {
-        { []() { return system_data::DeviceChange.GetState();      }, UpdateExtDevice },
-        { []() { return system_data::CurrentDate.GetState();       }, UpdateDate      },
-        { []() { return system_data::CurrentTime.GetState();       }, UpdateTime      },
-        { []() { return system_data::FreeStorage.GetState();       }, UpdateStorage   },
-        { []() { return system_data::FreeUSBStorage.GetState();    }, UpdateStorage   },
-        { []() { return system_data::CurrentState.GetState();      }, UpdateButton    },
-        { []() { return system_data::IsTempVideoInfo.GetState();   }, UpdateButton    },
-        { []() { return system_data::CurrentSoundState.GetState(); }, UpdateButton    },
+        { []() { return system_data::DeviceChange.GetState();    }, UpdateExtDevice },
+        { []() { return system_data::CurrentDate.GetState();     }, UpdateDate      },
+        { []() { return system_data::CurrentTime.GetState();     }, UpdateTime      },
+        { []() { return system_data::FreeStorage.GetState();     }, UpdateStorage   },
+        { []() { return system_data::FreeUSBStorage.GetState();  }, UpdateStorage   },
+        { []() { return system_data::CurrentState.GetState();    }, UpdateButton    },
+        { []() { return system_data::IsTempVideoInfo.GetState(); }, UpdateButton    },
     };
 
     listVkCode = {
-        { dummyVolumeUpKey  , VK_ADD      },
-        { dummyVolumeDownKey, VK_SUBTRACT },
+        { ui_btnSound          , VK_VOLUME_MUTE },
+        { ui_btnVideoRecordList, VK_APPS        },
+        { ui_btnFastForward    , VK_RIGHT       },
+        { ui_btnRLFastRewind   , VK_LEFT        },
+        { dummyVolumeUpKey     , VK_VOLUME_UP   },
+        { dummyVolumeDownKey   , VK_VOLUME_DOWN },
+        { dummyVolumeUpKey     , VK_ADD         },
+        { dummyVolumeDownKey   , VK_SUBTRACT    },
     };
 
     // Copy list VK code library
@@ -132,6 +144,8 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         // Show review sub-screen
         videorecord_lib::StartExternalWindow(ui_wndReview, REVIEW_SCREENNAME, "");
     }
+
+    UpdateSoundButton();
 
     // Create get system timer
     timerGetSystemData = lv_timer_create([](lv_timer_t* timer) {
@@ -249,6 +263,27 @@ void MainScreen::OnClickOperator(lv_event_t* event)
 
         system_data::CurrentState.SetValue(STATE_TYPE::S_PAUSE);
     }
+    else if (event->current_target == dummyPlayPauseKey)
+    {
+        if ((system_data::CurrentState.GetValue() == STATE_TYPE::S_STOP)
+            || (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)
+            )
+        {
+            if ((lv_obj_get_state(ui_btnPlay) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
+            {
+                event->current_target = ui_btnPlay;
+                OnClickOperator(event);
+            }
+        }
+        else if (system_data::CurrentState.GetValue() == STATE_TYPE::S_PLAY)
+        {
+            if ((lv_obj_get_state(ui_btnPause) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
+            {
+                event->current_target = ui_btnPause;
+                OnClickOperator(event);
+            }
+        }
+    }
     else if (event->current_target == ui_btnStop)
     {
         if ((system_data::CurrentState.GetValue() == STATE_TYPE::S_RECORD)
@@ -313,16 +348,9 @@ void MainScreen::OnClickOperator(lv_event_t* event)
     }
     else if (event->current_target == ui_btnSound)
     {
-        if ((lv_obj_get_state(ui_btnSound) & LV_STATE_CHECKED) == LV_STATE_CHECKED)
-        {
-            system_data::CurrentSoundState.SetValue(false);
-        }
-        else
-        {
-            system_data::CurrentSoundState.SetValue(true);
-        }
+        soundvolume_lib::ToggleMute();
 
-        videorecord_lib::SetSoundState();
+        UpdateSoundButton();
     }
     else if (event->current_target == ui_btnFastRewind)
     {
@@ -447,15 +475,6 @@ void MainScreen::UpdateButton()
         lv_obj_add_state(ui_btnSound, LV_STATE_DISABLED);
     }
 
-    if (system_data::CurrentSoundState.GetValue())
-    {
-        lv_obj_remove_state(ui_btnSound, LV_STATE_CHECKED);
-    }
-    else
-    {
-        lv_obj_add_state(ui_btnSound, LV_STATE_CHECKED);
-    }
-
     // Update Seek button
     if (state != STATE_TYPE::S_PLAY)
     {
@@ -478,4 +497,16 @@ void MainScreen::UpdateExtDevice()
     }
 
     ::SendMessage(system_data::WindowHandle.GetValue(), WM_DEVICECHANGE_DONE, 0, 0);
+}
+
+void MainScreen::UpdateSoundButton()
+{
+    if (soundvolume_lib::isMute)
+    {
+        lv_obj_add_state(ui_btnSound, LV_STATE_CHECKED);
+    }
+    else
+    {
+        lv_obj_remove_state(ui_btnSound, LV_STATE_CHECKED);
+    }
 }

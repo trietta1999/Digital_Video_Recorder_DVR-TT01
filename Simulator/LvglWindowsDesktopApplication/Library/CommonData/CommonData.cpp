@@ -11,7 +11,6 @@ namespace system_data
     CData<std::string> FreeUSBStorage;
     CData<STATE_TYPE> CurrentState;
     CData<bool> IsTempVideoInfo;
-    CData<bool> CurrentSoundState;
     CData<double> TransferPercent;
     CData<bool> DeviceChange;
 }
@@ -104,7 +103,6 @@ void CommonDataUpdateAll()
     system_data::FreeUSBStorage.ResetState();
     system_data::CurrentState.ResetState();
     system_data::IsTempVideoInfo.ResetState();
-    system_data::CurrentSoundState.ResetState();
     system_data::TransferPercent.ResetState();
     system_data::DeviceChange.ResetState();
 

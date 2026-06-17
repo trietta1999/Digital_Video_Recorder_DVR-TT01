@@ -17,7 +17,6 @@ namespace system_data
     extern CData<std::string> FreeUSBStorage;
     extern CData<STATE_TYPE> CurrentState;
     extern CData<bool> IsTempVideoInfo;
-    extern CData<bool> CurrentSoundState;
     extern CData<double> TransferPercent;
     extern CData<bool> DeviceChange;
 }

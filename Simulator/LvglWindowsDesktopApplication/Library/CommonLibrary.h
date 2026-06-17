@@ -86,7 +86,6 @@ namespace videorecord_lib
 {
     void StartExternalWindow(lv_obj_t* wnd, std::wstring screenName, std::string videoID);
     void StopExternalWindow();
-    void SetSoundState();
     void ExecuteSeek(bool rewind, bool forward);
     void ExecutePause();
     void KillAllProcess();
@@ -220,10 +219,14 @@ namespace network_lib
 
 namespace soundvolume_lib
 {
+    extern bool isMute;
+
     void CreateSoundVolumeWindow();
     void SetSystemVolume(int percent);
     int GetSystemVolume();
     void ChangeVolume(bool up, bool down);
+    void SetMute(bool value);
+    void ToggleMute();
 }
 
 namespace config_lib

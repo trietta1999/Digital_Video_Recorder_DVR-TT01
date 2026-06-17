@@ -114,13 +114,6 @@ namespace videorecord_lib
         ::ClientToScreen(system_data::WindowHandle.GetValue(), &point);
 
         ChangeWindowStyle(screenName.c_str(), point, size);
-
-        // During initialization, sound is enabled by default and is only disabled when other conditions are met
-        if (!system_data::CurrentSoundState.GetValue())
-        {
-            SetSoundState();
-        }
-
         SetWindowFocus(system_data::WindowHandle.GetValue());
     }
 
@@ -150,24 +143,6 @@ namespace videorecord_lib
                 }
             }
         }
-    }
-
-    void SetSoundState()
-    {
-        SetWindowFocus(extHwnd);
-
-        BYTE vkey = LOBYTE(VkKeyScan('M'));
-        BYTE scanCode = (BYTE)MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
-
-        keybd_event(vkey, scanCode, 0, 0);
-        keybd_event(vkey, scanCode, KEYEVENTF_KEYUP, 0);
-
-        SetWindowFocus(system_data::WindowHandle.GetValue());
-    }
-
-    void SetMicState(bool enable)
-    {
-
     }
 
     void ExecuteSeek(bool rewind, bool forward)

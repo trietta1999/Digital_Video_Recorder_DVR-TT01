@@ -6,6 +6,8 @@
 
 namespace soundvolume_lib
 {
+    bool isMute = false;
+
     static HWND hWnd = NULL;
     static HWND hStatic = NULL;
     static int currentVolume = 0;
@@ -104,6 +106,9 @@ namespace soundvolume_lib
             }).detach();
 
         currentVolume = GetSystemVolume();
+
+        SetSystemVolume(currentVolume);
+        SetMute(!setting_data::InitAudState.GetValue());
     }
 
     static IAudioEndpointVolume* GetVolumeController()
@@ -157,13 +162,14 @@ namespace soundvolume_lib
             return;
         }
 
-        float fVolume = (float)percent / 100.0f;
-
-        HRESULT hr = volumeController->SetMasterVolumeLevelScalar(fVolume, NULL);
-
         if (percent > 0)
         {
             volumeController->SetMute(FALSE, NULL);
+            volumeController->SetMasterVolumeLevelScalar((float)percent / 100.0f, NULL);
+        }
+        else
+        {
+            volumeController->SetMute(TRUE, NULL);
         }
 
         volumeController->Release();
@@ -190,7 +196,7 @@ namespace soundvolume_lib
 
         if (SUCCEEDED(hr))
         {
-            return (int)(fVolume * 100.0f);
+            return (int)(fVolume * 100.0f + 0.5f);
         }
 
         return -1;
@@ -224,5 +230,29 @@ namespace soundvolume_lib
         }
 
         SetSystemVolume(currentVolume);
+    }
+
+    void SetMute(bool value)
+    {
+        IAudioEndpointVolume* volumeController = GetVolumeController();
+
+        if (volumeController == NULL)
+        {
+            return;
+        }
+
+        volumeController->SetMute(value, NULL);
+        volumeController->Release();
+
+        ::CoUninitialize();
+
+        isMute = value;
+    }
+
+    void ToggleMute()
+    {
+        isMute = !isMute;
+
+        SetMute(isMute);
     }
 }
