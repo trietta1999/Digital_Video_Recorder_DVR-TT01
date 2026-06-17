@@ -94,23 +94,25 @@ void VideoInfoScreen::OnClickOK(lv_event_t* event)
 
 void VideoInfoScreen::OnClickInput(lv_event_t* event)
 {
-    if (event->current_target == ui_btnVideoEvent)
+    auto obj = (lv_obj_t*)(event->current_target);
+
+    if (obj == ui_btnVideoEvent)
     {
         ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::KBSCREEN_VIDEO_EVENT);
     }
-    else if (event->current_target == ui_btnVideoName)
+    else if (obj == ui_btnVideoName)
     {
         ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::KBSCREEN_VIDEO_NAME);
     }
-    else if (event->current_target == ui_btnVideoCategory)
+    else if (obj == ui_btnVideoCategory)
     {
         ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::KBSCREEN_VIDEO_CATEGORY);
     }
-    else if (event->current_target == ui_btnVideoDesc)
+    else if (obj == ui_btnVideoDesc)
     {
         ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::KBSCREEN_VIDEO_DESC);
     }
-    else if (event->current_target == ui_btnVideoAuthor)
+    else if (obj == ui_btnVideoAuthor)
     {
         ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::KBSCREEN_VIDEO_AUTHOR);
     }

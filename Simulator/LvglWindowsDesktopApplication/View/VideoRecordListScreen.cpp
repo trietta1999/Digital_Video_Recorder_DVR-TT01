@@ -339,11 +339,13 @@ void VideoRecordListScreen::OnClickBack(lv_event_t* event)
 
 void VideoRecordListScreen::OnClickPageChange(lv_event_t* event)
 {
+    auto obj = (lv_obj_t*)(event->current_target);
+
     // Get current vertical scroll position
     auto y = lv_obj_get_scroll_y(ui_conRL);
 
     // Handle Scroll Up or Previous Page action
-    if (event->current_target == ui_btnRLPrePage)
+    if (obj == ui_btnRLPrePage)
     {
         if (y > 0)
         {
@@ -360,7 +362,7 @@ void VideoRecordListScreen::OnClickPageChange(lv_event_t* event)
         }
     }
     // Handle Scroll Down or Next Page action
-    else if (event->current_target == ui_btnRLNextPage)
+    else if (obj == ui_btnRLNextPage)
     {
         if (y < totalRowHeight)
         {
@@ -377,12 +379,12 @@ void VideoRecordListScreen::OnClickPageChange(lv_event_t* event)
         }
     }
     // Handle Scroll to Top action
-    else if (event->current_target == ui_btnRLTopPage)
+    else if (obj == ui_btnRLTopPage)
     {
         lv_obj_scroll_to_y(ui_conRL, 0, LV_ANIM_ON);
     }
     // Handle Scroll to Bottom action
-    else if (event->current_target == ui_btnRLBottomPage)
+    else if (obj == ui_btnRLBottomPage)
     {
         lv_obj_scroll_to_y(ui_conRL, totalRowHeight, LV_ANIM_ON);
     }
@@ -461,18 +463,21 @@ void VideoRecordListScreen::OnClickAllItem(lv_event_t* event)
 
 void VideoRecordListScreen::OnClickOperator(lv_event_t* event)
 {
-    if (event->current_target == ui_btnVideoSearch)
+    auto obj = (lv_obj_t*)(event->current_target);
+    auto state = system_data::CurrentState.GetValue();
+
+    if (obj == ui_btnVideoSearch)
     {
         ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::KBSCREEN_VIDEO_SEARCH);
     }
-    else if (event->current_target == ui_btnRLPlay)
+    else if (obj == ui_btnRLPlay)
     {
-        if (system_data::CurrentState.GetValue() == STATE_TYPE::S_STOP)
+        if (state == STATE_TYPE::S_STOP)
         {
             // Show play sub-screen
             videorecord_lib::StartExternalWindow(ui_conRL, PLAY_SCREENNAME, listRowInfoSelected.front().id);
         }
-        else if (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)
+        else if (state == STATE_TYPE::S_PAUSE)
         {
             // Send unpause
             videorecord_lib::ExecutePause();
@@ -480,38 +485,38 @@ void VideoRecordListScreen::OnClickOperator(lv_event_t* event)
 
         system_data::CurrentState.SetValue(STATE_TYPE::S_PLAY);
     }
-    else if (event->current_target == ui_btnRLPause)
+    else if (obj == ui_btnRLPause)
     {
         // Send pause
         videorecord_lib::ExecutePause();
 
         system_data::CurrentState.SetValue(STATE_TYPE::S_PAUSE);
     }
-    else if (event->current_target == dummyPlayPauseKey)
+    else if (obj == dummyPlayPauseKey)
     {
-        if ((system_data::CurrentState.GetValue() == STATE_TYPE::S_STOP)
-            || (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)
+        if ((state == STATE_TYPE::S_STOP)
+            || (state == STATE_TYPE::S_PAUSE)
             )
         {
             if ((lv_obj_get_state(ui_btnRLPlay) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
             {
-                event->current_target = ui_btnRLPlay;
+                obj = ui_btnRLPlay;
                 OnClickOperator(event);
             }
         }
-        else if (system_data::CurrentState.GetValue() == STATE_TYPE::S_PLAY)
+        else if (state == STATE_TYPE::S_PLAY)
         {
             if ((lv_obj_get_state(ui_btnRLPause) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
             {
-                event->current_target = ui_btnRLPause;
+                obj = ui_btnRLPause;
                 OnClickOperator(event);
             }
         }
     }
-    else if (event->current_target == ui_btnRLStop)
+    else if (obj == ui_btnRLStop)
     {
-        if ((system_data::CurrentState.GetValue() == STATE_TYPE::S_PLAY)
-            || (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)
+        if ((state == STATE_TYPE::S_PLAY)
+            || (state == STATE_TYPE::S_PAUSE)
             )
         {
             // Stop sub-screen
@@ -520,21 +525,21 @@ void VideoRecordListScreen::OnClickOperator(lv_event_t* event)
 
         system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
     }
-    else if (event->current_target == ui_btnRLSound)
+    else if (obj == ui_btnRLSound)
     {
         soundvolume_lib::ToggleMute();
 
         UpdateSoundButton();
     }
-    else if (event->current_target == ui_btnRLFastRewind)
+    else if (obj == ui_btnRLFastRewind)
     {
         videorecord_lib::ExecuteSeek(true, false);
     }
-    else if (event->current_target == ui_btnRLFastForward)
+    else if (obj == ui_btnRLFastForward)
     {
         videorecord_lib::ExecuteSeek(false, true);
     }
-    else if (event->current_target == ui_btnRLNewRecord)
+    else if (obj == ui_btnRLNewRecord)
     {
         const auto& videoID = listRowInfoSelected.front().id;
         auto videoInfo = videoinfo_lib::GetExistData(videoID);

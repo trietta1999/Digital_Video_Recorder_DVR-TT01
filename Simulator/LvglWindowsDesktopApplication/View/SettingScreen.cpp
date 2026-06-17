@@ -211,11 +211,13 @@ void SettingScreen::OnClickSave(lv_event_t* event)
 
 void SettingScreen::OnClickEdit(lv_event_t* event)
 {
-    if (event->current_target == ui_btnWifiPass)
+    auto obj = (lv_obj_t*)(event->current_target);
+
+    if (obj == ui_btnWifiPass)
     {
         ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::KBSCREEN_SSID_PASSWORD);
     }
-    else if (event->current_target == ui_btnDuktoAddr)
+    else if (obj == ui_btnDuktoAddr)
     {
         ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::KBSCREEN_DUKTO_ADDR);
     }

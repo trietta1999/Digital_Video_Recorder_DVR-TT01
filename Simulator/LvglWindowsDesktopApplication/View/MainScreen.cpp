@@ -209,7 +209,10 @@ void MainScreen::OnClickClose(lv_event_t* event)
 
 void MainScreen::OnClickOperator(lv_event_t* event)
 {
-    if (event->current_target == ui_btnRec)
+    auto obj = (lv_obj_t*)(event->current_target);
+    auto state = system_data::CurrentState.GetValue();
+
+    if (obj == ui_btnRec)
     {
         videoinfo_lib::UpdateCurrentInfoDateTime();
 
@@ -241,14 +244,14 @@ void MainScreen::OnClickOperator(lv_event_t* event)
 
         system_data::CurrentState.SetValue(STATE_TYPE::S_RECORD);
     }
-    else if (event->current_target == ui_btnPlay)
+    else if (obj == ui_btnPlay)
     {
-        if (system_data::CurrentState.GetValue() == STATE_TYPE::S_STOP)
+        if (state == STATE_TYPE::S_STOP)
         {
             // Show play sub-screen
             videorecord_lib::StartExternalWindow(ui_wndReview, PLAY_SCREENNAME, current_videoinfo_data::VideoID.GetValue());
         }
-        else if (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)
+        else if (state == STATE_TYPE::S_PAUSE)
         {
             // Send unpause
             videorecord_lib::ExecutePause();
@@ -256,42 +259,42 @@ void MainScreen::OnClickOperator(lv_event_t* event)
 
         system_data::CurrentState.SetValue(STATE_TYPE::S_PLAY);
     }
-    else if (event->current_target == ui_btnPause)
+    else if (obj == ui_btnPause)
     {
         // Send pause
         videorecord_lib::ExecutePause();
 
         system_data::CurrentState.SetValue(STATE_TYPE::S_PAUSE);
     }
-    else if (event->current_target == dummyPlayPauseKey)
+    else if (obj == dummyPlayPauseKey)
     {
-        if ((system_data::CurrentState.GetValue() == STATE_TYPE::S_STOP)
-            || (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)
+        if ((state == STATE_TYPE::S_STOP)
+            || (state == STATE_TYPE::S_PAUSE)
             )
         {
             if ((lv_obj_get_state(ui_btnPlay) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
             {
-                event->current_target = ui_btnPlay;
+                obj = ui_btnPlay;
                 OnClickOperator(event);
             }
         }
-        else if (system_data::CurrentState.GetValue() == STATE_TYPE::S_PLAY)
+        else if (state == STATE_TYPE::S_PLAY)
         {
             if ((lv_obj_get_state(ui_btnPause) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
             {
-                event->current_target = ui_btnPause;
+                obj = ui_btnPause;
                 OnClickOperator(event);
             }
         }
     }
-    else if (event->current_target == ui_btnStop)
+    else if (obj == ui_btnStop)
     {
-        if ((system_data::CurrentState.GetValue() == STATE_TYPE::S_RECORD)
-            || (system_data::CurrentState.GetValue() == STATE_TYPE::S_PLAY)
-            || (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)
+        if ((state == STATE_TYPE::S_RECORD)
+            || (state == STATE_TYPE::S_PLAY)
+            || (state == STATE_TYPE::S_PAUSE)
             )
         {
-            if (system_data::CurrentState.GetValue() == STATE_TYPE::S_RECORD)
+            if (state == STATE_TYPE::S_RECORD)
             {
                 if (setting_data::PlayVideoState.GetValue())
                 {
@@ -314,8 +317,8 @@ void MainScreen::OnClickOperator(lv_event_t* event)
                     system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
                 }
             }
-            else if ((system_data::CurrentState.GetValue() == STATE_TYPE::S_PLAY)
-                || (system_data::CurrentState.GetValue() == STATE_TYPE::S_PAUSE)
+            else if ((state == STATE_TYPE::S_PLAY)
+                || (state == STATE_TYPE::S_PAUSE)
                 )
             {
                 if (setting_data::PreviewVideoState.GetValue())
@@ -331,7 +334,7 @@ void MainScreen::OnClickOperator(lv_event_t* event)
                 system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
             }
         }
-        else if (system_data::CurrentState.GetValue() == STATE_TYPE::S_RECORD)
+        else if (state == STATE_TYPE::S_RECORD)
         {
             if (setting_data::PlayVideoState.GetValue())
             {
@@ -346,17 +349,17 @@ void MainScreen::OnClickOperator(lv_event_t* event)
             }
         }
     }
-    else if (event->current_target == ui_btnSound)
+    else if (obj == ui_btnSound)
     {
         soundvolume_lib::ToggleMute();
 
         UpdateSoundButton();
     }
-    else if (event->current_target == ui_btnFastRewind)
+    else if (obj == ui_btnFastRewind)
     {
         videorecord_lib::ExecuteSeek(true, false);
     }
-    else if (event->current_target == ui_btnFastForward)
+    else if (obj == ui_btnFastForward)
     {
         videorecord_lib::ExecuteSeek(false, true);
     }
