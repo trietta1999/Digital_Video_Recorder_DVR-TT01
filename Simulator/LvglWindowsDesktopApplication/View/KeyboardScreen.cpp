@@ -12,7 +12,6 @@ typedef struct
 } KbInfo;
 
 static std::unordered_map<SCREEN_NAME, KbInfo> mapKbInit = {};
-static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
 static lv_timer_t* timerUpdateInput = nullptr;
 static lv_obj_t* dummyConfirmKey = nullptr;
 static lv_obj_t* dummyOkKey = nullptr;
@@ -116,7 +115,7 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { SCREEN_NAME::KBSCREEN_DUKTO_ADDR    , { "Dukto server IP", &temp_data::DuktoIP       } },
     };
 
-    listVkCode = {
+    ListButtonVkCode = {
         { ui_btnKeyboardKey0        , VK_NUMPAD0 },
         { ui_btnKeyboardKey1        , VK_NUMPAD1 },
         { ui_btnKeyboardKey2        , VK_NUMPAD2 },
@@ -137,9 +136,6 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { dummyCharKey              , VK_CHAR    },
         { dummySpaceKey             , VK_SPACE   },
     };
-
-    // Copy list VK code library
-    keyboard_lib::SetListVkCode(listVkCode);
 
     // Init text input
     lv_label_set_text(ui_lblKeyboardTitle, mapKbInit[system_data::CurrentKbScreen.GetValue()].title.c_str());
@@ -299,7 +295,7 @@ void KeyboardScreen::OnClickKey(lv_event_t* event)
     }
 
     // Send message to WINPROC
-    for (const auto& item : listVkCode)
+    for (const auto& item : keyboard_lib::GetListVkCode())
     {
         if (item.first == obj)
         {
@@ -313,7 +309,7 @@ void KeyboardScreen::OnClickKey(lv_event_t* event)
 void KeyboardScreen::OnLongPressKey(lv_event_t* event)
 {
     // Send message to WINPROC
-    for (const auto& item : listVkCode)
+    for (const auto& item : keyboard_lib::GetListVkCode())
     {
         if (item.first == event->current_target)
         {

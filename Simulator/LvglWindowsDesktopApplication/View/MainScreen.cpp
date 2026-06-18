@@ -9,8 +9,6 @@
 
 static lv_timer_t* timerGetSystemData = nullptr;
 static int currentExtIndex = 0;
-static std::vector<storage_lib::RemovableDriveInfo_t> listExtDrive = {};
-static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
 static lv_obj_t* dummyVolumeUpKey = nullptr;
 static lv_obj_t* dummyVolumeDownKey = nullptr;
 static lv_obj_t* dummyPlayPauseKey = nullptr;
@@ -99,7 +97,7 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { []() { return system_data::IsTempVideoInfo.GetState(); }, UpdateButton    },
     };
 
-    listVkCode = {
+    ListButtonVkCode = {
         { ui_btnSound          , VK_VOLUME_MUTE },
         { ui_btnVideoRecordList, VK_APPS        },
         { ui_btnFastForward    , VK_RIGHT       },
@@ -109,9 +107,6 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { dummyVolumeUpKey     , VK_ADD         },
         { dummyVolumeDownKey   , VK_SUBTRACT    },
     };
-
-    // Copy list VK code library
-    keyboard_lib::SetListVkCode(listVkCode);
 
     lv_obj_update_layout(ui_wndReview); // Forcing component recalculation after screen changes
 
@@ -156,6 +151,8 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         system_data::CurrentDate.SetValue(buffDate);
         system_data::CurrentTime.SetValue(buffTime);
         system_data::FreeStorage.SetValue(storage_lib::GetDriveFreeStorage(common_lib::ConvertWStringToString(common_lib::GetSystemPath())));
+
+        const auto& listExtDrive = storage_lib::GetExternalDrivesList();
 
         if (listExtDrive.size())
         {
@@ -372,6 +369,8 @@ void MainScreen::OnClickVideoRecordList(lv_event_t* event)
 
 void MainScreen::OnClickStorageUSB(lv_event_t* event)
 {
+    const auto& listExtDrive = storage_lib::GetExternalDrivesList();
+
     if (currentExtIndex < listExtDrive.size() - 1)
     {
         currentExtIndex++;
@@ -488,7 +487,7 @@ void MainScreen::UpdateButton()
 
 void MainScreen::UpdateExtDevice()
 {
-    listExtDrive = storage_lib::GetExternalDrivesList();
+    const auto& listExtDrive = storage_lib::GetExternalDrivesList();
 
     if (listExtDrive.size())
     {

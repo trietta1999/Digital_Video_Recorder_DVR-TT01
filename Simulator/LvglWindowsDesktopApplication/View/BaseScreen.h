@@ -15,6 +15,7 @@ protected:
 
     std::vector<ButtonInfo> ListButtonCallback;
     std::vector<std::pair<std::function<bool(void)>, std::function<void(void)>>> ListDataUpdateCallback;
+    std::vector<std::pair<lv_obj_t*, int>> ListButtonVkCode;
 
     SCREEN_NAME screenName;
     bool isFirstInit;
@@ -23,8 +24,7 @@ public:
     BaseScreen(SCREEN_NAME screen) { this->screenName = screen; this->isFirstInit = true; };
     virtual ~BaseScreen() = default;
 
-    SCREEN_NAME GetScreenName() const { return this->screenName; }
-
+    void RegisterKeyboard() const;
     void ButtonOperator(lv_event_t* event);
     void DataUpdateOperator();
 };

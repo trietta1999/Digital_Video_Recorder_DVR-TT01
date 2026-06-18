@@ -92,8 +92,6 @@ struct row_info_t
 static std::vector<row_info_t> listRowInfo = {};
 static std::vector<row_info_t> listRowInfoSelected = {};
 static std::vector<std::pair<std::string, bool>> listTransferState = {};
-static std::vector<storage_lib::RemovableDriveInfo_t> listExtDrive = {};
-static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
 static lv_obj_t* dummyVolumeUpKey = nullptr;
 static lv_obj_t* dummyVolumeDownKey = nullptr;
 static lv_obj_t* dummyPlayPauseKey = nullptr;
@@ -290,7 +288,7 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
         { []() { return system_data::TransferPercent.GetState(); }, UpdateTransferProgress },
     };
 
-    listVkCode = {
+    ListButtonVkCode = {
         { ui_btnRLPrePage    , VK_UP               },
         { ui_btnRLNextPage   , VK_DOWN             },
         { ui_btnRLTopPage    , VK_PRIOR            },
@@ -306,9 +304,6 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
         { dummyVolumeDownKey , VK_VOLUME_DOWN      },
         { dummyPlayPauseKey  , VK_MEDIA_PLAY_PAUSE },
     };
-
-    // Copy list VK code library
-    keyboard_lib::SetListVkCode(listVkCode);
 
     // Init state
     system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
@@ -563,8 +558,7 @@ void VideoRecordListScreen::OnClickTransfer(lv_event_t* event)
     system_data::CurrentState.SetValue(STATE_TYPE::S_TRANSFER);
 
     int totalPercent = listRowInfoSelected.size() * STANDARD_PERCENT;
-
-    // Get selected drive info
+    const auto& listExtDrive = storage_lib::GetExternalDrivesList();
     const auto& driveInfo = listExtDrive[lv_dropdown_get_selected(ui_dropPortableMemory)];
     const auto& driveLetter = driveInfo.letter;
 
@@ -651,6 +645,7 @@ void VideoRecordListScreen::UpdateButton()
 {
     auto oldState = system_data::CurrentState.GetOldValue();
     auto state = system_data::CurrentState.GetValue();
+    const auto& listExtDrive = storage_lib::GetExternalDrivesList();
 
     lv_obj_remove_state(ui_btnVideoSearch, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_dropVideoFilter, LV_STATE_DISABLED);
@@ -832,7 +827,7 @@ void VideoRecordListScreen::UpdateTransferProgress()
 
 void VideoRecordListScreen::UpdateExtDevice()
 {
-    listExtDrive = storage_lib::GetExternalDrivesList();
+    const auto& listExtDrive = storage_lib::GetExternalDrivesList();
 
     if (listExtDrive.size())
     {

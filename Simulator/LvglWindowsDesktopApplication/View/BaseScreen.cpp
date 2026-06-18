@@ -1,5 +1,6 @@
 ﻿#include "BaseScreen.h"
 #include "CommonData.h"
+#include "CommonLibrary.h"
 
 void BaseScreen::ButtonOperator(lv_event_t* event)
 {
@@ -38,4 +39,9 @@ void BaseScreen::DataUpdateOperator()
             }
         }
     }
+}
+
+void BaseScreen::RegisterKeyboard() const
+{
+    keyboard_lib::SetListVkCode(ListButtonVkCode);
 }

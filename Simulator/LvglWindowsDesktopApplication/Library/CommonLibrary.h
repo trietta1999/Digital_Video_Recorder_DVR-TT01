@@ -14,6 +14,7 @@ namespace keyboard_lib
     void SetKeyboardKeyState(int vk, bool state);
     bool GetKeyboardCapsState();
     short GetAutoConfirmTimeMs();
+    const std::vector<std::pair<lv_obj_t*, int>>& GetListVkCode();
     void SetListVkCode(const std::vector<std::pair<lv_obj_t*, int>>& list);
     void CALLBACK AutoConfirmKey(HWND hwnd, UINT uMsg, UINT_PTR timerId, DWORD dwTime);
     void HardwareKeyboardProcess(HWND hwnd, int uMsg, int wParam, lv_event_code_t lParam);
@@ -249,8 +250,8 @@ namespace storage_lib
 
     std::string GetDriveFreeStorage(std::string driveLetter);
     void CollectExternalDrivesList();
-    std::vector<RemovableDriveInfo_t> GetExternalDrivesList();
-    std::vector<std::string> GetExternalLabelList();
+    const std::vector<RemovableDriveInfo_t>& GetExternalDrivesList();
+    const std::vector<std::string>& GetExternalLabelList();
     bool CopyFileWithProgress(std::wstring source, std::wstring dest);
 }
 

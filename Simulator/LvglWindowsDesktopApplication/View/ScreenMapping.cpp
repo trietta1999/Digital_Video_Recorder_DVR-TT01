@@ -89,6 +89,8 @@ void ScreenMapping::ChangeScreen(SCREEN_NAME screen)
         lv_timer_handler();
         currentScreenInfo.second = mapScreenInfo[SCREEN_NAME::SCREEN_KEYBOARD].first(); // Create screen class
     }
+
+    currentScreenInfo.second->RegisterKeyboard(); // Register keyboard
 }
 
 void ScreenMapping::HandleScreen()

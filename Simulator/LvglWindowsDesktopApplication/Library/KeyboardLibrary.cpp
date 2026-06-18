@@ -232,6 +232,11 @@ namespace keyboard_lib
         }
     }
 
+    const std::vector<std::pair<lv_obj_t*, int>>& GetListVkCode()
+    {
+        return listVkCode;
+    }
+
     void SetListVkCode(const std::vector<std::pair<lv_obj_t*, int>>& list)
     {
         listVkCode = list;

@@ -105,12 +105,12 @@ namespace storage_lib
         }
     }
 
-    std::vector<RemovableDriveInfo_t> GetExternalDrivesList()
+    const std::vector<RemovableDriveInfo_t>& GetExternalDrivesList()
     {
         return listExtDrive;
     }
 
-    std::vector<std::string> GetExternalLabelList()
+    const std::vector<std::string>& GetExternalLabelList()
     {
         return listExtDisk;
     }
