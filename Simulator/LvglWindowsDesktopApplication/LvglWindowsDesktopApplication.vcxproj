@@ -45,6 +45,8 @@
       <Optimization Condition="'$(Configuration)'=='Release'">MinSpace</Optimization>
       <UndefinePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </UndefinePreprocessorDefinitions>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdcpp20</LanguageStandard>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateMapFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateMapFile>
