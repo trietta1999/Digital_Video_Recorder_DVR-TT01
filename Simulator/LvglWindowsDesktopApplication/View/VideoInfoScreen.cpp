@@ -8,8 +8,8 @@ VideoInfoScreen::VideoInfoScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
     ListButtonCallback = {
         { ui_btnVideoInputCancel, OnClickCancel   , LV_EVENT_CLICKED       },
-        { ui_btnVideoInputOK    , OnClickOK       , LV_EVENT_CLICKED       },
         { ui_btnVideoInputCancel, OnClickCancel   , LV_EVENT_SHORT_CLICKED },
+        { ui_btnVideoInputOK    , OnClickOK       , LV_EVENT_CLICKED       },
         { ui_btnVideoInputOK    , OnClickOK       , LV_EVENT_SHORT_CLICKED },
         { ui_btnVideoEvent      , OnClickInput    , LV_EVENT_SHORT_CLICKED },
         { ui_btnVideoName       , OnClickInput    , LV_EVENT_SHORT_CLICKED },
@@ -32,8 +32,8 @@ VideoInfoScreen::VideoInfoScreen(SCREEN_NAME screen) : BaseScreen(screen)
     };
 
     ListButtonVkCode = {
-        { ui_btnVideoInputCancel, VK_BROWSER_BACK },
-        { ui_btnVideoInputOK    , VK_APPS         },
+        { ui_btnVideoInputCancel, VK_RBUTTON },
+        { ui_btnVideoInputOK    , VK_APPS    },
     };
 }
 

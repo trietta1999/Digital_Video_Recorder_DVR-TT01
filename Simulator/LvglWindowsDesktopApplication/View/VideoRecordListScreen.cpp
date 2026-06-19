@@ -297,7 +297,7 @@ VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(sc
         { ui_barDeleteWaiting, VK_BACK             },
         { ui_btnRLFastRewind , VK_LEFT             },
         { ui_btnRLFastForward, VK_RIGHT            },
-        { ui_btnRLBack       , VK_BROWSER_BACK     },
+        { ui_btnRLBack       , VK_RBUTTON          },
         { dummyVolumeUpKey   , VK_ADD              },
         { dummyVolumeDownKey , VK_SUBTRACT         },
         { dummyVolumeUpKey   , VK_VOLUME_UP        },
@@ -495,7 +495,7 @@ void VideoRecordListScreen::OnClickOperator(lv_event_t* event)
         {
             if ((lv_obj_get_state(ui_btnRLPlay) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
             {
-                obj = ui_btnRLPlay;
+                event->current_target = ui_btnRLPlay;
                 OnClickOperator(event);
             }
         }
@@ -503,7 +503,7 @@ void VideoRecordListScreen::OnClickOperator(lv_event_t* event)
         {
             if ((lv_obj_get_state(ui_btnRLPause) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
             {
-                obj = ui_btnRLPause;
+                event->current_target = ui_btnRLPause;
                 OnClickOperator(event);
             }
         }

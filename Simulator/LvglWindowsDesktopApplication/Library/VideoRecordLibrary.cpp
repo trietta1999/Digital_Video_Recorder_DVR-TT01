@@ -1,4 +1,5 @@
-﻿#include <shlwapi.h>
+﻿#include <thread>
+#include <shlwapi.h>
 #include "CommonData.h"
 #include "CommonLibrary.h"
 #include "VideoInfoData.h"
@@ -6,6 +7,10 @@
 namespace videorecord_lib
 {
     static HWND extHwnd = NULL;
+    static POINT point;
+    static SIZE size;
+    bool isMouseRestrict = false;
+
     static std::wstring listScreenName[] = { REVIEW_SCREENNAME, RECORD_SCREENNAME, RECORD_PROCESSNAME, PLAY_SCREENNAME, DUKTO_SCREENNAME };
 
     static HWND Wait(std::wstring screenName)
@@ -37,11 +42,6 @@ namespace videorecord_lib
         style |= WS_BORDER;
         ::SetWindowLongPtr(extHwnd, GWL_STYLE, style);
 
-        // Block mouse clicking
-        LONG_PTR exStyle = ::GetWindowLongPtr(extHwnd, GWL_EXSTYLE);
-        ::SetWindowLongPtr(extHwnd, GWL_EXSTYLE, exStyle | WS_EX_LAYERED | WS_EX_TRANSPARENT);
-        ::SetLayeredWindowAttributes(extHwnd, 0, 255, LWA_ALPHA);
-
         // Redraw window
 #ifdef _DEBUG
         ::SetWindowPos(extHwnd, HWND_TOP, point.x, point.y, size.cx, size.cy, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
@@ -49,6 +49,78 @@ namespace videorecord_lib
         ::SetWindowPos(extHwnd, HWND_TOPMOST, point.x, point.y, size.cx, size.cy, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
         ::SetWindowLongPtr(extHwnd, GWLP_HWNDPARENT, (LONG_PTR)system_data::WindowHandle.GetValue());
 #endif
+    }
+
+    static void RestrictCursorFromArea(POINT pt, SIZE sz)
+    {
+        POINT mousePos;
+
+        if (!GetCursorPos(&mousePos))
+        {
+            return;
+        }
+
+        // Calculate the boundaries of the forbidden zone
+        int left = pt.x;
+        int top = pt.y;
+        int right = pt.x + sz.cx;
+        int bottom = pt.y + sz.cy;
+
+        // A 10-pixel buffer zone to intercept high-speed cursor skipping
+        int buffer = 10;
+
+        // Check if the cursor is within or approaching the forbidden area boundaries
+        if ((mousePos.x >= left - buffer) && (mousePos.x <= right + buffer) &&
+            (mousePos.y >= top - buffer) && (mousePos.y <= bottom + buffer))
+        {
+            // Get the current screen dimensions
+            int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+            int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+            RECT clipRect;
+
+            // Calculate distances to find which side the cursor is approaching from
+            int distLeft = mousePos.x - left;
+            int distRight = right - mousePos.x;
+            int distTop = mousePos.y - top;
+            int distBottom = bottom - mousePos.y;
+
+            int minDist = distLeft;
+
+            // Default: Lock the cursor within the left half of the screen
+            clipRect = { 0, 0, left - 1, screenHeight };
+
+            // Determine the closest boundary and dynamically split the allowed screen area
+            if (distRight < minDist)
+            {
+                minDist = distRight;
+                // Lock within the right half of the screen
+                clipRect = { right + 1, 0, screenWidth, screenHeight };
+            }
+            if (distTop < minDist)
+            {
+                minDist = distTop;
+                // Lock within the upper half of the screen
+                clipRect = { 0, 0, screenWidth, top - 1 };
+            }
+            if (distBottom < minDist)
+            {
+                minDist = distBottom;
+                // Lock within the lower half of the screen
+                clipRect = { 0, bottom + 1, screenWidth, screenHeight };
+            }
+
+            // Force Windows to confine the cursor using low-level OS boundaries
+            ClipCursor(&clipRect);
+
+            // Micro-adjust cursor position to satisfy the OS input subsystem
+            SetCursorPos(mousePos.x, mousePos.y);
+        }
+        else
+        {
+            // Free the cursor to move across the entire screen when away from the forbidden zone
+            ClipCursor(NULL);
+        }
     }
 
     // @todo: refactor later
@@ -107,18 +179,32 @@ namespace videorecord_lib
         extHwnd = Wait(screenName);
 
         // Get LVGL window review
-        POINT point = { lv_obj_get_x(wnd), lv_obj_get_y(wnd) };
-        SIZE size = { lv_obj_get_width(wnd), lv_obj_get_height(wnd) };
+        point = { lv_obj_get_x(wnd), lv_obj_get_y(wnd) };
+        size = { lv_obj_get_width(wnd), lv_obj_get_height(wnd) };
 
         // Convert to screen coordinates
         ::ClientToScreen(system_data::WindowHandle.GetValue(), &point);
 
         ChangeWindowStyle(screenName.c_str(), point, size);
         SetWindowFocus(system_data::WindowHandle.GetValue());
+
+        isMouseRestrict = true;
+
+#ifdef NDEBUG
+        std::thread([]() {
+            while (isMouseRestrict)
+            {
+                RestrictCursorFromArea(point, size);
+                Sleep(1);
+            }
+            }).detach();
+#endif
     }
 
     void StopExternalWindow()
     {
+        isMouseRestrict = false;
+
         for (const auto& screen : listScreenName)
         {
             auto hwnd = ::FindWindow(NULL, screen.c_str());

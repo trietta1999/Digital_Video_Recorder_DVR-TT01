@@ -268,112 +268,39 @@ namespace keyboard_lib
 
     void HardwareKeyboardProcess(HWND hwnd, int uMsg, int wParam, lv_event_code_t lParam)
     {
-        if ((system_data::CurrentKbScreen.GetValue() != SCREEN_NAME::MIN_KBSCREEN)
-            || (system_data::CurrentScreen.GetValue() == SCREEN_NAME::SCREEN_MAIN)
-            || (system_data::CurrentScreen.GetValue() == SCREEN_NAME::SCREEN_VIDEO_RECORDLIST)
-            )
+        lv_event_t e = { 0 };
+
+        switch (uMsg)
         {
-            lv_event_t e = { 0 };
+        case WM_KB_KEYDOWN:
+            keyboard_lib::CalculateInputChar(wParam, lParam);
+            break;
+        case WM_KEYDOWN:
+        {
+            bool isRepeat = (lParam & (1 << 30)) != 0;
 
-            switch (uMsg)
+            // Match VK code with real button on screen keypad
+            for (const auto& item : listVkCode)
             {
-            case WM_KB_KEYDOWN:
-                keyboard_lib::CalculateInputChar(wParam, lParam);
-                break;
-            case WM_KEYDOWN:
-            {
-                bool isRepeat = (lParam & (1 << 30)) != 0;
-
-                // Match VK code with real button on screen keypad
-                for (const auto& item : listVkCode)
+                if (item.second == wParam)
                 {
-                    if (item.second == wParam)
-                    {
-                        e.current_target = item.first;
-                        break;
-                    }
-                }
-
-                if (!isRepeat)
-                {
-                    // Get current time when key is the first pressing
-                    keydownTime = ::GetTickCount64();
-                    keydownTimeRepeat = ::GetTickCount64();
-                }
-                else
-                {
-                    // Repeat timeout -> Repeat send event long press
-                    if ((keydownTimeRepeat != 0) && (::GetTickCount64() - keydownTimeRepeat >= TIMECYCLE_100MS))
-                    {
-                        // Match VK code with real button on screen keypad
-                        for (const auto& item : listVkCode)
-                        {
-                            if (item.second == wParam)
-                            {
-                                e.current_target = item.first;
-                                break;
-                            }
-                        }
-
-                        e.code = LV_EVENT_LONG_PRESSED_REPEAT;
-                        ScreenMapping::GetInstance().SetEvent(e);
-
-                        keydownTimeRepeat = ::GetTickCount64();
-                    }
-
-                    // Send event long press
-                    if (!isLongPress)
-                    {
-                        isLongPress = true;
-                        e.code = LV_EVENT_LONG_PRESSED;
-                        ScreenMapping::GetInstance().SetEvent(e);
-                    }
+                    e.current_target = item.first;
+                    break;
                 }
             }
-            break;
-            case WM_KEYUP:
+
+            if (!isRepeat)
             {
-                keydownTimeRepeat = 0;
-                auto isShiftPressed = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
-
-                // Key down timeout
-                if (::GetTickCount64() - keydownTime <= TIMECYCLE_500MS)
+                // Get current time when key is the first pressing
+                keydownTime = ::GetTickCount64();
+                keydownTimeRepeat = ::GetTickCount64();
+            }
+            else
+            {
+                // Repeat timeout -> Repeat send event long press
+                if ((keydownTimeRepeat != 0) && (::GetTickCount64() - keydownTimeRepeat >= TIMECYCLE_100MS))
                 {
-                    if ((common_lib::CheckInRangeNumber(wParam, VK_KEY0 - 1, VK_KEY9 + 1) && !isShiftPressed) // Number key
-                        || common_lib::CheckInRangeNumber(wParam, VK_KEYA - 1, VK_KEYZ + 1) // Char key
-                        )
-                    {
-                        int* keyCode = new int(wParam);
-                        wParam = VK_CHAR;
-
-                        e.param = (void*)keyCode; // Set char keycode to event param
-                    }
-                    else if (wParam == VK_CAPITAL)
-                    {
-                        bool* capsState = new bool(GetKeyboardCapsState());
-                        e.param = (void*)capsState; // Set capslock state to event param
-                    }
-                    // Special key
-                    else
-                    {
-                        // Match VK code to char
-                        for (const auto& item : listSpecialChar)
-                        {
-                            if (item.first.second == wParam)
-                            {
-                                if ((isShiftPressed && (item.first.first == VK_SHIFT))
-                                    || (!isShiftPressed && (item.first.first == 0)))
-                                {
-                                    int* keycode = new int(item.second);
-                                    wParam = VK_CHAR;
-                                    e.param = (void*)keycode; // Set char keycode to event param
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    // Match VK code with real button on screen keypad
+                    // Match VK code with real button
                     for (const auto& item : listVkCode)
                     {
                         if (item.second == wParam)
@@ -383,19 +310,100 @@ namespace keyboard_lib
                         }
                     }
 
+                    e.code = LV_EVENT_LONG_PRESSED_REPEAT;
+                    ScreenMapping::GetInstance().SetEvent(e);
+
+                    keydownTimeRepeat = ::GetTickCount64();
+                }
+
+                // Send event long press
+                if (!isLongPress)
+                {
+                    isLongPress = true;
+                    e.code = LV_EVENT_LONG_PRESSED;
+                    ScreenMapping::GetInstance().SetEvent(e);
+                }
+            }
+        }
+        break;
+        case WM_KEYUP:
+        {
+            keydownTimeRepeat = 0;
+            auto isShiftPressed = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+
+            // Key down timeout
+            if (::GetTickCount64() - keydownTime <= TIMECYCLE_500MS)
+            {
+                if ((common_lib::CheckInRangeNumber(wParam, VK_KEY0 - 1, VK_KEY9 + 1) && !isShiftPressed) // Number key
+                    || common_lib::CheckInRangeNumber(wParam, VK_KEYA - 1, VK_KEYZ + 1) // Char key
+                    )
+                {
+                    int* keyCode = new int(wParam);
+                    wParam = VK_CHAR;
+
+                    e.param = (void*)keyCode; // Set char keycode to event param
+                }
+                else if (wParam == VK_CAPITAL)
+                {
+                    bool* capsState = new bool(GetKeyboardCapsState());
+                    e.param = (void*)capsState; // Set capslock state to event param
+                }
+                // Special key
+                else
+                {
+                    // Match VK code to char
+                    for (const auto& item : listSpecialChar)
+                    {
+                        if (item.first.second == wParam)
+                        {
+                            if ((isShiftPressed && (item.first.first == VK_SHIFT))
+                                || (!isShiftPressed && (item.first.first == 0)))
+                            {
+                                int* keycode = new int(item.second);
+                                wParam = VK_CHAR;
+                                e.param = (void*)keycode; // Set char keycode to event param
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Match VK code with real button
+                for (const auto& item : listVkCode)
+                {
+                    if (item.second == wParam)
+                    {
+                        e.current_target = item.first;
+                        break;
+                    }
+                }
+
+                e.code = LV_EVENT_SHORT_CLICKED;
+                ScreenMapping::GetInstance().SetEvent(e);
+
+                ::SetTimer(hwnd, TID_KEYDOWN, GetAutoConfirmTimeMs(), AutoConfirmKey);
+            }
+
+            isLongPress = false;
+        }
+        break;
+        case WM_RBUTTONUP:
+        {
+            for (const auto& item : listVkCode)
+            {
+                if (item.second == VK_RBUTTON)
+                {
+                    e.current_target = item.first;
                     e.code = LV_EVENT_SHORT_CLICKED;
                     ScreenMapping::GetInstance().SetEvent(e);
 
-                    ::SetTimer(hwnd, TID_KEYDOWN, GetAutoConfirmTimeMs(), AutoConfirmKey);
+                    break;
                 }
-
-                isLongPress = false;
             }
+        }
+        break;
+        default:
             break;
-
-            default:
-                break;
-            }
         }
     }
 

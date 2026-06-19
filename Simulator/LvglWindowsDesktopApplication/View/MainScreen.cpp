@@ -271,7 +271,7 @@ void MainScreen::OnClickOperator(lv_event_t* event)
         {
             if ((lv_obj_get_state(ui_btnPlay) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
             {
-                obj = ui_btnPlay;
+                event->current_target = ui_btnPlay;
                 OnClickOperator(event);
             }
         }
@@ -279,7 +279,7 @@ void MainScreen::OnClickOperator(lv_event_t* event)
         {
             if ((lv_obj_get_state(ui_btnPause) & LV_STATE_DISABLED) != LV_STATE_DISABLED)
             {
-                obj = ui_btnPause;
+                event->current_target = ui_btnPause;
                 OnClickOperator(event);
             }
         }
