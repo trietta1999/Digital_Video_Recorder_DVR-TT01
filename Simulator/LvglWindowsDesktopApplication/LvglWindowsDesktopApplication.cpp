@@ -82,6 +82,40 @@ static void DebugConsoleProcess()
                 temp_data::VideoDesc.SetValue("Test desc");
                 temp_data::VideoAuthor.SetValue("Test author");
             }
+            else if (inputParams.at(0) == "appkey")
+            {
+                int key = 0;
+
+                ::Sleep(TIMECYCLE_10MS);
+                ::SetForegroundWindow(system_data::WindowHandle.GetValue());
+                ::SetFocus(system_data::WindowHandle.GetValue());
+
+                if (inputParams.at(1) == "home")
+                {
+                    key = VK_BROWSER_HOME;
+                }
+                else if (inputParams.at(1) == "tab")
+                {
+                    key = VK_TAB;
+                }
+                else if (inputParams.at(1) == "mail")
+                {
+                    key = VK_LAUNCH_MAIL;
+                }
+                else if (inputParams.at(1) == "calc")
+                {
+                    key = VK_LAUNCH_APP2;
+                }
+
+                KBDLLHOOKSTRUCT lParam = {
+                    key,
+                    ::MapVirtualKey(key, MAPVK_VK_TO_VSC),
+                    0, 0, 0
+                };
+
+                keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYDOWN, (LPARAM)&lParam);
+                keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYUP, (LPARAM)&lParam);
+            }
 
             debug_println("Process debug data done!");
         }
@@ -102,18 +136,53 @@ static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
     switch (uMsg)
     {
-    case WM_DEVICECHANGE:
+    case WM_APPCOMMAND:
     {
-        storage_lib::CollectExternalDrivesList();
-        system_data::DeviceChange.SetValue(true);
+        int cmd = GET_APPCOMMAND_LPARAM(lParam);
+        int key = 0;
+
+        switch (cmd)
+        {
+        case APPCOMMAND_BROWSER_HOME:
+            key = VK_BROWSER_HOME;
+            break;
+        case APPCOMMAND_LAUNCH_MAIL:
+            key = VK_LAUNCH_MAIL;
+            break;
+        case APPCOMMAND_LAUNCH_APP2:
+            key = VK_LAUNCH_APP2;
+            break;
+        default:
+            break;
+        }
+
+        KBDLLHOOKSTRUCT lParam = {
+            key,
+            ::MapVirtualKey(key, MAPVK_VK_TO_VSC),
+            0, 0, 0
+        };
+
+        keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYDOWN, (LPARAM)&lParam);
+        keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYUP, (LPARAM)&lParam);
     }
     break;
+    case WM_DEVICECHANGE:
+        storage_lib::CollectExternalDrivesList();
+        system_data::DeviceChange.SetValue(true);
+        break;
     case WM_DEVICECHANGE_DONE:
         system_data::DeviceChange.SetValue(false);
+        break;
+    case WM_HOOK_NUMPAD_START:
+        keyboard_lib::SetupHookInternalNumpad();
+        break;
+    case WM_HOOK_NUMPAD_STOP:
+        keyboard_lib::StopHookInternalNumpad();
         break;
     case WM_QUIT:
     case WM_DESTROY:
     case WM_NCDESTROY:
+        keyboard_lib::StopHookInternalNumpad();
         videorecord_lib::KillAllProcess();
         ::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)OriginalWndProc);
         break;
@@ -227,6 +296,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     InitService();
 
     soundvolume_lib::CreateSoundVolumeWindow();
+
+    ::SendMessage(system_data::WindowHandle.GetValue(), WM_HOOK_NUMPAD_START, 0, 0);
 
     // Change to main screen
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);

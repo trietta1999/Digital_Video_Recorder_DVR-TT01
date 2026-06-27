@@ -18,6 +18,9 @@ namespace keyboard_lib
     void SetListVkCode(const std::vector<std::pair<lv_obj_t*, int>>& list);
     void CALLBACK AutoConfirmKey(HWND hwnd, UINT uMsg, UINT_PTR timerId, DWORD dwTime);
     void HardwareKeyboardProcess(HWND hwnd, int uMsg, int wParam, lv_event_code_t lParam);
+    LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
+    void SetupHookInternalNumpad();
+    void StopHookInternalNumpad();
     void ResetAll();
 }
 

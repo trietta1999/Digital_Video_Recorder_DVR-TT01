@@ -22,10 +22,7 @@ namespace systemsetting_lib
 
     void SetupSystemData()
     {
-        temp_data::DuktoIP.SetValue(network_lib::CalculateIPStrFromCombinedNum(
-            setting_data::DuktoIPPart12.GetValue(),
-            setting_data::DuktoIPPart34.GetValue()
-        ));
+
     }
 
     void SetupSetting()
@@ -37,6 +34,11 @@ namespace systemsetting_lib
             info.tempData->SetValue(value);
             info.configValue = value;
         }
+
+        temp_data::DuktoIP.SetValue(network_lib::CalculateIPStrFromCombinedNum(
+            setting_data::DuktoIPPart12.GetValue(),
+            setting_data::DuktoIPPart34.GetValue()
+        ));
     }
 
     void SetupTempSetting()

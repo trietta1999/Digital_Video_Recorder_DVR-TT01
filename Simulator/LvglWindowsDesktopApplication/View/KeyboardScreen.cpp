@@ -69,6 +69,7 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_btnKeyboardCancel      , OnClickCancel       , LV_EVENT_CLICKED             },
         { ui_btnKeyboardOK          , OnClickOK           , LV_EVENT_CLICKED             },
         { ui_btnKeyboardKeyCaps     , OnClickKey          , LV_EVENT_CLICKED             },
+        { ui_btnKeyboardKeyCaps     , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
         { ui_btnKeyboardKey0        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
         { ui_btnKeyboardKey1        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
         { ui_btnKeyboardKey2        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },

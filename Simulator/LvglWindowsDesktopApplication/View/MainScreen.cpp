@@ -67,10 +67,13 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
 
     ListButtonCallback = {
         { ui_btnNewVideo       , OnClickNew                                                       , LV_EVENT_CLICKED       },
+        { ui_btnNewVideo       , OnClickNew                                                       , LV_EVENT_SHORT_CLICKED },
         { ui_btnCloseVideo     , OnClickClose                                                     , LV_EVENT_CLICKED       },
+        { ui_btnCloseVideo     , OnClickClose                                                     , LV_EVENT_SHORT_CLICKED },
         { ui_btnVideoRecordList, OnClickVideoRecordList                                           , LV_EVENT_CLICKED       },
         { ui_btnVideoRecordList, OnClickVideoRecordList                                           , LV_EVENT_SHORT_CLICKED },
         { ui_btnSystemSetting  , OnClickSystemSetting                                             , LV_EVENT_CLICKED       },
+        { ui_btnSystemSetting  , OnClickSystemSetting                                             , LV_EVENT_SHORT_CLICKED },
         { ui_btnRec            , OnClickOperator                                                  , LV_EVENT_CLICKED       },
         { ui_btnPlay           , OnClickOperator                                                  , LV_EVENT_CLICKED       },
         { ui_btnPause          , OnClickOperator                                                  , LV_EVENT_CLICKED       },
@@ -99,13 +102,15 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
 
     ListButtonVkCode = {
         { ui_btnSound          , VK_VOLUME_MUTE },
-        { ui_btnVideoRecordList, VK_APPS        },
         { ui_btnFastForward    , VK_RIGHT       },
         { ui_btnRLFastRewind   , VK_LEFT        },
+        { ui_btnNewVideo       , VK_F1          },
+        { ui_btnCloseVideo     , VK_F2          },
+        { ui_btnVideoRecordList, VK_F3          },
+        { ui_btnVideoRecordList, VK_APPS        },
+        { ui_btnSystemSetting  , VK_F4          },
         { dummyVolumeUpKey     , VK_VOLUME_UP   },
         { dummyVolumeDownKey   , VK_VOLUME_DOWN },
-        { dummyVolumeUpKey     , VK_ADD         },
-        { dummyVolumeDownKey   , VK_SUBTRACT    },
     };
 
     lv_obj_update_layout(ui_wndReview); // Forcing component recalculation after screen changes

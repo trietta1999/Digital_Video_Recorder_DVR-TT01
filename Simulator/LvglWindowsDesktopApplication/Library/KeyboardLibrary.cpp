@@ -4,11 +4,18 @@
 
 namespace keyboard_lib
 {
-    typedef struct
+    struct TextType_t
     {
         char lower;
         char upper;
-    } TextType_t;
+    };
+
+    struct NumpadKeyExchange_t
+    {
+        int keyOrg;
+        int keyExchange;
+        SCREEN_NAME screenName;
+    };
 
     static std::vector<std::pair<int, char>> listNumber = {
         { VK_NUMPAD0, '0' },
@@ -72,6 +79,34 @@ namespace keyboard_lib
         { { VK_SHIFT, '0'           }, ')' },
     };
 
+    static std::vector<NumpadKeyExchange_t> listNumpadKeyExchange = {
+        { VK_NUMPAD1, VK_NUMPAD9, SCREEN_NAME::MAX_KBSCREEN },
+        { VK_NUMPAD2, VK_NUMPAD6, SCREEN_NAME::MAX_KBSCREEN },
+        { VK_NUMPAD3, VK_NUMPAD3, SCREEN_NAME::MAX_KBSCREEN },
+        { VK_NUMPAD4, VK_NUMPAD8, SCREEN_NAME::MAX_KBSCREEN },
+        { VK_NUMPAD5, VK_NUMPAD5, SCREEN_NAME::MAX_KBSCREEN },
+        { VK_NUMPAD6, VK_NUMPAD2, SCREEN_NAME::MAX_KBSCREEN },
+        { VK_NUMPAD7, VK_NUMPAD7, SCREEN_NAME::MAX_KBSCREEN },
+        { VK_NUMPAD8, VK_NUMPAD4, SCREEN_NAME::MAX_KBSCREEN },
+        { VK_NUMPAD9, VK_NUMPAD1, SCREEN_NAME::MAX_KBSCREEN },
+
+        { VK_NUMPAD0, VK_NUMPAD0, SCREEN_NAME::MAX_KBSCREEN },
+        { VK_SPACE  , VK_SPACE  , SCREEN_NAME::MAX_KBSCREEN },
+        { VK_DECIMAL, VK_CAPITAL, SCREEN_NAME::MAX_KBSCREEN }, // .
+
+        { VK_DIVIDE  , VK_CANCEL, SCREEN_NAME::MAX_SCREEN   }, // /
+        { VK_MULTIPLY, VK_ACCEPT, SCREEN_NAME::MAX_SCREEN   }, // *
+        { VK_BACK    , VK_BACK  , SCREEN_NAME::MAX_KBSCREEN },
+
+        { VK_ADD     , VK_VOLUME_UP  , SCREEN_NAME::MAX_SCREEN }, // +
+        { VK_SUBTRACT, VK_VOLUME_DOWN, SCREEN_NAME::MAX_SCREEN }, // -
+
+        { VK_BROWSER_HOME, VK_F1, SCREEN_NAME::MAX_SCREEN },
+        { VK_TAB         , VK_F2, SCREEN_NAME::MAX_SCREEN },
+        { VK_LAUNCH_MAIL , VK_F3, SCREEN_NAME::MAX_SCREEN },
+        { VK_LAUNCH_APP2 , VK_F4, SCREEN_NAME::MAX_SCREEN },
+    };
+
     static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
 
     static std::string buff = "";
@@ -80,6 +115,7 @@ namespace keyboard_lib
     static bool isLongPress = false;
     static unsigned long long keydownTime = 0;
     static unsigned long long keydownTimeRepeat = 0;
+    static HHOOK keyboardHook = NULL;
 
     void SendKeyMessage(int keycode, lv_event_code_t event)
     {
@@ -210,8 +246,8 @@ namespace keyboard_lib
 
     bool GetKeyboardCapsState()
     {
-        auto isShiftPressed = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
-        auto isCapsLockOn = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
+        auto isShiftPressed = (::GetKeyState(VK_SHIFT) & 0x8000) != 0;
+        auto isCapsLockOn = (::GetKeyState(VK_CAPITAL) & 0x0001) != 0;
         auto state = isCapsLockOn ^ isShiftPressed;
 
         return state;
@@ -244,7 +280,7 @@ namespace keyboard_lib
 
     void CALLBACK AutoConfirmKey(HWND hwnd, UINT uMsg, UINT_PTR timerId, DWORD dwTime)
     {
-        KillTimer(hwnd, TID_KEYDOWN);
+        ::KillTimer(hwnd, TID_KEYDOWN);
 
         if ((system_data::CurrentKbScreen.GetValue() != SCREEN_NAME::MIN_KBSCREEN)
             && (setting_data::KeyboardType.GetValue() != (short)dropdownlist_lib::DD_KEYBOARD_TYPE_e::Standard_keyboard))
@@ -276,6 +312,7 @@ namespace keyboard_lib
             keyboard_lib::CalculateInputChar(wParam, lParam);
             break;
         case WM_KEYDOWN:
+        case WM_SYSKEYDOWN:
         {
             bool isRepeat = (lParam & (1 << 30)) != 0;
 
@@ -327,9 +364,10 @@ namespace keyboard_lib
         }
         break;
         case WM_KEYUP:
+        case WM_SYSKEYUP:
         {
             keydownTimeRepeat = 0;
-            auto isShiftPressed = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+            auto isShiftPressed = (::GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
 
             // Key down timeout
             if (::GetTickCount64() - keydownTime <= TIMECYCLE_500MS)
@@ -405,6 +443,76 @@ namespace keyboard_lib
         default:
             break;
         }
+    }
+
+    LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
+    {
+        if (nCode == HC_ACTION)
+        {
+            KBDLLHOOKSTRUCT* p = (KBDLLHOOKSTRUCT*)lParam;
+            int targetKey = 0;
+
+            if (p->flags & LLKHF_INJECTED)
+            {
+                return ::CallNextHookEx(keyboardHook, nCode, wParam, lParam);
+            }
+
+            for (const auto& keyInfo : listNumpadKeyExchange)
+            {
+                if (p->vkCode == keyInfo.keyOrg)
+                {
+                    if (((keyInfo.screenName == SCREEN_NAME::MAX_KBSCREEN)
+                        && (setting_data::KeyboardType.GetValue() == (short)dropdownlist_lib::DD_KEYBOARD_TYPE_e::Internal_numpad))
+                        || (keyInfo.screenName == SCREEN_NAME::MAX_SCREEN)
+                        )
+                    {
+                        targetKey = keyInfo.keyExchange;
+                    }
+
+                    break;
+                }
+            }
+
+            if (targetKey)
+            {
+                if ((wParam == WM_KEYDOWN) || (wParam == WM_SYSKEYDOWN))
+                {
+                    INPUT inputDown = {};
+                    inputDown.type = INPUT_KEYBOARD;
+                    inputDown.ki.wVk = targetKey;
+
+                    ::SendInput(1, &inputDown, sizeof(INPUT));
+                }
+                else if ((wParam == WM_KEYUP) || (wParam == WM_SYSKEYUP))
+                {
+                    INPUT inputUp = {};
+                    inputUp.type = INPUT_KEYBOARD;
+                    inputUp.ki.wVk = targetKey;
+                    inputUp.ki.dwFlags = KEYEVENTF_KEYUP;
+
+                    ::SendInput(1, &inputUp, sizeof(INPUT));
+                }
+
+                return 1;
+            }
+        }
+
+        return ::CallNextHookEx(keyboardHook, nCode, wParam, lParam);
+    }
+
+    void SetupHookInternalNumpad()
+    {
+        keyboardHook = ::SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, ::GetModuleHandle(NULL), 0);
+
+        if (!keyboardHook)
+        {
+            return;
+        }
+    }
+
+    void StopHookInternalNumpad()
+    {
+        ::UnhookWindowsHookEx(keyboardHook);
     }
 
     void ResetAll()

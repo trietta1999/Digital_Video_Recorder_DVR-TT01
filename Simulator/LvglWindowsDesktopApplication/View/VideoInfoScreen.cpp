@@ -34,6 +34,8 @@ VideoInfoScreen::VideoInfoScreen(SCREEN_NAME screen) : BaseScreen(screen)
     ListButtonVkCode = {
         { ui_btnVideoInputCancel, VK_RBUTTON },
         { ui_btnVideoInputOK    , VK_APPS    },
+        { ui_btnVideoInputCancel, VK_CANCEL  },
+        { ui_btnVideoInputOK    , VK_ACCEPT  },
     };
 }
 

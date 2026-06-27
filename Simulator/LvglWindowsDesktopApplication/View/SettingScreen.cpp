@@ -121,6 +121,8 @@ SettingScreen::SettingScreen(SCREEN_NAME screen) : BaseScreen(screen)
     ListButtonVkCode = {
         { ui_btnSettingCancel, VK_RBUTTON },
         { ui_btnSettingSave  , VK_APPS    },
+        { ui_btnSettingCancel, VK_CANCEL  },
+        { ui_btnSettingSave  , VK_ACCEPT  },
     };
 }
 
@@ -202,6 +204,7 @@ void SettingScreen::OnClickCancel(lv_event_t* event)
 void SettingScreen::OnClickSave(lv_event_t* event)
 {
     systemsetting_lib::SaveSetting();
+    systemsetting_lib::SetupSystemData();
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);
 }
 
