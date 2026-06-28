@@ -158,7 +158,7 @@ namespace keyboard_lib
                     auto key = (int*)ScreenMapping::GetInstance().GetEvent().param; // Get char keycode from event param
                     inputChar = *key; // Default upper case or number
 
-                    if (common_lib::CheckInRangeNumber(inputChar, VK_KEYA - 1, VK_KEYZ + 1)) // Char key
+                    if (common_lib::CheckInRangeNumberEqual(inputChar, VK_KEYA, VK_KEYZ)) // Char key
                     {
                         if (!GetKeyboardCapsState())
                         {
@@ -372,8 +372,8 @@ namespace keyboard_lib
             // Key down timeout
             if (::GetTickCount64() - keydownTime <= TIMECYCLE_500MS)
             {
-                if ((common_lib::CheckInRangeNumber(wParam, VK_KEY0 - 1, VK_KEY9 + 1) && !isShiftPressed) // Number key
-                    || common_lib::CheckInRangeNumber(wParam, VK_KEYA - 1, VK_KEYZ + 1) // Char key
+                if ((common_lib::CheckInRangeNumberEqual(wParam, VK_KEY0, VK_KEY9) && !isShiftPressed) // Number key
+                    || common_lib::CheckInRangeNumberEqual(wParam, VK_KEYA, VK_KEYZ) // Char key
                     )
                 {
                     int* keyCode = new int(wParam);

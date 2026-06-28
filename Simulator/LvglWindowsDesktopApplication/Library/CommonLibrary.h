@@ -260,7 +260,8 @@ namespace storage_lib
 
 namespace common_lib
 {
-    bool CheckInRangeNumber(int check, int min, int max);
+    bool CheckInRangeNumber(long long check, long long min, long long max);
+    bool CheckInRangeNumberEqual(long long check, long long min, long long max);
     std::string JoinString(std::string delimeter, const std::vector<std::string>& list);
     std::vector<std::string> SplitString(char delimiter, std::string input);
     std::string TrimString(std::string input);

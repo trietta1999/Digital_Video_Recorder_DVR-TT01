@@ -5,13 +5,13 @@
 #include "ScreenMapping.h"
 #include "KeyboardScreen.h"
 
-typedef struct
+struct KbInfo_t
 {
     std::string title;
     CData<std::string>* data;
-} KbInfo;
+};
 
-static std::unordered_map<SCREEN_NAME, KbInfo> mapKbInit = {};
+static std::unordered_map<SCREEN_NAME, KbInfo_t> mapKbInit = {};
 static lv_timer_t* timerUpdateInput = nullptr;
 static lv_obj_t* dummyConfirmKey = nullptr;
 static lv_obj_t* dummyOkKey = nullptr;
@@ -70,6 +70,7 @@ KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_btnKeyboardOK          , OnClickOK           , LV_EVENT_CLICKED             },
         { ui_btnKeyboardKeyCaps     , OnClickKey          , LV_EVENT_CLICKED             },
         { ui_btnKeyboardKeyCaps     , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
+        { ui_btnKeyboardKeyCaps     , OnClickKey          , LV_EVENT_LONG_PRESSED_REPEAT },
         { ui_btnKeyboardKey0        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
         { ui_btnKeyboardKey1        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
         { ui_btnKeyboardKey2        , OnClickKey          , LV_EVENT_SHORT_CLICKED       },
@@ -277,16 +278,30 @@ void KeyboardScreen::OnClickKey(lv_event_t* event)
     }
     else if (obj == ui_btnKeyboardKeyCaps)
     {
-        // Toggle key
-        if ((lv_obj_get_state(ui_btnKeyboardKeyCaps) & LV_STATE_CHECKED) == LV_STATE_CHECKED)
+        if (event->code == LV_EVENT_CLICKED)
         {
-            lv_obj_remove_state(obj, LV_STATE_CHECKED);
-            keyboard_lib::SetKeyboardKeyState(VK_CAPITAL, false);
+            // Toggle key
+            if ((lv_obj_get_state(ui_btnKeyboardKeyCaps) & LV_STATE_CHECKED) == LV_STATE_CHECKED)
+            {
+                lv_obj_remove_state(obj, LV_STATE_CHECKED);
+                keyboard_lib::SetKeyboardKeyState(VK_CAPITAL, false);
+            }
+            else
+            {
+                lv_obj_add_state(obj, LV_STATE_CHECKED);
+                keyboard_lib::SetKeyboardKeyState(VK_CAPITAL, true);
+            }
         }
-        else
+        else /*if (event->code == LV_EVENT_SHORT_CLICKED)*/
         {
-            lv_obj_add_state(obj, LV_STATE_CHECKED);
-            keyboard_lib::SetKeyboardKeyState(VK_CAPITAL, true);
+            if (keyboard_lib::GetKeyboardCapsState())
+            {
+                lv_obj_add_state(ui_btnKeyboardKeyCaps, LV_STATE_CHECKED);
+            }
+            else
+            {
+                lv_obj_remove_state(ui_btnKeyboardKeyCaps, LV_STATE_CHECKED);
+            }
         }
     }
     else if (obj == dummySpaceKey)

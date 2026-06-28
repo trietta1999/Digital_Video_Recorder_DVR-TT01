@@ -132,7 +132,7 @@ namespace network_lib
                 // Release the network list memory of this interface
                 if (pBssList != NULL)
                 {
-                    WlanFreeMemory(pBssList);
+                    ::WlanFreeMemory(pBssList);
                 }
             }
         }
@@ -156,10 +156,10 @@ namespace network_lib
         }
 
         ULONG tableSize = 0;
-        GetIpAddrTable(NULL, &tableSize, FALSE);
+        ::GetIpAddrTable(NULL, &tableSize, FALSE);
 
         PMIB_IPADDRTABLE pIPAddrTable = (PMIB_IPADDRTABLE)malloc(tableSize);
-        if (GetIpAddrTable(pIPAddrTable, &tableSize, FALSE) != NO_ERROR)
+        if (::GetIpAddrTable(pIPAddrTable, &tableSize, FALSE) != NO_ERROR)
         {
             free(pIPAddrTable);
             return info;
@@ -172,7 +172,7 @@ namespace network_lib
                 MIB_IFROW ifRow = {};
                 ifRow.dwIndex = pIPAddrTable->table[i].dwIndex;
 
-                if (GetIfEntry(&ifRow) == NO_ERROR)
+                if (::GetIfEntry(&ifRow) == NO_ERROR)
                 {
                     std::string currentName((char*)ifRow.bDescr);
 
@@ -199,12 +199,12 @@ namespace network_lib
 
                         // Query Route Table for Gateway
                         ULONG routeSize = 0;
-                        GetIpForwardTable(NULL, &routeSize, FALSE);
+                        ::GetIpForwardTable(NULL, &routeSize, FALSE);
                         PMIB_IPFORWARDTABLE pRouteTable = (PMIB_IPFORWARDTABLE)malloc(routeSize);
 
                         if (pRouteTable)
                         {
-                            if (GetIpForwardTable(pRouteTable, &routeSize, FALSE) == NO_ERROR)
+                            if (::GetIpForwardTable(pRouteTable, &routeSize, FALSE) == NO_ERROR)
                             {
                                 for (DWORD j = 0; j < pRouteTable->dwNumEntries; j++)
                                 {
@@ -215,7 +215,7 @@ namespace network_lib
                                         struct in_addr gwAddr = {};
                                         gwAddr.S_un.S_addr = pRouteTable->table[j].dwForwardNextHop;
 
-                                        if (inet_ntop(AF_INET, &gwAddr, gwBuffer, sizeof(gwBuffer)) != nullptr) {
+                                        if (::inet_ntop(AF_INET, &gwAddr, gwBuffer, sizeof(gwBuffer)) != nullptr) {
                                             info.gateway = gwBuffer;
                                         }
 

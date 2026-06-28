@@ -854,6 +854,7 @@ void VideoRecordListScreen::UpdateVideoInfoList()
 
         auto listVideoInfo = recordlist_lib::GetVideoInfoListData(); // Get video info from data
         auto searchKey = input_data::VideoSearch.GetValue();
+        auto searchType = input_data::VideoSearchType.GetValue();
         totalRowHeight = 0;
 
         // Clear template item
@@ -867,7 +868,7 @@ void VideoRecordListScreen::UpdateVideoInfoList()
             std::erase_if(listVideoInfo, [&](const videoinfo_lib::videoinfo_t& item) {
                 // StrStrI returns nullptr if search key is NOT found
                 // Return true (to delete) when StrStrIA == nullptr
-                return (::StrStrI(common_lib::ConvertStringToWString(GetFilterValue(item, input_data::VideoSearchType.GetValue())).c_str(), common_lib::ConvertStringToWString(searchKey).c_str()) == nullptr);
+                return (::StrStrI(common_lib::ConvertStringToWString(GetFilterValue(item, searchType)).c_str(), common_lib::ConvertStringToWString(searchKey).c_str()) == nullptr);
                 });
         }
 
@@ -881,7 +882,7 @@ void VideoRecordListScreen::UpdateVideoInfoList()
                 videoInfo.datetime.wDay, videoInfo.datetime.wMonth, videoInfo.datetime.wYear,
                 videoInfo.datetime.wHour, videoInfo.datetime.wMinute, videoInfo.datetime.wSecond); // @todo: wait setting
 
-            rowInfo.CreateData(datetime, videoInfo.videoName, videoInfo.videoID);
+            rowInfo.CreateData(datetime, GetFilterValue(videoInfo, searchType), videoInfo.videoID);
 
             // Find if the latest transfer state is exist
             auto find = std::find_if(listTransferState.begin(), listTransferState.end(),

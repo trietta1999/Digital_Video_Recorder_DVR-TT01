@@ -55,9 +55,14 @@ namespace config_lib
 
 namespace common_lib
 {
-    bool CheckInRangeNumber(int check, int min, int max)
+    bool CheckInRangeNumber(long long check, long long min, long long max)
     {
         return ((check > min) && (check < max));
+    }
+
+    bool CheckInRangeNumberEqual(long long check, long long min, long long max)
+    {
+        return ((check >= min) && (check <= max));
     }
 
     std::string JoinString(std::string delimeter, const std::vector<std::string>& list)

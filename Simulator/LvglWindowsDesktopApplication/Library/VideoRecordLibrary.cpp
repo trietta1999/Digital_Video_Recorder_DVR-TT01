@@ -55,7 +55,7 @@ namespace videorecord_lib
     {
         POINT mousePos;
 
-        if (!GetCursorPos(&mousePos))
+        if (!::GetCursorPos(&mousePos))
         {
             return;
         }
@@ -70,12 +70,13 @@ namespace videorecord_lib
         int buffer = 10;
 
         // Check if the cursor is within or approaching the forbidden area boundaries
-        if ((mousePos.x >= left - buffer) && (mousePos.x <= right + buffer) &&
-            (mousePos.y >= top - buffer) && (mousePos.y <= bottom + buffer))
+        if (common_lib::CheckInRangeNumberEqual(mousePos.x, left - buffer, right + buffer)
+            && common_lib::CheckInRangeNumberEqual(mousePos.y, top - buffer, bottom + buffer)
+            )
         {
             // Get the current screen dimensions
-            int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-            int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+            int screenWidth = ::GetSystemMetrics(SM_CXSCREEN);
+            int screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
 
             RECT clipRect;
 
@@ -111,15 +112,15 @@ namespace videorecord_lib
             }
 
             // Force Windows to confine the cursor using low-level OS boundaries
-            ClipCursor(&clipRect);
+            ::ClipCursor(&clipRect);
 
             // Micro-adjust cursor position to satisfy the OS input subsystem
-            SetCursorPos(mousePos.x, mousePos.y);
+            ::SetCursorPos(mousePos.x, mousePos.y);
         }
         else
         {
             // Free the cursor to move across the entire screen when away from the forbidden zone
-            ClipCursor(NULL);
+            ::ClipCursor(NULL);
         }
     }
 
@@ -195,7 +196,7 @@ namespace videorecord_lib
             while (isMouseRestrict)
             {
                 RestrictCursorFromArea(point, size);
-                Sleep(1);
+                ::Sleep(TIMECYCLE_10MS);
             }
             }).detach();
 #endif
@@ -222,8 +223,8 @@ namespace videorecord_lib
                     BYTE vkey = LOBYTE(VkKeyScan('Q'));
                     BYTE scanCode = (BYTE)MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
 
-                    keybd_event(vkey, scanCode, 0, 0);
-                    keybd_event(vkey, scanCode, KEYEVENTF_KEYUP, 0);
+                    ::keybd_event(vkey, scanCode, 0, 0);
+                    ::keybd_event(vkey, scanCode, KEYEVENTF_KEYUP, 0);
 
                     SetWindowFocus(system_data::WindowHandle.GetValue());
                 }
@@ -237,13 +238,13 @@ namespace videorecord_lib
 
         if (rewind)
         {
-            keybd_event(VK_LEFT, 0, KEYEVENTF_EXTENDEDKEY, 0);
-            keybd_event(VK_LEFT, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+            ::keybd_event(VK_LEFT, 0, KEYEVENTF_EXTENDEDKEY, 0);
+            ::keybd_event(VK_LEFT, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
         }
         else if (forward)
         {
-            keybd_event(VK_RIGHT, 0, KEYEVENTF_EXTENDEDKEY, 0);
-            keybd_event(VK_RIGHT, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+            ::keybd_event(VK_RIGHT, 0, KEYEVENTF_EXTENDEDKEY, 0);
+            ::keybd_event(VK_RIGHT, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
         }
 
         SetWindowFocus(system_data::WindowHandle.GetValue());
@@ -256,8 +257,8 @@ namespace videorecord_lib
         BYTE vkey = LOBYTE(VkKeyScan('P'));
         BYTE scanCode = (BYTE)MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
 
-        keybd_event(vkey, scanCode, 0, 0);
-        keybd_event(vkey, scanCode, KEYEVENTF_KEYUP, 0);
+        ::keybd_event(vkey, scanCode, 0, 0);
+        ::keybd_event(vkey, scanCode, KEYEVENTF_KEYUP, 0);
 
         SetWindowFocus(system_data::WindowHandle.GetValue());
     }
