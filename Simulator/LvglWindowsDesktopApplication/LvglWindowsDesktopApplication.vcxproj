@@ -323,7 +323,6 @@
     <ClInclude Include="Library\CommonData\CommonData.h" />
     <ClInclude Include="Library\CommonData\CommonDataType.h" />
     <ClInclude Include="Library\CommonLibrary.h" />
-    <ClInclude Include="Library\CommonService.h" />
     <ClInclude Include="Library\SystemConfig.h" />
     <ClInclude Include="Library\VideoInfoData.h" />
     <ClInclude Include="lv_conf.h" />
@@ -725,7 +724,6 @@
     <ClCompile Include="Library\CommonData\CommonData.cpp" />
     <ClCompile Include="Library\CommonData\CommonDataType.cpp" />
     <ClCompile Include="Library\CommonLibrary.cpp" />
-    <ClCompile Include="Library\CommonService.cpp" />
     <ClCompile Include="Library\DropdownListLibrary.cpp" />
     <ClCompile Include="Library\KeyboardLibrary.cpp" />
     <ClCompile Include="Library\NetworkLibrary.cpp" />

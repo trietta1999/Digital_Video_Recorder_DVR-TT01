@@ -2,7 +2,6 @@
 #include <iphlpapi.h>
 #include <ws2tcpip.h>
 #include <wlanapi.h>
-#include <iostream>
 #include <fstream>
 #include <sstream>
 #include "CommonData.h"

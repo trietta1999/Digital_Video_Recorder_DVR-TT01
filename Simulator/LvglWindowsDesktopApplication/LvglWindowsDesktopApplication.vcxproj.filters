@@ -833,9 +833,6 @@
     <ClInclude Include="Library\CommonLibrary.h">
       <Filter>Library\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Library\CommonService.h">
-      <Filter>Library\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Library\SystemConfig.h">
       <Filter>Library\Config\Header</Filter>
     </ClInclude>
@@ -1548,9 +1545,6 @@
       <Filter>UI\View</Filter>
     </ClCompile>
     <ClCompile Include="Library\CommonLibrary.cpp">
-      <Filter>Library\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\CommonService.cpp">
       <Filter>Library\Common</Filter>
     </ClCompile>
     <ClCompile Include="Library\KeyboardLibrary.cpp">

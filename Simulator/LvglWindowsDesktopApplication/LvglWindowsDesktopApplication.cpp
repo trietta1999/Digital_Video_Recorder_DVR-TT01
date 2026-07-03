@@ -9,7 +9,6 @@
 
 #include "ui/ui.h"
 #include "CommonData.h"
-#include "CommonService.h"
 #include "CommonLibrary.h"
 #include "ScreenMapping.h"
 
@@ -292,9 +291,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     // Setup dropdownlist
     dropdownlist_lib::SetupDropdownList();
 
-    // Init service
-    InitService();
-
     soundvolume_lib::CreateSoundVolumeWindow();
 
     ::SendMessage(system_data::WindowHandle.GetValue(), WM_HOOK_NUMPAD_START, 0, 0);
@@ -309,7 +305,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     while (true)
     {
         lv_timer_handler();
-        ServiceProcess();
         ScreenMapping::GetInstance().HandleScreen();
         CommonDataUpdateAll();
 
