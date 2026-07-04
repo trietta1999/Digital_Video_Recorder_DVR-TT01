@@ -204,6 +204,8 @@ namespace soundvolume_lib
 
     void ChangeVolume(bool up, bool down)
     {
+        isMute = false;
+
         if (up)
         {
             if (currentVolume < STANDARD_PERCENT)
@@ -226,6 +228,7 @@ namespace soundvolume_lib
             if (currentVolume < 0)
             {
                 currentVolume = 0;
+                isMute = true;
             }
         }
 

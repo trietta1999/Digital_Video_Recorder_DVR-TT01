@@ -101,10 +101,11 @@ namespace keyboard_lib
         { VK_ADD     , VK_VOLUME_UP  , SCREEN_NAME::MAX_SCREEN }, // +
         { VK_SUBTRACT, VK_VOLUME_DOWN, SCREEN_NAME::MAX_SCREEN }, // -
 
-        { VK_BROWSER_HOME, VK_F1, SCREEN_NAME::MAX_SCREEN },
-        { VK_TAB         , VK_F2, SCREEN_NAME::MAX_SCREEN },
-        { VK_LAUNCH_MAIL , VK_F3, SCREEN_NAME::MAX_SCREEN },
-        { VK_LAUNCH_APP2 , VK_F4, SCREEN_NAME::MAX_SCREEN },
+        { VK_BROWSER_BACK, VK_CANCEL, SCREEN_NAME::MAX_SCREEN },
+        { VK_BROWSER_HOME, VK_F1    , SCREEN_NAME::MAX_SCREEN },
+        { VK_TAB         , VK_F2    , SCREEN_NAME::MAX_SCREEN },
+        { VK_LAUNCH_MAIL , VK_F3    , SCREEN_NAME::MAX_SCREEN },
+        { VK_LAUNCH_APP2 , VK_F4    , SCREEN_NAME::MAX_SCREEN },
     };
 
     static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};

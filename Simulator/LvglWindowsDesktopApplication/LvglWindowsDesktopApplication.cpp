@@ -93,6 +93,10 @@ static void DebugConsoleProcess()
                 {
                     key = VK_BROWSER_HOME;
                 }
+                else if (inputParams.at(1) == "back")
+                {
+                    key = VK_BROWSER_BACK;
+                }
                 else if (inputParams.at(1) == "tab")
                 {
                     key = VK_TAB;
@@ -106,14 +110,17 @@ static void DebugConsoleProcess()
                     key = VK_LAUNCH_APP2;
                 }
 
-                KBDLLHOOKSTRUCT lParam = {
-                    key,
-                    ::MapVirtualKey(key, MAPVK_VK_TO_VSC),
-                    0, 0, 0
-                };
+                if (key)
+                {
+                    KBDLLHOOKSTRUCT lParam = {
+                        key,
+                        ::MapVirtualKey(key, MAPVK_VK_TO_VSC),
+                        0, 0, 0
+                    };
 
-                keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYDOWN, (LPARAM)&lParam);
-                keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYUP, (LPARAM)&lParam);
+                    keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYDOWN, (LPARAM)&lParam);
+                    keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYUP, (LPARAM)&lParam);
+                }
             }
 
             debug_println("Process debug data done!");
@@ -145,6 +152,9 @@ static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
         case APPCOMMAND_BROWSER_HOME:
             key = VK_BROWSER_HOME;
             break;
+        case APPCOMMAND_BROWSER_BACKWARD:
+            key = VK_BROWSER_BACK;
+            break;
         case APPCOMMAND_LAUNCH_MAIL:
             key = VK_LAUNCH_MAIL;
             break;
@@ -155,14 +165,17 @@ static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
             break;
         }
 
-        KBDLLHOOKSTRUCT lParam = {
-            key,
-            ::MapVirtualKey(key, MAPVK_VK_TO_VSC),
-            0, 0, 0
-        };
+        if (key)
+        {
+            KBDLLHOOKSTRUCT lParam = {
+                key,
+                ::MapVirtualKey(key, MAPVK_VK_TO_VSC),
+                0, 0, 0
+            };
 
-        keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYDOWN, (LPARAM)&lParam);
-        keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYUP, (LPARAM)&lParam);
+            keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYDOWN, (LPARAM)&lParam);
+            keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYUP, (LPARAM)&lParam);
+        }
     }
     break;
     case WM_DEVICECHANGE:
@@ -206,7 +219,9 @@ static LONG WINAPI OurCrashHandler(EXCEPTION_POINTERS* pExceptionInfo)
         dumpInfo.ExceptionPointers = pExceptionInfo;
         dumpInfo.ClientPointers = TRUE;
 
-        BOOL success = MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, MiniDumpWithDataSegs, &dumpInfo, NULL, NULL);
+        MINIDUMP_TYPE dumpType = (MINIDUMP_TYPE)(MiniDumpWithFullMemory | MiniDumpWithHandleData | MiniDumpWithThreadInfo | MiniDumpWithUnloadedModules);
+
+        BOOL success = MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, dumpType, &dumpInfo, NULL, NULL);
 
         CloseHandle(hFile);
     }

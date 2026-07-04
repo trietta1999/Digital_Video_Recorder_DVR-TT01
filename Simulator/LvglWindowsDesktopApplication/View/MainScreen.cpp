@@ -66,28 +66,28 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
     dummyPlayPauseKey = lv_button_create(nullptr);
 
     ListButtonCallback = {
-        { ui_btnNewVideo       , OnClickNew                                                       , LV_EVENT_CLICKED       },
-        { ui_btnNewVideo       , OnClickNew                                                       , LV_EVENT_SHORT_CLICKED },
-        { ui_btnCloseVideo     , OnClickClose                                                     , LV_EVENT_CLICKED       },
-        { ui_btnCloseVideo     , OnClickClose                                                     , LV_EVENT_SHORT_CLICKED },
-        { ui_btnVideoRecordList, OnClickVideoRecordList                                           , LV_EVENT_CLICKED       },
-        { ui_btnVideoRecordList, OnClickVideoRecordList                                           , LV_EVENT_SHORT_CLICKED },
-        { ui_btnSystemSetting  , OnClickSystemSetting                                             , LV_EVENT_CLICKED       },
-        { ui_btnSystemSetting  , OnClickSystemSetting                                             , LV_EVENT_SHORT_CLICKED },
-        { ui_btnRec            , OnClickOperator                                                  , LV_EVENT_CLICKED       },
-        { ui_btnPlay           , OnClickOperator                                                  , LV_EVENT_CLICKED       },
-        { ui_btnPause          , OnClickOperator                                                  , LV_EVENT_CLICKED       },
-        { ui_btnStop           , OnClickOperator                                                  , LV_EVENT_CLICKED       },
-        { ui_btnSound          , OnClickOperator                                                  , LV_EVENT_CLICKED       },
-        { ui_btnSound          , OnClickOperator                                                  , LV_EVENT_SHORT_CLICKED },
-        { ui_btnFastForward    , OnClickOperator                                                  , LV_EVENT_CLICKED       },
-        { ui_btnFastRewind     , OnClickOperator                                                  , LV_EVENT_CLICKED       },
-        { ui_btnFastForward    , OnClickOperator                                                  , LV_EVENT_SHORT_CLICKED },
-        { ui_btnFastRewind     , OnClickOperator                                                  , LV_EVENT_SHORT_CLICKED },
-        { ui_btnStorageUSB     , OnClickStorageUSB                                                , LV_EVENT_CLICKED       },
-        { dummyVolumeUpKey     , [](lv_event_t* e) { soundvolume_lib::ChangeVolume(true, false); }, LV_EVENT_SHORT_CLICKED },
-        { dummyVolumeDownKey   , [](lv_event_t* e) { soundvolume_lib::ChangeVolume(false, true); }, LV_EVENT_SHORT_CLICKED },
-        { dummyPlayPauseKey    , OnClickOperator                                                  , LV_EVENT_SHORT_CLICKED },
+        { ui_btnNewVideo       , OnClickNew            , LV_EVENT_CLICKED       },
+        { ui_btnNewVideo       , OnClickNew            , LV_EVENT_SHORT_CLICKED },
+        { ui_btnCloseVideo     , OnClickClose          , LV_EVENT_CLICKED       },
+        { ui_btnCloseVideo     , OnClickClose          , LV_EVENT_SHORT_CLICKED },
+        { ui_btnVideoRecordList, OnClickVideoRecordList, LV_EVENT_CLICKED       },
+        { ui_btnVideoRecordList, OnClickVideoRecordList, LV_EVENT_SHORT_CLICKED },
+        { ui_btnSystemSetting  , OnClickSystemSetting  , LV_EVENT_CLICKED       },
+        { ui_btnSystemSetting  , OnClickSystemSetting  , LV_EVENT_SHORT_CLICKED },
+        { ui_btnRec            , OnClickOperator       , LV_EVENT_CLICKED       },
+        { ui_btnPlay           , OnClickOperator       , LV_EVENT_CLICKED       },
+        { ui_btnPause          , OnClickOperator       , LV_EVENT_CLICKED       },
+        { ui_btnStop           , OnClickOperator       , LV_EVENT_CLICKED       },
+        { ui_btnSound          , OnClickOperator       , LV_EVENT_CLICKED       },
+        { ui_btnSound          , OnClickOperator       , LV_EVENT_SHORT_CLICKED },
+        { ui_btnFastForward    , OnClickOperator       , LV_EVENT_CLICKED       },
+        { ui_btnFastRewind     , OnClickOperator       , LV_EVENT_CLICKED       },
+        { ui_btnFastForward    , OnClickOperator       , LV_EVENT_SHORT_CLICKED },
+        { ui_btnFastRewind     , OnClickOperator       , LV_EVENT_SHORT_CLICKED },
+        { ui_btnStorageUSB     , OnClickStorageUSB     , LV_EVENT_CLICKED       },
+        { dummyVolumeUpKey     , OnClickVolume         , LV_EVENT_SHORT_CLICKED },
+        { dummyVolumeDownKey   , OnClickVolume         , LV_EVENT_SHORT_CLICKED },
+        { dummyPlayPauseKey    , OnClickOperator       , LV_EVENT_SHORT_CLICKED },
     };
 
     ListDataUpdateCallback = {
@@ -393,6 +393,22 @@ void MainScreen::OnClickSystemSetting(lv_event_t* event)
     systemsetting_lib::SetupTempSetting();
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_SETTING);
     SettingScreen::InitSettingScreen();
+}
+
+void MainScreen::OnClickVolume(lv_event_t* event)
+{
+    auto obj = (lv_obj_t*)(event->current_target);
+
+    if (obj == dummyVolumeUpKey)
+    {
+        soundvolume_lib::ChangeVolume(true, false);
+    }
+    else if (obj == dummyVolumeDownKey)
+    {
+        soundvolume_lib::ChangeVolume(false, true);
+    }
+
+    UpdateSoundButton();
 }
 
 void MainScreen::UpdateDate()
