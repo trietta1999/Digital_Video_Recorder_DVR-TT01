@@ -61,9 +61,9 @@ static void CreateDateTimeStr(std::string& dateStr, std::string& timeStr)
 
 MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
-    dummyVolumeUpKey = lv_button_create(nullptr);
-    dummyVolumeDownKey = lv_button_create(nullptr);
-    dummyPlayPauseKey = lv_button_create(nullptr);
+    CREATE_OBJECT(dummyVolumeUpKey);
+    CREATE_OBJECT(dummyVolumeDownKey);
+    CREATE_OBJECT(dummyPlayPauseKey);
 
     ListButtonCallback = {
         { ui_btnNewVideo       , OnClickNew            , LV_EVENT_CLICKED       },

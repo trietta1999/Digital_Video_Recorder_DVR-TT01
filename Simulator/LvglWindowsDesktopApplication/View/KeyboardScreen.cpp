@@ -59,11 +59,11 @@ static void AutoAddSpaceAfterPeriod()
 
 KeyboardScreen::KeyboardScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
-    dummyConfirmKey = lv_button_create(nullptr);
-    dummyOkKey = lv_button_create(nullptr);
-    dummyCancelKey = lv_button_create(nullptr);
-    dummyCharKey = lv_button_create(nullptr);
-    dummySpaceKey = lv_button_create(nullptr);
+    CREATE_OBJECT(dummyConfirmKey);
+    CREATE_OBJECT(dummyOkKey);
+    CREATE_OBJECT(dummyCancelKey);
+    CREATE_OBJECT(dummyCharKey);
+    CREATE_OBJECT(dummySpaceKey);
 
     ListButtonCallback = {
         { ui_btnKeyboardCancel      , OnClickCancel       , LV_EVENT_CLICKED             },

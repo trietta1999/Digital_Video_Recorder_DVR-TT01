@@ -62,6 +62,8 @@
 #define SCRIPT_DIRECTORY L"release_script"
 #endif
 
+#define CREATE_OBJECT(name) if (!name) name = lv_button_create(nullptr);
+
 enum
 {
     WM_USER_MIN = WM_USER,

@@ -243,9 +243,9 @@ static std::string GetFilterValue(videoinfo_lib::videoinfo_t item, short key)
 
 VideoRecordListScreen::VideoRecordListScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
-    dummyVolumeUpKey = lv_button_create(nullptr);
-    dummyVolumeDownKey = lv_button_create(nullptr);
-    dummyPlayPauseKey = lv_button_create(nullptr);
+    CREATE_OBJECT(dummyVolumeUpKey);
+    CREATE_OBJECT(dummyVolumeDownKey);
+    CREATE_OBJECT(dummyPlayPauseKey);
 
     ListButtonCallback = {
         { ui_btnRLBack       , OnClickBack           , LV_EVENT_CLICKED             },
