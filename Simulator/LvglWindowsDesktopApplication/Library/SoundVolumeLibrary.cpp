@@ -4,6 +4,10 @@
 #include "CommonData.h"
 #include "CommonLibrary.h"
 
+#define WND_SV_WIDTH 250
+#define WND_SV_HEIGHT 100
+#define LBL_SV_TEXTSIZE 100
+
 namespace soundvolume_lib
 {
     bool isMute = false;
@@ -11,10 +15,6 @@ namespace soundvolume_lib
     static HWND hWnd = NULL;
     static HWND hStatic = NULL;
     static int currentVolume = 0;
-
-    static int myWidth = 250;
-    static int myHeight = 100;
-    static int textSize = 100;
 
     static void CALLBACK AutoHideWindow(HWND hwnd, UINT uMsg, UINT_PTR timerId, DWORD dwTime)
     {
@@ -58,8 +58,8 @@ namespace soundvolume_lib
             POINT parentTopLeft = { parentRect.left, parentRect.top };
             ::ClientToScreen(hParent, &parentTopLeft);
 
-            int myX = parentTopLeft.x + (parentWidth - myWidth) / 2;
-            int myY = parentTopLeft.y + (parentHeight - myHeight) / 2;
+            int myX = parentTopLeft.x + (parentWidth - WND_SV_WIDTH) / 2;
+            int myY = parentTopLeft.y + (parentHeight - WND_SV_HEIGHT) / 2;
 
             WNDCLASS wc = {};
             wc.lpfnWndProc = MyWinProc;
@@ -73,15 +73,15 @@ namespace soundvolume_lib
                 WS_EX_TOPMOST | WS_EX_LAYERED | WS_EX_TRANSPARENT,
                 L"SOUND_VOLUME_WND", NULL,
                 WS_POPUP | WS_CHILD | WS_BORDER,
-                myX, myY, myWidth, myHeight, hParent, NULL, ::GetModuleHandle(NULL), NULL);
+                myX, myY, WND_SV_WIDTH, WND_SV_HEIGHT, hParent, NULL, ::GetModuleHandle(NULL), NULL);
 
             hStatic = ::CreateWindowEx(
                 0, L"STATIC", NULL,
                 WS_VISIBLE | WS_CHILD | SS_CENTER | SS_CENTERIMAGE,
-                0, 0, myWidth, myHeight, hWnd, NULL, wc.hInstance, NULL);
+                0, 0, WND_SV_WIDTH, WND_SV_HEIGHT, hWnd, NULL, wc.hInstance, NULL);
 
             HFONT hFont = ::CreateFont(
-                textSize,                 // Height (in logical units)
+                LBL_SV_TEXTSIZE,          // Height (in logical units)
                 0, 0, 0,                  // Width, Escapement, Orientation
                 FW_NORMAL,                // Weight
                 FALSE, FALSE, FALSE,      // Italic, Underline, Strikeout

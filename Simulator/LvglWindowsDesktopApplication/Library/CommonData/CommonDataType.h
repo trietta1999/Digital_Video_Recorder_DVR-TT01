@@ -18,7 +18,6 @@
 #define RECORD_PROCESSNAME L"Record process"
 #define REVIEW_SCREENNAME L"Review window"
 #define PLAY_SCREENNAME L"Play window"
-#define DUKTO_SCREENNAME L"Dukto"
 
 #define HORIZON_MAX_RESOLUTION 1280
 #define VERTICAL_MAX_RESOLUTION 800

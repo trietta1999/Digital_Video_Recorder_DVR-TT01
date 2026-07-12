@@ -382,11 +382,6 @@ namespace keyboard_lib
 
                     e.param = (void*)keyCode; // Set char keycode to event param
                 }
-                else if (wParam == VK_CAPITAL)
-                {
-                    bool* capsState = new bool(GetKeyboardCapsState());
-                    e.param = (void*)capsState; // Set capslock state to event param
-                }
                 // Special key
                 else
                 {

@@ -183,7 +183,7 @@ namespace network_lib
 
     struct lan_info_t
     {
-        short type;
+        IFTYPE type;
         std::string name;
         std::string description;
         IF_OPER_STATUS status;
@@ -196,7 +196,7 @@ namespace network_lib
         std::string password;
         std::string auth;
         std::string cipher;
-        short signalQuality;
+        WLAN_SIGNAL_QUALITY signalQuality;
 
         bool IsAnyNone() const
         {

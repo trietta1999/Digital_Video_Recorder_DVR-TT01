@@ -11,7 +11,7 @@ namespace videorecord_lib
     static SIZE size;
     bool isMouseRestrict = false;
 
-    static std::wstring listScreenName[] = { REVIEW_SCREENNAME, RECORD_SCREENNAME, RECORD_PROCESSNAME, PLAY_SCREENNAME, DUKTO_SCREENNAME };
+    static std::wstring listScreenName[] = { REVIEW_SCREENNAME, RECORD_SCREENNAME, RECORD_PROCESSNAME, PLAY_SCREENNAME };
 
     static HWND Wait(std::wstring screenName)
     {
