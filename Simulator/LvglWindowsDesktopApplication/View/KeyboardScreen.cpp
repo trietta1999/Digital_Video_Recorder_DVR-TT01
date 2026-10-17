@@ -7,20 +7,21 @@
 
 struct KbInfo_t
 {
-    std::string title;
-    CData<std::string>* data;
+    std::string title; // Header text to display on the keyboard screen
+    CData<std::string>* data; // Data pointer to the field being edited
 };
 
-static std::unordered_map<SCREEN_NAME, KbInfo_t> mapKbInit = {};
-static lv_timer_t* timerUpdateInput = nullptr;
-static lv_obj_t* dummyConfirmKey = nullptr;
-static lv_obj_t* dummyOkKey = nullptr;
-static lv_obj_t* dummyCancelKey = nullptr;
-static lv_obj_t* dummyCharKey = nullptr;
-static lv_obj_t* dummySpaceKey = nullptr;
+static std::unordered_map<SCREEN_NAME, KbInfo_t> mapKbInit = {}; // Map screen context to keyboard metadata
+static lv_timer_t* timerUpdateInput = nullptr; // Timer for periodic input buffer polling
+static lv_obj_t* dummyConfirmKey = nullptr; // Virtual object for T9 confirmation action
+static lv_obj_t* dummyOkKey = nullptr; // Virtual object for keyboard 'Enter' action
+static lv_obj_t* dummyCancelKey = nullptr; // Virtual object for keyboard 'Escape' action
+static lv_obj_t* dummyCharKey = nullptr; // Virtual object for direct character input
+static lv_obj_t* dummySpaceKey = nullptr; // Virtual object for 'Space' character input
 
 static char GetCloseBracket(char input)
 {
+    // Returns the corresponding closing bracket for a given opening bracket
     switch (input)
     {
     case '(':
@@ -34,13 +35,14 @@ static char GetCloseBracket(char input)
 
 static void AutoCloseBracket(char input)
 {
+    // Automatically inserts a closing bracket if the feature is enabled in settings
     if (setting_data::AutoCloseBracketState.GetValue())
     {
         auto closeBracket = GetCloseBracket(input);
         if (closeBracket)
         {
             lv_textarea_add_char(ui_txtKeyboardInput, closeBracket);
-            lv_textarea_cursor_left(ui_txtKeyboardInput);
+            lv_textarea_cursor_left(ui_txtKeyboardInput); // Keep cursor inside the brackets
 
         }
     }
@@ -48,6 +50,7 @@ static void AutoCloseBracket(char input)
 
 static void AutoAddSpaceAfterPeriod()
 {
+    // Automatically inserts a space after a period if the feature is enabled
     if (setting_data::InsSpaceAfterPuncState.GetValue())
     {
         if (lv_textarea_get_current_char(ui_txtKeyboardInput) == '.')

@@ -10,20 +10,22 @@ public:
     ~MainScreen();
 
 private:
-    static void OnClickNew(lv_event_t* event);
-    static void OnClickClose(lv_event_t* event);
-    static void OnClickOperator(lv_event_t* event);
-    static void OnClickVideoRecordList(lv_event_t* event);
-    static void OnClickStorageUSB(lv_event_t* event);
-    static void OnClickSystemSetting(lv_event_t* event);
-    static void OnClickVolume(lv_event_t* event);
+    // Event handlers for user interactions
+    static void OnClickNew(lv_event_t* event); // Triggers creation of new video metadata entry
+    static void OnClickClose(lv_event_t* event); // Placeholder for close operation
+    static void OnClickOperator(lv_event_t* event); // Toggles recording/playback states
+    static void OnClickVideoRecordList(lv_event_t* event); // Navigates to the video library screen
+    static void OnClickStorageUSB(lv_event_t* event); // Navigates to external storage management
+    static void OnClickSystemSetting(lv_event_t* event); // Navigates to the system settings screen
+    static void OnClickVolume(lv_event_t* event); // Toggles system mute or volume overlay
 
-    static void UpdateDate();
-    static void UpdateTime();
-    static void UpdateStorage();
-    static void UpdateButton();
-    static void UpdateExtDevice();
-    static void UpdateSoundButton();
+    // UI synchronization methods
+    static void UpdateDate(); // Updates the date label on the main dashboard
+    static void UpdateTime(); // Updates the time label on the main dashboard
+    static void UpdateStorage(); // Updates the internal storage capacity indicators
+    static void UpdateButton(); // Updates dynamic labels/icons on action buttons (e.g., Record/Stop)
+    static void UpdateExtDevice(); // Updates USB/External device connectivity icons
+    static void UpdateSoundButton(); // Updates volume/mute button visual state
 };
 
 #endif // _MAIN_SCREEN_H

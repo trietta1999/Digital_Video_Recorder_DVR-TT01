@@ -6,13 +6,15 @@
 
 namespace videorecord_lib
 {
-    static HWND extHwnd = NULL;
-    static POINT point;
-    static SIZE size;
-    bool isMouseRestrict = false;
+    static HWND extHwnd = NULL; // Handle to the external process window (player/recorder)
+    static POINT point; // Screen coordinates for external window positioning
+    static SIZE size; // Dimensions for external window positioning
+    bool isMouseRestrict = false; // Flag to enable/disable cursor restriction logic
 
+    // List of known window titles managed by this library
     static std::wstring listScreenName[] = { REVIEW_SCREENNAME, RECORD_SCREENNAME, RECORD_PROCESSNAME, PLAY_SCREENNAME };
 
+    // Polls until a window with the given name is found
     static HWND Wait(std::wstring screenName)
     {
         HWND hwnd = 0;
@@ -26,6 +28,7 @@ namespace videorecord_lib
         return hwnd;
     }
 
+    // Forces focus and foreground state to a specific window
     static void SetWindowFocus(HWND hwnd)
     {
         ::Sleep(TIMECYCLE_10MS);
@@ -33,24 +36,26 @@ namespace videorecord_lib
         ::SetFocus(hwnd);
     }
 
+    // Modifies the external window to look integrated (remove borders/caption) and positions it
     static void ChangeWindowStyle(std::wstring screenName, POINT point, SIZE size)
     {
-        // Hide caption, block resizable
+        // Hide caption, block resizable to make it appear like a UI element
         LONG_PTR style = ::GetWindowLongPtr(extHwnd, GWL_STYLE);
         style &= ~WS_CAPTION;
         style &= ~WS_THICKFRAME;
         style |= WS_BORDER;
         ::SetWindowLongPtr(extHwnd, GWL_STYLE, style);
 
-        // Redraw window
+        // Redraw window and set layering/z-order
 #ifdef _DEBUG
         ::SetWindowPos(extHwnd, HWND_TOP, point.x, point.y, size.cx, size.cy, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 #else
         ::SetWindowPos(extHwnd, HWND_TOPMOST, point.x, point.y, size.cx, size.cy, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
-        ::SetWindowLongPtr(extHwnd, GWLP_HWNDPARENT, (LONG_PTR)system_data::WindowHandle.GetValue());
+        ::SetWindowLongPtr(extHwnd, GWLP_HWNDPARENT, (LONG_PTR)system_data::WindowHandle.GetValue()); // Link as child
 #endif
     }
 
+    // Prevents the system cursor from entering a specific screen region
     static void RestrictCursorFromArea(POINT pt, SIZE sz)
     {
         POINT mousePos;
@@ -124,10 +129,10 @@ namespace videorecord_lib
         }
     }
 
-    // @todo: refactor later
+    // Launches an external process (FFmpeg/FFplay) and overlays its window onto an LVGL object area
     void StartExternalWindow(lv_obj_t* wnd, std::wstring screenName, std::string videoID)
     {
-        StopExternalWindow();
+        StopExternalWindow(); // Ensure previous instances are closed
         //KillAllProcess();
 
         //std::thread([screenName]() {
@@ -156,14 +161,17 @@ namespace videorecord_lib
         wchar_t scriptPath[MAX_CHARS] = { 0 };
         wchar_t outputPath[MAX_CHARS] = { 0 };
 
+        // Determine launch parameters based on operation type
         if (screenName == RECORD_SCREENNAME)
         {
+            // Record: Use PowerShell to launch FFmpeg script and set specific window title
             swprintf_s(outputPath, L"%s\\video_data\\%s", common_lib::GetSystemPath().c_str(), common_lib::ConvertStringToWString(videoID).c_str());
             swprintf_s(param, L"$host.UI.RawUI.WindowTitle = \\\"%s\\\";cd \\\"%s\\\";.\\record.bat \\\"%s\\\" \\\"%s\\\\video.mp4\\\"", RECORD_PROCESSNAME, common_lib::GetFullPath(SCRIPT_DIRECTORY).c_str(), RECORD_SCREENNAME, outputPath);
             ::ShellExecute(NULL, L"open", L"powershell", param, common_lib::GetFullPath(SCRIPT_DIRECTORY).c_str(), SW_HIDE);
         }
         else if (screenName == PLAY_SCREENNAME)
         {
+            // Playback: Launch FFplay script with the video file path
             swprintf_s(outputPath, L"%s\\video_data\\%s\\video.mp4", common_lib::GetSystemPath().c_str(), common_lib::ConvertStringToWString(videoID).c_str());
             swprintf_s(param, L"\"%s\" \"%s\"", PLAY_SCREENNAME, outputPath);
             swprintf_s(scriptPath, L"%s\\play.bat", SCRIPT_DIRECTORY);
@@ -171,27 +179,30 @@ namespace videorecord_lib
         }
         else if (screenName == REVIEW_SCREENNAME)
         {
+            // Review: Generic live stream review
             swprintf_s(param, L"\"%s\"", REVIEW_SCREENNAME);
             swprintf_s(scriptPath, L"%s\\review.bat", SCRIPT_DIRECTORY);
             ::ShellExecute(NULL, L"open", common_lib::GetFullPath(scriptPath).c_str(), param, common_lib::GetFullPath(SCRIPT_DIRECTORY).c_str(), SW_HIDE);
         }
 
-        // Wait for process starting
+        // Wait for the OS to create the window so we can grab the handle
         extHwnd = Wait(screenName);
 
-        // Get LVGL window review
+        // Map the LVGL object's coordinates to screen coordinates
         point = { lv_obj_get_x(wnd), lv_obj_get_y(wnd) };
         size = { lv_obj_get_width(wnd), lv_obj_get_height(wnd) };
 
         // Convert to screen coordinates
         ::ClientToScreen(system_data::WindowHandle.GetValue(), &point);
 
+        // Subclass and position the external window
         ChangeWindowStyle(screenName.c_str(), point, size);
-        SetWindowFocus(system_data::WindowHandle.GetValue());
+        SetWindowFocus(system_data::WindowHandle.GetValue()); // Return focus to main app
 
         isMouseRestrict = true;
 
 #ifdef NDEBUG
+        // Start background thread to keep cursor away from the external window (overlay protection)
         std::thread([]() {
             while (isMouseRestrict)
             {
@@ -202,6 +213,7 @@ namespace videorecord_lib
 #endif
     }
 
+    // Gracefully closes any active external process windows
     void StopExternalWindow()
     {
         isMouseRestrict = false;
@@ -214,10 +226,11 @@ namespace videorecord_lib
             {
                 if (screen != RECORD_PROCESSNAME)
                 {
-                    ::SendMessage(hwnd, WM_CLOSE, 0, 0);
+                    ::SendMessage(hwnd, WM_CLOSE, 0, 0); // Standard close for UI windows
                 }
                 else
                 {
+                    // Special case for FFmpeg recorder: send 'Q' to quit gracefully
                     SetWindowFocus(hwnd);
 
                     BYTE vkey = LOBYTE(VkKeyScan('Q'));
@@ -232,6 +245,7 @@ namespace videorecord_lib
         }
     }
 
+    // Sends keyboard shortcuts (Left/Right arrow) to the player window for seeking
     void ExecuteSeek(bool rewind, bool forward)
     {
         SetWindowFocus(extHwnd);
@@ -250,6 +264,7 @@ namespace videorecord_lib
         SetWindowFocus(system_data::WindowHandle.GetValue());
     }
 
+    // Sends the 'P' key to the player window to toggle pause/resume
     void ExecutePause()
     {
         SetWindowFocus(extHwnd);
@@ -263,6 +278,7 @@ namespace videorecord_lib
         SetWindowFocus(system_data::WindowHandle.GetValue());
     }
 
+    // Forcibly terminates all FFmpeg-related processes via shell command
     void KillAllProcess()
     {
         system("taskkill /f /im ffplay.exe");

@@ -12,44 +12,46 @@
 #include "CommonLibrary.h"
 #include "ScreenMapping.h"
 
-WNDPROC OriginalWndProc = NULL;
+WNDPROC OriginalWndProc = NULL; // Pointer to the original window procedure for subclassing
 
 #ifdef _DEBUG
-static void DebugConsoleProcess();
+static void DebugConsoleProcess(); // Forward declaration for processing console commands
 
+// Allocates and attaches a console window for debugging
 static void AttachConsoleWindow()
 {
-    AllocConsole();
-    FILE* fp;
-    freopen_s(&fp, "CONOUT$", "w", stdout);
-    freopen_s(&fp, "CONOUT$", "w", stderr);
-    freopen_s(&fp, "CONIN$", "r", stdin);
+    AllocConsole(); // Allocate a new console for the calling process
+    FILE* fp; // File pointer for stream redirection
+    freopen_s(&fp, "CONOUT$", "w", stdout); // Redirect stdout to console
+    freopen_s(&fp, "CONOUT$", "w", stderr); // Redirect stderr to console
+    freopen_s(&fp, "CONIN$", "r", stdin); // Redirect stdin from console
 }
 
+// Spawns a thread to read and process console input
 static void DebugConsoleRead()
 {
     std::thread([] {
         while (true)
         {
-            std::string inputConsole;
+            std::string inputConsole; // Buffer for console input
 
             try
             {
-                std::getline(std::cin, inputConsole);
+                std::getline(std::cin, inputConsole); // Read line from console
 
                 if (!inputConsole.empty())
                 {
-                    std::istringstream iss(inputConsole);
-                    std::string param;
-                    std::vector<std::string> inputParams;
+                    std::istringstream iss(inputConsole); // String stream for parsing
+                    std::string param; // Buffer for individual parameters
+                    std::vector<std::string> inputParams; // List of parsed parameters
 
                     while (iss >> param) {
                         inputParams.push_back(param);
                     }
 
-                    debug_data::InputParamList.SetValue(inputParams);
+                    debug_data::InputParamList.SetValue(inputParams); // Update debug data shared state
 
-                    DebugConsoleProcess();
+                    DebugConsoleProcess(); // Execute logic based on input
                 }
             }
             catch (...)
@@ -60,19 +62,21 @@ static void DebugConsoleRead()
         }).detach();
 }
 
+// Processes commands received via the debug console
 static void DebugConsoleProcess()
 {
     // Debug console
     if (debug_data::InputParamList.GetState())
     {
         try {
-            auto inputParams = debug_data::InputParamList.GetValue();
+            auto inputParams = debug_data::InputParamList.GetValue(); // Retrieve parsed parameters
 
-            // Test show message box
+            // Test case: Show a standard Windows message box
             if (inputParams.at(0) == "test")
             {
                 ::MessageBox(NULL, L"Test show message box", L"Test", MB_OK);
             }
+            // Test case: Populate temporary video data
             else if (inputParams.at(0) == "input_test")
             {
                 temp_data::VideoEvent.SetValue("Test event");
@@ -81,9 +85,10 @@ static void DebugConsoleProcess()
                 temp_data::VideoDesc.SetValue("Test desc");
                 temp_data::VideoAuthor.SetValue("Test author");
             }
+            // Test case: Simulate hardware key presses
             else if (inputParams.at(0) == "appkey")
             {
-                int key = 0;
+                int key = 0; // Virtual key code
 
                 ::Sleep(TIMECYCLE_10MS);
                 ::SetForegroundWindow(system_data::WindowHandle.GetValue());
@@ -118,6 +123,7 @@ static void DebugConsoleProcess()
                         0, 0, 0
                     };
 
+                    // Manually trigger the low-level keyboard hook procedure
                     keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYDOWN, (LPARAM)&lParam);
                     keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYUP, (LPARAM)&lParam);
                 }
@@ -136,16 +142,18 @@ static void DebugConsoleProcess()
 }
 #endif
 
+// Custom window procedure to handle specific Windows messages
 static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+    // Process hardware keyboard events
     keyboard_lib::HardwareKeyboardProcess(hwnd, uMsg, wParam, (lv_event_code_t)lParam);
 
     switch (uMsg)
     {
-    case WM_APPCOMMAND:
+    case WM_APPCOMMAND: // Handle multimedia and browser keys
     {
-        int cmd = GET_APPCOMMAND_LPARAM(lParam);
-        int key = 0;
+        int cmd = GET_APPCOMMAND_LPARAM(lParam); // Extract command
+        int key = 0; // Corresponding virtual key
 
         switch (cmd)
         {
@@ -173,30 +181,31 @@ static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
                 0, 0, 0
             };
 
+            // Trigger internal keyboard processing
             keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYDOWN, (LPARAM)&lParam);
             keyboard_lib::LowLevelKeyboardProc(HC_ACTION, WM_KEYUP, (LPARAM)&lParam);
         }
     }
     break;
-    case WM_DEVICECHANGE:
+    case WM_DEVICECHANGE: // Notify when hardware devices (like USB) are plugged/unplugged
         storage_lib::CollectExternalDrivesList();
         system_data::DeviceChange.SetValue(true);
         break;
-    case WM_DEVICECHANGE_DONE:
+    case WM_DEVICECHANGE_DONE: // Internal message to signal completion of device processing
         system_data::DeviceChange.SetValue(false);
         break;
-    case WM_HOOK_NUMPAD_START:
+    case WM_HOOK_NUMPAD_START: // Custom message to start numpad hook
         keyboard_lib::SetupHookInternalNumpad();
         break;
-    case WM_HOOK_NUMPAD_STOP:
+    case WM_HOOK_NUMPAD_STOP: // Custom message to stop numpad hook
         keyboard_lib::StopHookInternalNumpad();
         break;
     case WM_QUIT:
     case WM_DESTROY:
-    case WM_NCDESTROY:
+    case WM_NCDESTROY: // Handle application shutdown
         keyboard_lib::StopHookInternalNumpad();
         videorecord_lib::KillAllProcess();
-        ::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)OriginalWndProc);
+        ::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)OriginalWndProc); // Restore original winproc
         break;
 
     default:
@@ -206,21 +215,24 @@ static LRESULT CALLBACK MyNewWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     return CallWindowProc(OriginalWndProc, hwnd, uMsg, wParam, lParam);
 }
 
+// Exception handler to create a minidump when the application crashes
 static LONG WINAPI OurCrashHandler(EXCEPTION_POINTERS* pExceptionInfo)
 {
-    std::wstring dumpFileName = L"crash_report.dmp";
+    std::wstring dumpFileName = L"crash_report.dmp"; // File name for the crash dump
 
     HANDLE hFile = CreateFileW(dumpFileName.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (hFile != INVALID_HANDLE_VALUE)
     {
-        MINIDUMP_EXCEPTION_INFORMATION dumpInfo;
+        MINIDUMP_EXCEPTION_INFORMATION dumpInfo; // Minidump exception metadata
         dumpInfo.ThreadId = GetCurrentThreadId();
         dumpInfo.ExceptionPointers = pExceptionInfo;
         dumpInfo.ClientPointers = TRUE;
 
+        // Specify dump level (full memory and additional metadata)
         MINIDUMP_TYPE dumpType = (MINIDUMP_TYPE)(MiniDumpWithFullMemory | MiniDumpWithHandleData | MiniDumpWithThreadInfo | MiniDumpWithUnloadedModules);
 
+        // Write the crash dump to file
         BOOL success = MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, dumpType, &dumpInfo, NULL, NULL);
 
         CloseHandle(hFile);
@@ -229,35 +241,37 @@ static LONG WINAPI OurCrashHandler(EXCEPTION_POINTERS* pExceptionInfo)
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
+// WinMain entry point
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
     UNREFERENCED_PARAMETER(nShowCmd);
 
-    ::SetUnhandledExceptionFilter(OurCrashHandler);
+    ::SetUnhandledExceptionFilter(OurCrashHandler); // Register custom crash handler
 
-    lv_init();
+    lv_init(); // Initialize LVGL graphics library
 
-    int32_t zoom_level = 100;
-    bool allow_dpi_override = false;
-    bool simulator_mode = false;
+    int32_t zoom_level = 100; // Display zoom factor
+    bool allow_dpi_override = false; // DPI awareness flag
+    bool simulator_mode = false; // LVGL simulator flag
     lv_display_t* display = lv_windows_create_display(APP_NAME, HORIZON_MAX_RESOLUTION, VERTICAL_MAX_RESOLUTION, zoom_level, allow_dpi_override, simulator_mode);
     if (!display)
     {
         return -1;
     }
 
-    HWND window_handle = lv_windows_get_display_window_handle(display);
+    HWND window_handle = lv_windows_get_display_window_handle(display); // Get native window handle
     if (!window_handle)
     {
         return -1;
     }
     else
     {
-        system_data::WindowHandle.SetValue(window_handle);
+        system_data::WindowHandle.SetValue(window_handle); // Store window handle globally
     }
 
+    // Set application icon
     HICON icon_handle = ::LoadIconW(hInstance, MAKEINTRESOURCE(IDI_LVGL_WINDOWS));
     if (icon_handle)
     {
@@ -265,13 +279,14 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         ::SendMessageW(window_handle, WM_SETICON, FALSE, (LPARAM)icon_handle);
     }
 
+    // Acquire pointer input device
     lv_indev_t* pointer_indev = lv_windows_acquire_pointer_indev(display);
     if (!pointer_indev)
     {
         return -1;
     }
 
-    // Set custom winproc
+    // Subclass the main window with custom procedure
     OriginalWndProc = (WNDPROC)::SetWindowLongPtr(window_handle, GWLP_WNDPROC, (LONG_PTR)MyNewWinProc);
     if (!OriginalWndProc)
     {
@@ -279,56 +294,59 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     }
 
 #ifdef NDEBUG
-    // Hide caption, block resizable
+    // Production window styling: Hide title bar and disable resizing
     DWORD style = ::GetWindowLongPtr(window_handle, GWL_STYLE);
     style &= ~WS_CAPTION;
     style &= ~WS_THICKFRAME;
     ::SetWindowLongPtr(window_handle, GWL_STYLE, style);
 
-    // Redraw window
+    // Position window as topmost and full resolution
     ::SetWindowPos(window_handle, HWND_TOPMOST, 0, 0, HORIZON_MAX_RESOLUTION, VERTICAL_MAX_RESOLUTION, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 #endif
 
 #ifdef _DEBUG
-    AttachConsoleWindow();
+    AttachConsoleWindow(); // Attach debug console in debug builds
 #endif
 
-    // Init external device
+    // Initial external device scan
     ::SendMessage(window_handle, WM_DEVICECHANGE, 0, 0);
 
-    // Create UI
+    // Initialize UI components
     ui_init();
 
-    // Init setting
+    // Initialize system settings and data
     systemsetting_lib::SetupSetting();
     systemsetting_lib::SetupSystemData();
 
-    // Setup dropdownlist
+    // Configure dropdown lists
     dropdownlist_lib::SetupDropdownList();
 
+    // Initialize volume management
     soundvolume_lib::CreateSoundVolumeWindow();
 
+    // Start keyboard hook
     ::SendMessage(system_data::WindowHandle.GetValue(), WM_HOOK_NUMPAD_START, 0, 0);
 
-    // Change to main screen
+    // Navigate to the main screen
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);
 
 #ifdef _DEBUG
-    DebugConsoleRead();
+    DebugConsoleRead(); // Start console input thread
 #endif
 
+    // Application main loop
     while (true)
     {
-        lv_timer_handler();
-        ScreenMapping::GetInstance().HandleScreen();
-        CommonDataUpdateAll();
+        lv_timer_handler(); // Process LVGL timers and UI events
+        ScreenMapping::GetInstance().HandleScreen(); // Process screen transitions and logic
+        CommonDataUpdateAll(); // Synchronize shared data
 
-        ::Sleep(TIMECYCLE_10MS);
+        ::Sleep(TIMECYCLE_10MS); // Throttle loop execution
     }
 
-    lv_deinit();
+    lv_deinit(); // Clean up LVGL
 
-    ::FreeConsole();
+    ::FreeConsole(); // Detach debug console
 
     return 0;
 }

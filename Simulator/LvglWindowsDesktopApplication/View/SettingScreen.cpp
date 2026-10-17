@@ -8,9 +8,10 @@
 
 #define SW_SET_DATA_CB(cdata) [](lv_event_t* e){ cdata.SetValue(IsButtonChecked((lv_obj_t*)(e->current_target))); }
 
-static lv_timer_t* timerCheckWiFiConnect = nullptr;
-static bool isUpdateWiFiIP = false;
+static lv_timer_t* timerCheckWiFiConnect = nullptr; // Timer for periodic WiFi connection verification
+static bool isUpdateWiFiIP = false; // Flag to prevent redundant IP dashboard updates
 
+// Queries network details for a specific adapter and updates the UI labels
 static void UpdateIPInput(std::string targetAdapterName)
 {
     auto ipInfo = network_lib::GetNetworkIPByName(targetAdapterName);
@@ -20,12 +21,13 @@ static void UpdateIPInput(std::string targetAdapterName)
     lv_label_set_text(ui_lblDefaultGateway, ipInfo.gateway.c_str());
 }
 
+// Starts a background polling loop to monitor WiFi status and refresh networking info on connection
 static void RunWifiConnectCheck()
 {
     timerCheckWiFiConnect = lv_timer_create([](lv_timer_t* timer) {
         if (network_lib::IsWiFiConnectedTo())
         {
-            lv_obj_remove_state(ui_lblConnectState, LV_STATE_DISABLED);
+            lv_obj_remove_state(ui_lblConnectState, LV_STATE_DISABLED); // Visually signal connected state
 
             if (!isUpdateWiFiIP)
             {
@@ -35,7 +37,7 @@ static void RunWifiConnectCheck()
         }
         else
         {
-            lv_obj_add_state(ui_lblConnectState, LV_STATE_DISABLED);
+            lv_obj_add_state(ui_lblConnectState, LV_STATE_DISABLED); // Visually signal disconnected state
         }
         }, TIMECYCLE_5SEC, nullptr);
 }
@@ -51,6 +53,7 @@ static void StopWifiConnectCheck()
     isUpdateWiFiIP = false;
 }
 
+// Helper to set LVGL button/switch state based on a boolean value
 static void SetButtonState(lv_obj_t* obj, short value)
 {
     if (value)
@@ -63,16 +66,13 @@ static void SetButtonState(lv_obj_t* obj, short value)
     }
 }
 
+// Helper to check if an LVGL button/switch is currently checked
 static bool IsButtonChecked(lv_obj_t* obj)
 {
-    if ((lv_obj_get_state(obj) & LV_STATE_CHECKED) == LV_STATE_CHECKED)
-    {
-        return true;
-    }
-
-    return false;
+    return (lv_obj_get_state(obj) & LV_STATE_CHECKED) == LV_STATE_CHECKED;
 }
 
+// Enables or disables the grouping of WiFi-specific configuration inputs
 static void SetEnableWiFiInput(bool state)
 {
     if (state)
@@ -95,6 +95,7 @@ static void SetEnableWiFiInput(bool state)
 
 SettingScreen::SettingScreen(SCREEN_NAME screen) : BaseScreen(screen)
 {
+    // Configure event callbacks for all interactive settings UI components
     ListButtonCallback = {
         { ui_btnSettingCancel      , OnClickCancel                                       , LV_EVENT_CLICKED       },
         { ui_btnSettingCancel      , OnClickCancel                                       , LV_EVENT_SHORT_CLICKED },
@@ -110,6 +111,7 @@ SettingScreen::SettingScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { ui_btnDuktoAddr          , OnClickEdit                                         , LV_EVENT_SHORT_CLICKED },
     };
 
+    // Reactive data bindings for dynamic UI updates
     ListDataUpdateCallback = {
         { []() { return temp_data::KeyboardType.GetState(); }, UpdateKeyboardSetting },
         { []() { return temp_data::NetworkType.GetState();  }, UpdateNetworkState    },
@@ -118,6 +120,7 @@ SettingScreen::SettingScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { []() { return temp_data::DuktoIP.GetState();      }, SetDuktoServerIP      },
     };
 
+    // Map screen buttons to physical virtual keys for standard keyboard interaction
     ListButtonVkCode = {
         { ui_btnSettingCancel, VK_RBUTTON },
         { ui_btnSettingSave  , VK_APPS    },
@@ -138,6 +141,7 @@ void SettingScreen::InitSettingScreen()
     InitNetworkSetting();
 }
 
+// Synchronizes the 'General' tab UI with current staged data
 void SettingScreen::InitGeneralSetting()
 {
     dropdownlist_lib::UpdateDropdownList({
@@ -150,6 +154,7 @@ void SettingScreen::InitGeneralSetting()
     SetButtonState(ui_swPlayVideo, temp_data::PlayVideoState.GetValue());
 }
 
+// Synchronizes the 'Keyboard' tab UI with current staged data
 void SettingScreen::InitKeyboardSetting()
 {
     dropdownlist_lib::UpdateDropdownList({
@@ -162,13 +167,13 @@ void SettingScreen::InitKeyboardSetting()
     SetButtonState(ui_swAutoCloseBracket, temp_data::AutoCloseBracketState.GetValue());
 }
 
+// Scans network interfaces and populates the 'Network' tab UI
 void SettingScreen::InitNetworkSetting()
 {
-    // Get network info
     network_lib::GetLANConnections();
     network_lib::GetWiFiSSIDs();
 
-    // Init network type
+    // Populate network adapter selection dropdown
     auto& dropNetworkTypeInfo = dropdownlist_lib::GetDropdownInfo(DROPDOWNLIST_NAME::DD_NETWORK_TYPE);
     dropNetworkTypeInfo.options = network_lib::CreateNetworkTypeDropdownOptions();
 
@@ -182,7 +187,7 @@ void SettingScreen::InitNetworkSetting()
         temp_data::NetworkType.SetValue(0);
     }
 
-    // Init SSID
+    // Populate WiFi SSID selection dropdown
     auto& dropSSIDInfo = dropdownlist_lib::GetDropdownInfo(DROPDOWNLIST_NAME::DD_SSID);
     dropSSIDInfo.options = network_lib::CreateSSIDDropdownOptions();
     dropSSIDInfo.options.insert(dropSSIDInfo.options.begin(), "-- No change --");
@@ -191,7 +196,7 @@ void SettingScreen::InitNetworkSetting()
     // Init host name input
     lv_label_set_text(ui_lblHostName, network_lib::GetLocalHostName().c_str());
 
-    // Init Dukto server IP input
+    // Initialize Dukto server address display from packed data
     auto strIP = network_lib::CalculateIPStrFromCombinedNum(temp_data::DuktoIPPart12.GetValue(), temp_data::DuktoIPPart34.GetValue());
     temp_data::DuktoIP.SetValue(strIP);
 }
@@ -208,6 +213,7 @@ void SettingScreen::OnClickSave(lv_event_t* event)
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);
 }
 
+// Redirects to the virtual keyboard screen for specialized input fields
 void SettingScreen::OnClickEdit(lv_event_t* event)
 {
     auto obj = (lv_obj_t*)(event->current_target);
@@ -222,6 +228,7 @@ void SettingScreen::OnClickEdit(lv_event_t* event)
     }
 }
 
+// Enables or disables T9 specific settings based on the selected keyboard type
 void SettingScreen::UpdateKeyboardSetting()
 {
     if (temp_data::KeyboardType.GetValue() != (short)dropdownlist_lib::DD_KEYBOARD_TYPE_e::Standard_keyboard)
@@ -236,6 +243,7 @@ void SettingScreen::UpdateKeyboardSetting()
     }
 }
 
+// Refreshes adapter-specific IP information and WiFi controls when the selected network interface changes
 void SettingScreen::UpdateNetworkState()
 {
     const auto& info = network_lib::listLanInfo[temp_data::NetworkType.GetValue()];
@@ -267,6 +275,7 @@ void SettingScreen::UpdateNetworkState()
     UpdateIPInput(info.description);
 }
 
+// Triggers a WiFi connection attempt when the user selects a new SSID or enters a password
 void SettingScreen::UpdateWiFiInfo()
 {
     if (temp_data::SSID.GetValue() > 0)
@@ -284,15 +293,13 @@ void SettingScreen::UpdateWiFiInfo()
     }
 }
 
+// Validates, parses and packs the Dukto server IP string into its storage format
 void SettingScreen::SetDuktoServerIP()
 {
     auto value = temp_data::DuktoIP.GetValue();
     auto periodCount = std::count(value.begin(), value.end(), '.');
     bool isAllDigit = true;
-    std::string part1 = "";
-    std::string part2 = "";
-    std::string part3 = "";
-    std::string part4 = "";
+    std::string part1 = "", part2 = "", part3 = "", part4 = "";
 
     temp_data::DuktoIPPart12.SetValue(0);
     temp_data::DuktoIPPart34.SetValue(0);

@@ -4,11 +4,11 @@
 
 namespace dropdownlist_lib
 {
-    static std::unordered_map<DROPDOWNLIST_NAME, dropdown_info_t> mapDropdownInfo;
+    static std::unordered_map<DROPDOWNLIST_NAME, dropdown_info_t> mapDropdownInfo; // Internal registry of all managed dropdown widgets
 
     void SetupDropdownList()
     {
-        // Register dropdownlist info
+        // Initializes the registry with UI objects, option strings, and associated data pointers
         mapDropdownInfo = {
             {
                 DROPDOWNLIST_NAME::DD_VIDEO_SEARCH,
@@ -91,13 +91,15 @@ namespace dropdownlist_lib
             },
         };
 
-        // Init dropdown options
+        // Populate options and set initial selection for each registered dropdown
         for (auto& info : mapDropdownInfo)
         {
             auto& tempInfo = info.second;
 
+            // Apply option list separated by newlines
             lv_dropdown_set_options(tempInfo.dropdownObj, common_lib::JoinString("\n", tempInfo.options).c_str());
 
+            // Set the UI selection index based on current CData value
             for (int i = 0; i < tempInfo.options.size(); i++)
             {
                 if (tempInfo.data->GetValue() == i)
@@ -111,14 +113,17 @@ namespace dropdownlist_lib
 
     void UpdateDropdownList(std::vector<DROPDOWNLIST_NAME> listName)
     {
+        // Selectively updates only the dropdowns specified in listName
         for (auto& info : mapDropdownInfo)
         {
             if (std::find(listName.begin(), listName.end(), info.first) != listName.end())
             {
                 auto& tempInfo = info.second;
 
+                // Refresh options list
                 lv_dropdown_set_options(tempInfo.dropdownObj, common_lib::JoinString("\n", tempInfo.options).c_str());
 
+                // Re-synchronize selected index from data
                 for (int i = 0; i < tempInfo.options.size(); i++)
                 {
                     if (tempInfo.data->GetValue() == i)
@@ -133,16 +138,19 @@ namespace dropdownlist_lib
 
     dropdown_info_t& GetDropdownInfo(DROPDOWNLIST_NAME name)
     {
+        // Returns the metadata structure for a specific dropdown
         return mapDropdownInfo[name];
     }
 
     short GetDropdownSelectedIndex(DROPDOWNLIST_NAME name)
     {
+        // Helper to retrieve the current selection index from the UI object
         return lv_dropdown_get_selected(mapDropdownInfo[name].dropdownObj);
     }
 
     void UpdateDropdownData(lv_obj_t* obj)
     {
+        // Synchronizes the CData value with the UI's current selection
         for (auto& info : mapDropdownInfo)
         {
             if (info.second.dropdownObj == obj)

@@ -4,6 +4,7 @@
 
 namespace systemsetting_lib
 {
+    // Mapping of application settings to their configuration keys and default values
     static std::vector<setting_info_t> listSettingInfo = {
         { &temp_data::DateFormat               , &setting_data::DateFormat               , L"DateFormat"               , 0 },
         { &temp_data::DateSeparator            , &setting_data::DateSeparator            , L"DateSeparator"            , 0 },
@@ -22,19 +23,21 @@ namespace systemsetting_lib
 
     void SetupSystemData()
     {
-
+        // Reserved for future system-level data initialization
     }
 
     void SetupSetting()
     {
+        // Loads all settings from the persistent configuration file into memory
         for (auto& info : listSettingInfo)
         {
             auto value = config_lib::GetUShortConfig(SYSTEM_SECTION, info.configName, common_lib::GetFullPath(SYSTEM_CONFIG));
-            info.settingData->SetValue(value);
-            info.tempData->SetValue(value);
-            info.configValue = value;
+            info.settingData->SetValue(value); // Set persistent storage
+            info.tempData->SetValue(value); // Set temporary staging buffer
+            info.configValue = value; // Update default reference
         }
 
+        // Initialize the formatted Dukto IP string from the individual octet pairs
         temp_data::DuktoIP.SetValue(network_lib::CalculateIPStrFromCombinedNum(
             setting_data::DuktoIPPart12.GetValue(),
             setting_data::DuktoIPPart34.GetValue()
@@ -43,26 +46,26 @@ namespace systemsetting_lib
 
     void SetupTempSetting()
     {
-        // Copy setting to temp data
+        // Synchronizes temporary buffers with persistent data, typically called before entering a settings screen
         for (auto& info : listSettingInfo)
         {
-            info.tempData->SetValue(0); // Clear data for changing state
+            info.tempData->SetValue(0); // Reset to ensure state change logic triggers if needed
             info.tempData->SetValue(info.settingData->GetValue());
         }
     }
 
     void SaveSetting()
     {
-        // Copy temp to setting data
+        // Commits temporary staged changes to persistent memory and writes to the filesystem
         for (auto& info : listSettingInfo)
         {
             auto value = info.tempData->GetValue();
 
-            info.settingData->SetValue(0); // Clear data for changing state
+            info.settingData->SetValue(0); // Reset to ensure state change triggers
             info.settingData->SetValue(value);
             info.configValue = value;
 
-            // Write to config file
+            // Update the INI configuration file on disk
             config_lib::WriteWStringConfig(SYSTEM_SECTION, info.configName, common_lib::GetFullPath(SYSTEM_CONFIG), std::to_wstring(value));
         }
     }

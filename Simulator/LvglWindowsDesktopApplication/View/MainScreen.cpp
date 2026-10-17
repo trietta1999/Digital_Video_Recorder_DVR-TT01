@@ -7,19 +7,21 @@
 #include "VideoRecordListScreen.h"
 #include "SettingScreen.h"
 
-static lv_timer_t* timerGetSystemData = nullptr;
-static int currentExtIndex = 0;
-static lv_obj_t* dummyVolumeUpKey = nullptr;
-static lv_obj_t* dummyVolumeDownKey = nullptr;
-static lv_obj_t* dummyPlayPauseKey = nullptr;
+static lv_timer_t* timerGetSystemData = nullptr; /// Timer for periodic system data updates (Clock, Storage)
+static int currentExtIndex = 0;                  /// Currently selected external storage device index
+static lv_obj_t* dummyVolumeUpKey = nullptr;     /// Virtual key for volume up control
+static lv_obj_t* dummyVolumeDownKey = nullptr;   /// Virtual key for volume down control
+static lv_obj_t* dummyPlayPauseKey = nullptr;    /// Virtual key for play/pause toggle
 
 static void CreateDateTimeStr(std::string& dateStr, std::string& timeStr)
 {
+    // Format system date and time strings based on user settings
     char buffDate[MAX_PATH] = { 0 };
     char buffTime[MAX_PATH] = { 0 };
     char separator = 0;
     auto systime = common_lib::GetSystemDateTime();
 
+    // Determine the date separator character
     switch (setting_data::DateSeparator.GetValue())
     {
     case (short)dropdownlist_lib::DD_DATE_SEPARATOR_e::Period:
@@ -38,6 +40,7 @@ static void CreateDateTimeStr(std::string& dateStr, std::string& timeStr)
         break;
     }
 
+    // Determine the date format order
     switch (setting_data::DateFormat.GetValue())
     {
     case (short)dropdownlist_lib::DD_DATE_FORMAT_e::DDMMYYYY:
@@ -65,6 +68,7 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
     CREATE_OBJECT(dummyVolumeDownKey);
     CREATE_OBJECT(dummyPlayPauseKey);
 
+    // Configure button interactions
     ListButtonCallback = {
         { ui_btnNewVideo       , OnClickNew            , LV_EVENT_CLICKED       },
         { ui_btnNewVideo       , OnClickNew            , LV_EVENT_SHORT_CLICKED },
@@ -90,6 +94,7 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { dummyPlayPauseKey    , OnClickOperator       , LV_EVENT_SHORT_CLICKED },
     };
 
+    // Configure data observers for UI syncing
     ListDataUpdateCallback = {
         { []() { return system_data::DeviceChange.GetState();    }, UpdateExtDevice },
         { []() { return system_data::CurrentDate.GetState();     }, UpdateDate      },
@@ -100,6 +105,7 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
         { []() { return system_data::IsTempVideoInfo.GetState(); }, UpdateButton    },
     };
 
+    // Mapping physical keys to UI buttons
     ListButtonVkCode = {
         { ui_btnSound          , VK_VOLUME_MUTE },
         { ui_btnFastForward    , VK_RIGHT       },
@@ -115,6 +121,7 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
 
     lv_obj_update_layout(ui_wndReview); // Forcing component recalculation after screen changes
 
+    // Load temporary video metadata if available
     if (!system_data::IsTempVideoInfo.GetValue())
     {
         // Get temp video info
@@ -139,6 +146,7 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
     // Init state
     system_data::CurrentState.SetValue(STATE_TYPE::S_STOP);
 
+    // Initialize video review window if enabled in settings
     if (setting_data::PreviewVideoState.GetValue())
     {
         // Show review sub-screen
@@ -147,12 +155,13 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
 
     UpdateSoundButton();
 
-    // Create get system timer
+    // Start the system update timer
     timerGetSystemData = lv_timer_create([](lv_timer_t* timer) {
         std::string buffDate = "", buffTime = "";
 
         CreateDateTimeStr(buffDate, buffTime);
 
+        // Sync system data to shared state
         system_data::CurrentDate.SetValue(buffDate);
         system_data::CurrentTime.SetValue(buffTime);
         system_data::FreeStorage.SetValue(storage_lib::GetDriveFreeStorage(common_lib::ConvertWStringToString(common_lib::GetSystemPath())));
@@ -173,21 +182,22 @@ MainScreen::MainScreen(SCREEN_NAME screen) : BaseScreen(screen)
 
 MainScreen::~MainScreen()
 {
-    lv_timer_del(timerGetSystemData);
+    lv_timer_del(timerGetSystemData); // Cleanup timer
     timerGetSystemData = nullptr;
 
     // Exit review sub-screen
-    videorecord_lib::StopExternalWindow();
+    videorecord_lib::StopExternalWindow(); // Close video window
 }
 
 void MainScreen::OnClickNew(lv_event_t* event)
 {
-    ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_VIDEO_INPUT);
+    ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_VIDEO_INPUT); // Navigate to metadata input
     VideoInfoScreen::VideoInfoScreenInit();
 }
 
 void MainScreen::OnClickClose(lv_event_t* event)
 {
+    // Reset all temporary recording data
     // Clear input data
     input_data::VideoEvent.SetValue("");
     input_data::VideoName.SetValue("");
@@ -204,6 +214,7 @@ void MainScreen::OnClickClose(lv_event_t* event)
 
     system_data::IsTempVideoInfo.SetValue(false);
 
+    // Stop playback/record
     // Call button event Stop
     event->current_target = ui_btnStop;
     OnClickOperator(event);
@@ -216,8 +227,9 @@ void MainScreen::OnClickOperator(lv_event_t* event)
 
     if (obj == ui_btnRec)
     {
-        videoinfo_lib::UpdateCurrentInfoDateTime();
+        videoinfo_lib::UpdateCurrentInfoDateTime(); // Capture start time
 
+        // Prepare video metadata for the new record
         // Create current video info
         videoinfo_lib::videoinfo_t info = {
             current_videoinfo_data::VideoID.GetValue(),

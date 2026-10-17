@@ -41,6 +41,7 @@ VideoInfoScreen::VideoInfoScreen(SCREEN_NAME screen) : BaseScreen(screen)
 
 void VideoInfoScreen::VideoInfoScreenInit()
 {
+    // Initialize temporary metadata staging area with current input data
     COPY_CDATA_1TO2(input_data::VideoEvent, temp_data::VideoEvent);
     COPY_CDATA_1TO2(input_data::VideoName, temp_data::VideoName);
     COPY_CDATA_1TO2(input_data::VideoCategory, temp_data::VideoCategory);
@@ -53,6 +54,7 @@ void VideoInfoScreen::OnClickCancel(lv_event_t* event)
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);
 }
 
+// Persists the draft metadata into the system staging context and returns to main
 void VideoInfoScreen::OnClickOK(lv_event_t* event)
 {
     COPY_CDATA_1TO2(temp_data::VideoEvent, input_data::VideoEvent);
@@ -65,6 +67,7 @@ void VideoInfoScreen::OnClickOK(lv_event_t* event)
 
     videoinfo_lib::CreateCurrentInfoFromInput();
 
+    // Consolidate metadata and timestamp for storage
     videoinfo_lib::videoinfo_t info = {
         current_videoinfo_data::VideoID.GetValue(),
         current_videoinfo_data::VideoEvent.GetValue(),
@@ -84,11 +87,12 @@ void VideoInfoScreen::OnClickOK(lv_event_t* event)
         }
     };
 
-    videoinfo_lib::CreateTempData(info);
+    videoinfo_lib::CreateTempData(info); // Save to Temp section in INI
 
     ScreenMapping::GetInstance().ChangeScreen(SCREEN_NAME::SCREEN_MAIN);
 }
 
+// Redirects to keyboard screen for specific metadata field editing
 void VideoInfoScreen::OnClickInput(lv_event_t* event)
 {
     auto obj = (lv_obj_t*)(event->current_target);
@@ -120,6 +124,7 @@ void VideoInfoScreen::OnLongPressInput(lv_event_t* event)
 
 }
 
+// Updates UI labels with staged data and validates form completion
 void VideoInfoScreen::UpdateVideoInfo()
 {
     if (temp_data::VideoEvent.GetState())

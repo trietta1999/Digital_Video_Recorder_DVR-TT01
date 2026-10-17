@@ -8,17 +8,19 @@
 #include "VideoRecordListScreen.h"
 #include "SettingScreen.h"
 
+// Singleton accessor for the ScreenMapping instance
 ScreenMapping& ScreenMapping::GetInstance()
 {
     static ScreenMapping instance;
     return instance;
 }
 
+// Constructor initializes the screen map with factory functions and LVGL transition logic
 ScreenMapping::ScreenMapping()
 {
-    event = { 0 };
+    event = { 0 }; // Initialize empty event context
 
-    // Add screen info to map
+    // Map screen identifiers to their respective creation and transition lambdas
     mapScreenInfo = {
         {
             SCREEN_NAME::SCREEN_MAIN,
@@ -58,16 +60,19 @@ ScreenMapping::ScreenMapping()
     };
 }
 
+// Stores the last triggered LVGL event for asynchronous handling
 void ScreenMapping::SetEvent(lv_event_t event)
 {
     this->event = event;
 }
 
+// Orchestrates the transition from one screen to another
 void ScreenMapping::ChangeScreen(SCREEN_NAME screen)
 {
-    // Delete current screen info
+    // Cleanup previous screen instance
     delete currentScreenInfo.second;
 
+    // Handle standard application screens
     if (common_lib::CheckInRangeNumber((int)screen, (int)SCREEN_NAME::MIN_SCREEN, (int)SCREEN_NAME::MAX_SCREEN))
     {
         system_data::CurrentScreen.SetValue(screen);
@@ -75,30 +80,34 @@ void ScreenMapping::ChangeScreen(SCREEN_NAME screen)
 
         // Create new screen info
         currentScreenInfo.first = screen;
-        mapScreenInfo[screen].second(); // Call change screen
-        lv_timer_handler();
-        currentScreenInfo.second = mapScreenInfo[screen].first(); // Create screen class
+        mapScreenInfo[screen].second(); // Execute LVGL screen load logic
+        lv_timer_handler(); // Force UI update to ensure objects are available
+        currentScreenInfo.second = mapScreenInfo[screen].first(); // Instantiate the screen controller class
     }
+    // Handle specialized keyboard entry screens
     else if (common_lib::CheckInRangeNumber((int)screen, (int)SCREEN_NAME::MIN_KBSCREEN, (int)SCREEN_NAME::MAX_KBSCREEN))
     {
         system_data::CurrentKbScreen.SetValue(screen);
 
         // Create keyboard screen info
         currentScreenInfo.first = SCREEN_NAME::SCREEN_KEYBOARD;
-        mapScreenInfo[SCREEN_NAME::SCREEN_KEYBOARD].second(); // Call change screen
+        mapScreenInfo[SCREEN_NAME::SCREEN_KEYBOARD].second(); // Shift to the generic keyboard UI
         lv_timer_handler();
-        currentScreenInfo.second = mapScreenInfo[SCREEN_NAME::SCREEN_KEYBOARD].first(); // Create screen class
+        currentScreenInfo.second = mapScreenInfo[SCREEN_NAME::SCREEN_KEYBOARD].first(); // Instantiate keyboard controller
     }
 
-    currentScreenInfo.second->RegisterKeyboard(); // Register keyboard
+    currentScreenInfo.second->RegisterKeyboard(); // Apply new key mappings for the active screen
 }
 
+// Main processing loop for screen-specific interactions and data reactive updates
 void ScreenMapping::HandleScreen()
 {
-    // Handle operation
+    // Execute interaction logic based on the stored event
     currentScreenInfo.second->ButtonOperator(&event);
+
+    // Execute periodic data sync/UI updates
     currentScreenInfo.second->DataUpdateOperator();
 
-    // Reset event data
+    // Clear the event context after processing to prevent repeated triggers
     event = { 0 };
 }

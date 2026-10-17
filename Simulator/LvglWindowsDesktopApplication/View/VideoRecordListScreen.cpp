@@ -8,19 +8,20 @@
 
 struct row_info_t
 {
-    lv_obj_t* rowObj;
-    lv_obj_t* checkboxObj;
-    lv_obj_t* checkboxTransferObj;
-    lv_obj_t* datetimeObj;
-    lv_obj_t* nameObj;
-    bool isCheck;
-    bool isTransfered;
-    std::string datetime;
-    std::string name;
-    std::string id;
+    lv_obj_t* rowObj; // Main container for the row
+    lv_obj_t* checkboxObj; // Selection checkbox object
+    lv_obj_t* checkboxTransferObj; // Status icon for file transfer status
+    lv_obj_t* datetimeObj; // Label for recording timestamp
+    lv_obj_t* nameObj; // Label for video filename/title
+    bool isCheck; // Internal state of row selection
+    bool isTransfered; // Internal state of transfer completion
+    std::string datetime; // Formatted datetime string
+    std::string name; // Video name string
+    std::string id; // Unique video identifier
 
     bool operator==(const row_info_t& other)
     {
+        // Comparison operator for identifying unique rows in vectors
         return ((other.isCheck == this->isCheck)
             && (other.datetime == this->datetime)
             && (other.name == this->name)
@@ -30,6 +31,7 @@ struct row_info_t
 
     void CreateUI(lv_obj_t* row, lv_obj_t* checkbox, lv_obj_t* checkboxTransfer, lv_obj_t* datetime, lv_obj_t* name)
     {
+        // Links UI objects to the row metadata structure
         this->rowObj = row;
         this->checkboxObj = checkbox;
         this->checkboxTransferObj = checkboxTransfer;
@@ -39,6 +41,7 @@ struct row_info_t
 
     void CreateData(std::string datetime, std::string name, std::string id)
     {
+        // Populates UI labels and internal state from video data
         lv_label_set_text(this->datetimeObj, datetime.c_str());
         lv_label_set_text(this->nameObj, name.c_str());
         lv_obj_add_state(this->checkboxTransferObj, LV_STATE_CHECKED);
@@ -52,6 +55,7 @@ struct row_info_t
 
     void UpdateRow()
     {
+        // Synchronizes internal boolean state with LVGL object state
         if ((lv_obj_get_state(rowObj) & LV_STATE_CHECKED) == LV_STATE_CHECKED)
         {
             isCheck = true;
@@ -61,6 +65,7 @@ struct row_info_t
             isCheck = false;
         }
 
+        // Applies visual checkbox update based on the checked state
         if (isCheck)
         {
             lv_obj_add_state(checkboxObj, LV_STATE_CHECKED);
@@ -73,33 +78,35 @@ struct row_info_t
 
     void UpdateTransferState() const
     {
+        // Toggles the transfer status icon based on 'isTransfered' state
         if (!isTransfered)
         {
-            lv_obj_add_state(checkboxTransferObj, LV_STATE_CHECKED);
+            lv_obj_add_state(checkboxTransferObj, LV_STATE_CHECKED); // Shows 'limited' or 'not transfered' icon
         }
         else
         {
-            lv_obj_remove_state(checkboxTransferObj, LV_STATE_CHECKED);
+            lv_obj_remove_state(checkboxTransferObj, LV_STATE_CHECKED); // Shows 'checked' icon
         }
     }
 
     void DeleteRow() const
     {
+        // Removes the row UI object from memory
         lv_obj_delete(rowObj);
     }
 };
 
-static std::vector<row_info_t> listRowInfo = {};
-static std::vector<row_info_t> listRowInfoSelected = {};
-static std::vector<std::pair<std::string, bool>> listTransferState = {};
-static lv_obj_t* dummyVolumeUpKey = nullptr;
-static lv_obj_t* dummyVolumeDownKey = nullptr;
-static lv_obj_t* dummyPlayPauseKey = nullptr;
-static int totalItemHeight = 0;
-static int totalRowHeight = 0;
-static short deleteTimeCounter = 0;
-static int copyItemCount = 0;
-static bool isInit = false;
+static std::vector<row_info_t> listRowInfo = {}; // Global list of all visible rows in the record list
+static std::vector<row_info_t> listRowInfoSelected = {}; // List of rows currently selected by the user
+static std::vector<std::pair<std::string, bool>> listTransferState = {}; // Persistent cache of video transfer statuses
+static lv_obj_t* dummyVolumeUpKey = nullptr; // Virtual object for Volume Up event mapping
+static lv_obj_t* dummyVolumeDownKey = nullptr; // Virtual object for Volume Down event mapping
+static lv_obj_t* dummyPlayPauseKey = nullptr; // Virtual object for Media Play/Pause event mapping
+static int totalItemHeight = 0; // Height of a single list item including padding
+static int totalRowHeight = 0; // Cumulative height of the entire scrollable list
+static short deleteTimeCounter = 0; // Accumulator for delete long-press duration
+static int copyItemCount = 0; // Counter for progress tracking during bulk file operations
+static bool isInit = false; // Flag to force list refresh on initialization
 
 static row_info_t CreateRowUI()
 {

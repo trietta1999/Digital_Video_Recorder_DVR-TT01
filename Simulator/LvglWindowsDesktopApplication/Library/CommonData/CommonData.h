@@ -8,44 +8,44 @@
 
 namespace system_data
 {
-    extern CData<HWND> WindowHandle;
-    extern CData<SCREEN_NAME> CurrentKbScreen;
-    extern CData<SCREEN_NAME> CurrentScreen;
-    extern CData<std::string> CurrentDate;
-    extern CData<std::string> CurrentTime;
-    extern CData<std::string> FreeStorage;
-    extern CData<std::string> FreeUSBStorage;
-    extern CData<STATE_TYPE> CurrentState;
-    extern CData<bool> IsTempVideoInfo;
-    extern CData<double> TransferPercent;
-    extern CData<bool> DeviceChange;
+    extern CData<HWND> WindowHandle; // Native handle of the main application window
+    extern CData<SCREEN_NAME> CurrentKbScreen; // Current virtual keyboard screen context
+    extern CData<SCREEN_NAME> CurrentScreen; // Current active application screen
+    extern CData<std::string> CurrentDate; // Formatted current date string
+    extern CData<std::string> CurrentTime; // Formatted current time string
+    extern CData<std::string> FreeStorage; // Available internal storage space description
+    extern CData<std::string> FreeUSBStorage; // Available external USB storage space description
+    extern CData<STATE_TYPE> CurrentState; // Current system operation state (Record, Play, etc.)
+    extern CData<bool> IsTempVideoInfo; // Flag indicating if current video info is non-persistent
+    extern CData<double> TransferPercent; // Progress percentage for file transfer operations
+    extern CData<bool> DeviceChange; // Flag indicating a hardware configuration change
 }
 
 namespace current_videoinfo_data
 {
-    extern CData<std::string> VideoID;
-    extern CData<std::string> VideoEvent;
-    extern CData<std::string> VideoName;
-    extern CData<std::string> VideoCategory;
-    extern CData<std::string> VideoDesc;
-    extern CData<std::string> VideoAuthor;
-    extern CData<unsigned short> VideoDay;
-    extern CData<unsigned short> VideoMonth;
-    extern CData<unsigned short> VideoYear;
-    extern CData<unsigned short> VideoHour;
-    extern CData<unsigned short> VideoMinute;
-    extern CData<unsigned short> VideoSecond;
+    extern CData<std::string> VideoID; // ID of the currently active or selected video
+    extern CData<std::string> VideoEvent; // Event title of current video
+    extern CData<std::string> VideoName; // Filename/Title of current video
+    extern CData<std::string> VideoCategory; // Category of current video
+    extern CData<std::string> VideoDesc; // Detailed description of current video
+    extern CData<std::string> VideoAuthor; // Author/Operator of current video
+    extern CData<unsigned short> VideoDay; // Recording day
+    extern CData<unsigned short> VideoMonth; // Recording month
+    extern CData<unsigned short> VideoYear; // Recording year
+    extern CData<unsigned short> VideoHour; // Recording hour
+    extern CData<unsigned short> VideoMinute; // Recording minute
+    extern CData<unsigned short> VideoSecond; // Recording second
 }
 
 namespace input_data
 {
-    extern CData<std::string> VideoEvent;
-    extern CData<std::string> VideoName;
-    extern CData<std::string> VideoCategory;
-    extern CData<std::string> VideoDesc;
-    extern CData<std::string> VideoAuthor;
-    extern CData<std::string> VideoSearch;
-    extern CData<short> VideoSearchType;
+    extern CData<std::string> VideoEvent; // UI input buffer for video event
+    extern CData<std::string> VideoName; // UI input buffer for video name
+    extern CData<std::string> VideoCategory; // UI input buffer for video category
+    extern CData<std::string> VideoDesc; // UI input buffer for video description
+    extern CData<std::string> VideoAuthor; // UI input buffer for video author
+    extern CData<std::string> VideoSearch; // UI input buffer for search query
+    extern CData<short> VideoSearchType; // Selected filter type for video search
 }
 
 namespace setting_data

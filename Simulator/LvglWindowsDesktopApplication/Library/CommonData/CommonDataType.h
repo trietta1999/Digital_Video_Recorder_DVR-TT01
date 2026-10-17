@@ -13,63 +13,63 @@
 
 #define STR(a) #a
 
-#define APP_NAME L"DVR-TT01"
-#define RECORD_SCREENNAME L"Record window"
-#define RECORD_PROCESSNAME L"Record process"
-#define REVIEW_SCREENNAME L"Review window"
-#define PLAY_SCREENNAME L"Play window"
+#define APP_NAME L"DVR-TT01" // Official application name
+#define RECORD_SCREENNAME L"Record window" // Title for the recording window
+#define RECORD_PROCESSNAME L"Record process" // Identifier for the recording process
+#define REVIEW_SCREENNAME L"Review window" // Title for the review window
+#define PLAY_SCREENNAME L"Play window" // Title for the playback window
 
-#define HORIZON_MAX_RESOLUTION 1280
-#define VERTICAL_MAX_RESOLUTION 800
+#define HORIZON_MAX_RESOLUTION 1280 // Maximum horizontal resolution in pixels
+#define VERTICAL_MAX_RESOLUTION 800 // Maximum vertical resolution in pixels
 
-#define debug_println(a) std::cout << std::string(a) << "\n"
+#define debug_println(a) std::cout << std::string(a) << "\n" // Helper for console logging
 
-#define TIMECYCLE_10MS 10
-#define TIMECYCLE_100MS 100
-#define TIMECYCLE_200MS 200
-#define TIMECYCLE_500MS 500
-#define TIMECYCLE_700MS 700
-#define TIMECYCLE_1SEC 1000
-#define TIMECYCLE_3SEC 3000
-#define TIMECYCLE_5SEC 5000
+#define TIMECYCLE_10MS 10 // 10 millisecond interval
+#define TIMECYCLE_100MS 100 // 100 millisecond interval
+#define TIMECYCLE_200MS 200 // 200 millisecond interval
+#define TIMECYCLE_500MS 500 // 500 millisecond interval
+#define TIMECYCLE_700MS 700 // 700 millisecond interval
+#define TIMECYCLE_1SEC 1000 // 1 second interval
+#define TIMECYCLE_3SEC 3000 // 3 second interval
+#define TIMECYCLE_5SEC 5000 // 5 second interval
 
-#define TID_KEYDOWN 1
-#define TID_VOLUME_WND 2
+#define TID_KEYDOWN 1 // Timer ID for key down events
+#define TID_VOLUME_WND 2 // Timer ID for volume window auto-hide
 
-#define VK_CHAR 0x100
-#define VK_KEY0 '0'
-#define VK_KEY9 '9'
-#define VK_KEYA 'A'
-#define VK_KEYZ 'Z'
+#define VK_CHAR 0x100 // Custom flag for character-based input
+#define VK_KEY0 '0' // Virtual key for '0'
+#define VK_KEY9 '9' // Virtual key for '9'
+#define VK_KEYA 'A' // Virtual key for 'A'
+#define VK_KEYZ 'Z' // Virtual key for 'Z'
 
-#define ACCEPT_ALL_CHARS ""
-#define ACCEPT_SPACE_ONLY " "
+#define ACCEPT_ALL_CHARS "" // Filter string for accepting any input
+#define ACCEPT_SPACE_ONLY " " // Filter string for accepting only spaces
 
-#define MAX_CHARS MAX_PATH * 2
+#define MAX_CHARS MAX_PATH * 2 // Generic buffer size for character arrays
 
-#define RL_ITEM_PER_PAGE 5
-#define SCROLL_Y_STEP 200
-#define VOLUME_STEP 2
+#define RL_ITEM_PER_PAGE 5 // Number of items per page in lists
+#define SCROLL_Y_STEP 200 // Pixel increment for vertical scrolling
+#define VOLUME_STEP 2 // Increment for system volume adjustment
 
-#define STANDARD_PERCENT 100
+#define STANDARD_PERCENT 100 // Scale factor for percentages
 
-#define WIFI_CONNECT_CHECK_RETRY_MAX 10
+#define WIFI_CONNECT_CHECK_RETRY_MAX 10 // Max attempts to verify WiFi connection
 
 #ifdef _DEBUG
-#define SCRIPT_DIRECTORY L"debug_script"
+#define SCRIPT_DIRECTORY L"debug_script" // Directory containing scripts for debug builds
 #else
-#define SCRIPT_DIRECTORY L"release_script"
+#define SCRIPT_DIRECTORY L"release_script" // Directory containing scripts for release builds
 #endif
 
-#define CREATE_OBJECT(name) if (!name) name = lv_button_create(nullptr);
+#define CREATE_OBJECT(name) if (!name) name = lv_button_create(nullptr); // Helper macro to instantiate LVGL button if null
 
 enum
 {
     WM_USER_MIN = WM_USER,
-    WM_KB_KEYDOWN,
-    WM_DEVICECHANGE_DONE,
-    WM_HOOK_NUMPAD_START,
-    WM_HOOK_NUMPAD_STOP,
+    WM_KB_KEYDOWN, // Custom message for virtual keyboard key presses
+    WM_DEVICECHANGE_DONE, // Custom message for completion of device change handling
+    WM_HOOK_NUMPAD_START, // Command to activate numpad hook
+    WM_HOOK_NUMPAD_STOP, // Command to deactivate numpad hook
 };
 
 #define TO_ENUM(enum_name, item) item,

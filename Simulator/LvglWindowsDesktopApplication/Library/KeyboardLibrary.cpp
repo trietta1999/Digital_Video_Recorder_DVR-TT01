@@ -6,17 +6,18 @@ namespace keyboard_lib
 {
     struct TextType_t
     {
-        char lower;
-        char upper;
+        char lower; // Character in lowercase
+        char upper; // Character in uppercase
     };
 
     struct NumpadKeyExchange_t
     {
-        int keyOrg;
-        int keyExchange;
-        SCREEN_NAME screenName;
+        int keyOrg; // Original virtual key code
+        int keyExchange; // Virtual key code to exchange with
+        SCREEN_NAME screenName; // Target screen context for this exchange
     };
 
+    // Mapping of virtual numpad keys to characters
     static std::vector<std::pair<int, char>> listNumber = {
         { VK_NUMPAD0, '0' },
         { VK_NUMPAD1, '1' },
@@ -30,6 +31,7 @@ namespace keyboard_lib
         { VK_NUMPAD9, '9' },
     };
 
+    // Mapping of T9 numeric combinations to characters
     static std::vector<std::pair<std::string, TextType_t>> listCombineChar = {
         { "0"     , { ' ', ' ' } },
         { "00"    , { '(', '(' } },
@@ -68,6 +70,7 @@ namespace keyboard_lib
         { "9999"  , { 'z', 'Z' } },
     };
 
+    // Mapping of special key combinations to characters
     static std::vector<std::pair<std::pair<int, int>, char>> listSpecialChar = {
         { { 0       , VK_OEM_PERIOD }, '.' },
         { { VK_SHIFT, VK_OEM_MINUS  }, '_' },
@@ -79,6 +82,7 @@ namespace keyboard_lib
         { { VK_SHIFT, '0'           }, ')' },
     };
 
+    // Table for remapping physical numpad keys to application functions
     static std::vector<NumpadKeyExchange_t> listNumpadKeyExchange = {
         { VK_NUMPAD1, VK_NUMPAD9, SCREEN_NAME::MAX_KBSCREEN },
         { VK_NUMPAD2, VK_NUMPAD6, SCREEN_NAME::MAX_KBSCREEN },
@@ -108,18 +112,20 @@ namespace keyboard_lib
         { VK_LAUNCH_APP2 , VK_F4    , SCREEN_NAME::MAX_SCREEN },
     };
 
-    static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {};
+    static std::vector<std::pair<lv_obj_t*, int>> listVkCode = {}; // List mapping UI buttons to virtual key codes
 
-    static std::string buff = "";
-    static char inputChar = 0;
-    static char combineChar = 0;
-    static bool isLongPress = false;
-    static unsigned long long keydownTime = 0;
-    static unsigned long long keydownTimeRepeat = 0;
-    static HHOOK keyboardHook = NULL;
+    static std::string buff = ""; // Buffer for T9 numeric sequence
+    static char inputChar = 0; // Buffer for direct character input
+    static char combineChar = 0; // Buffer for T9 combined character output
+    static bool isLongPress = false; // Flag to track long press state
+    static unsigned long long keydownTime = 0; // Timestamp for initial key down
+    static unsigned long long keydownTimeRepeat = 0; // Timestamp for repeat interval tracking
+    static HHOOK keyboardHook = NULL; // Handle to the low-level keyboard hook
 
-    void SendKeyMessage(int keycode, lv_event_code_t event)
+
+        void SendKeyMessage(int keycode, lv_event_code_t event)
     {
+        // Forwards the keyboard event to the main window message loop
         ::SendMessage(system_data::WindowHandle.GetValue(), WM_KB_KEYDOWN, keycode, event);
     }
 
@@ -127,14 +133,15 @@ namespace keyboard_lib
     {
         if (event == LV_EVENT_SHORT_CLICKED)
         {
-            // Confirm key
+            // Confirm key (T9 logic)
             if (keycode == VK_CONVERT)
             {
-                // Match number buffer to character
+                // Match the accumulated numeric buffer to a character in the T9 map
                 for (const auto& item : listCombineChar)
                 {
                     if (item.first == buff)
                     {
+                        // Assign uppercase or lowercase based on current keyboard state
                         if (!GetKeyboardCapsState())
                         {
                             combineChar = item.second.lower;
@@ -148,37 +155,37 @@ namespace keyboard_lib
                     }
                 }
 
-                buff.clear();
+                buff.clear(); // Reset buffer after confirmation
             }
-            // Other key
+            // Handling standard keys
             else
             {
-                // Direct char input
+                // Logic for direct character input (from a full keyboard layout)
                 if (keycode == VK_CHAR)
                 {
-                    auto key = (int*)ScreenMapping::GetInstance().GetEvent().param; // Get char keycode from event param
-                    inputChar = *key; // Default upper case or number
+                    auto key = (int*)ScreenMapping::GetInstance().GetEvent().param; // Retrieve character code from event parameter
+                    inputChar = *key; // Set input character (defaults to upper/number)
 
-                    if (common_lib::CheckInRangeNumberEqual(inputChar, VK_KEYA, VK_KEYZ)) // Char key
+                    // Auto-convert to lowercase if Caps Lock logic allows
+                    if (common_lib::CheckInRangeNumberEqual(inputChar, VK_KEYA, VK_KEYZ))
                     {
                         if (!GetKeyboardCapsState())
                         {
-                            inputChar += 0x20; // Convert to lower case
+                            inputChar += 0x20; // ASCII offset for lowercase
                         }
                     }
 
-                    delete key; // Delete heap
+                    delete key; // Free heap memory allocated for the parameter
                 }
                 else
                 {
-                    // Get input key
+                    // Logic for numeric pad (T9 input collection)
                     for (const auto& item : listNumber)
                     {
                         if (item.first == keycode)
                         {
-                            // Push input char num to buffer
-                            inputChar = item.second;
-                            buff.push_back(item.second);
+                            inputChar = item.second; // Store latest numeric char
+                            buff.push_back(item.second); // Append to T9 sequence buffer
                             break;
                         }
                     }
@@ -187,20 +194,19 @@ namespace keyboard_lib
         }
         else if (event == LV_EVENT_LONG_PRESSED)
         {
-            // Backspace key
+            // Backspace long press clears the entire T9 buffer
             if (keycode == VK_BACK)
             {
                 buff.clear();
             }
-            // Other key
+            // Other keys long press might directly output the number instead of T9 sequence
             else
             {
-                // Set number output
                 for (const auto& item : listNumber)
                 {
                     if (item.first == keycode)
                     {
-                        combineChar = item.second;
+                        combineChar = item.second; // Direct numeric output
                         break;
                     }
                 }
@@ -210,6 +216,7 @@ namespace keyboard_lib
 
     char GetInputChar()
     {
+        // Consumes and returns the latest direct input character
         auto temp = inputChar;
         inputChar = 0;
         return temp;
@@ -217,6 +224,7 @@ namespace keyboard_lib
 
     char GetCombineChar()
     {
+        // Consumes and returns the latest T9 combined character
         auto temp = combineChar;
         combineChar = 0;
         return temp;
@@ -226,27 +234,31 @@ namespace keyboard_lib
     {
         BYTE keyState[256] = { 0 };
 
-        (void)::GetKeyboardState(keyState);
+        (void)::GetKeyboardState(keyState); // Fetch current system-wide keyboard state
 
+        // Modify the specific virtual key's toggled state
         if (state)
         {
-            keyState[vk] |= 0x01; // On
+            keyState[vk] |= 0x01; // Set bit 0 (toggled on)
         }
         else
         {
-            keyState[vk] &= ~0x01; // Off
+            keyState[vk] &= ~0x01; // Clear bit 0 (toggled off)
         }
 
-        ::SetKeyboardState(keyState);
+        ::SetKeyboardState(keyState); // Apply the modified state back to the system
 
+        // Simulate a physical key press/release to trigger system updates (like UI indicators)
         ::keybd_event(vk, 0x45, KEYEVENTF_EXTENDEDKEY | 0, 0);
         ::keybd_event(vk, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 
-        ::Sleep(TIMECYCLE_10MS);
+        ::Sleep(TIMECYCLE_10MS); // Short delay to allow system processing
     }
 
     bool GetKeyboardCapsState()
     {
+        // Logic to determine if characters should be uppercase
+        // Based on Caps Lock state XORed with Shift key state
         auto isShiftPressed = (::GetKeyState(VK_SHIFT) & 0x8000) != 0;
         auto isCapsLockOn = (::GetKeyState(VK_CAPITAL) & 0x0001) != 0;
         auto state = isCapsLockOn ^ isShiftPressed;
@@ -256,6 +268,7 @@ namespace keyboard_lib
 
     short GetAutoConfirmTimeMs()
     {
+        // Returns the timeout value based on the user's T9 speed setting
         switch (setting_data::T9AutoConfirmSpeed.GetValue())
         {
         case (short)dropdownlist_lib::DD_T9_AUTO_CONFIRM_SPEED_e::Slow:
@@ -271,24 +284,25 @@ namespace keyboard_lib
 
     const std::vector<std::pair<lv_obj_t*, int>>& GetListVkCode()
     {
-        return listVkCode;
+        return listVkCode; // Returns the mapping of UI objects to key codes
     }
 
     void SetListVkCode(const std::vector<std::pair<lv_obj_t*, int>>& list)
     {
-        listVkCode = list;
+        listVkCode = list; // Updates the mapping of UI objects to key codes
     }
 
     void CALLBACK AutoConfirmKey(HWND hwnd, UINT uMsg, UINT_PTR timerId, DWORD dwTime)
     {
-        ::KillTimer(hwnd, TID_KEYDOWN);
+        ::KillTimer(hwnd, TID_KEYDOWN); // Stop the confirmation timer
 
+        // If on a keyboard screen and not using a standard keyboard, trigger auto-confirm
         if ((system_data::CurrentKbScreen.GetValue() != SCREEN_NAME::MIN_KBSCREEN)
             && (setting_data::KeyboardType.GetValue() != (short)dropdownlist_lib::DD_KEYBOARD_TYPE_e::Standard_keyboard))
         {
             lv_event_t e = { 0 };
 
-            // Match VK code with real button on screen keypad
+            // Find the UI object corresponding to the 'Convert/Confirm' key
             for (const auto& item : listVkCode)
             {
                 if (item.second == VK_CONVERT)
@@ -298,8 +312,8 @@ namespace keyboard_lib
                 }
             }
 
-            e.code = LV_EVENT_SHORT_CLICKED;
-            ScreenMapping::GetInstance().SetEvent(e);
+            e.code = LV_EVENT_SHORT_CLICKED; // Trigger a click event
+            ScreenMapping::GetInstance().SetEvent(e); // Dispatch event to LVGL
         }
     }
 
@@ -310,14 +324,15 @@ namespace keyboard_lib
         switch (uMsg)
         {
         case WM_KB_KEYDOWN:
+            // Custom message handler for virtual key processing
             keyboard_lib::CalculateInputChar(wParam, lParam);
             break;
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
         {
-            bool isRepeat = (lParam & (1 << 30)) != 0;
+            bool isRepeat = (lParam & (1 << 30)) != 0; // Check if this is an auto-repeat message
 
-            // Match VK code with real button on screen keypad
+            // Map physical virtual key to corresponding UI button
             for (const auto& item : listVkCode)
             {
                 if (item.second == wParam)
@@ -329,16 +344,15 @@ namespace keyboard_lib
 
             if (!isRepeat)
             {
-                // Get current time when key is the first pressing
+                // Record time of first press
                 keydownTime = ::GetTickCount64();
                 keydownTimeRepeat = ::GetTickCount64();
             }
             else
             {
-                // Repeat timeout -> Repeat send event long press
+                // Handle continuous repeat for long presses
                 if ((keydownTimeRepeat != 0) && (::GetTickCount64() - keydownTimeRepeat >= TIMECYCLE_100MS))
                 {
-                    // Match VK code with real button
                     for (const auto& item : listVkCode)
                     {
                         if (item.second == wParam)
@@ -354,7 +368,7 @@ namespace keyboard_lib
                     keydownTimeRepeat = ::GetTickCount64();
                 }
 
-                // Send event long press
+                // Initial long press detection (after first repeat message)
                 if (!isLongPress)
                 {
                     isLongPress = true;
@@ -370,7 +384,7 @@ namespace keyboard_lib
             keydownTimeRepeat = 0;
             auto isShiftPressed = (::GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
 
-            // Key down timeout
+            // Handle short click if key was released within the timeout and wasn't a long press
             if (::GetTickCount64() - keydownTime <= TIMECYCLE_500MS)
             {
                 if ((common_lib::CheckInRangeNumberEqual(wParam, VK_KEY0, VK_KEY9) && !isShiftPressed) // Number key
@@ -378,11 +392,11 @@ namespace keyboard_lib
                     )
                 {
                     int* keyCode = new int(wParam);
-                    wParam = VK_CHAR;
+                    wParam = VK_CHAR; // Re-route as a character event
 
                     e.param = (void*)keyCode; // Set char keycode to event param
                 }
-                // Special key
+                // Check for special characters using Shift state
                 else
                 {
                     // Match VK code to char
@@ -402,7 +416,7 @@ namespace keyboard_lib
                     }
                 }
 
-                // Match VK code with real button
+                // Find target UI object for the key
                 for (const auto& item : listVkCode)
                 {
                     if (item.second == wParam)
@@ -415,14 +429,16 @@ namespace keyboard_lib
                 e.code = LV_EVENT_SHORT_CLICKED;
                 ScreenMapping::GetInstance().SetEvent(e);
 
+                // Start timer for T9 auto-confirmation
                 ::SetTimer(hwnd, TID_KEYDOWN, GetAutoConfirmTimeMs(), AutoConfirmKey);
             }
 
-            isLongPress = false;
+            isLongPress = false; // Reset long press state on key up
         }
         break;
         case WM_RBUTTONUP:
         {
+            // Special handling for right-click mapped to a UI button
             for (const auto& item : listVkCode)
             {
                 if (item.second == VK_RBUTTON)
@@ -448,15 +464,18 @@ namespace keyboard_lib
             KBDLLHOOKSTRUCT* p = (KBDLLHOOKSTRUCT*)lParam;
             int targetKey = 0;
 
+            // Ignore synthetic keystrokes injected by this application
             if (p->flags & LLKHF_INJECTED)
             {
                 return ::CallNextHookEx(keyboardHook, nCode, wParam, lParam);
             }
 
+            // Remap physical keys based on current application context
             for (const auto& keyInfo : listNumpadKeyExchange)
             {
                 if (p->vkCode == keyInfo.keyOrg)
                 {
+                    // Remap if in Internal Numpad mode or if key is a global system action
                     if (((keyInfo.screenName == SCREEN_NAME::MAX_KBSCREEN)
                         && (setting_data::KeyboardType.GetValue() == (short)dropdownlist_lib::DD_KEYBOARD_TYPE_e::Internal_numpad))
                         || (keyInfo.screenName == SCREEN_NAME::MAX_SCREEN)
@@ -469,6 +488,7 @@ namespace keyboard_lib
                 }
             }
 
+            // If a remapping is found, suppress original key and inject the new one
             if (targetKey)
             {
                 if ((wParam == WM_KEYDOWN) || (wParam == WM_SYSKEYDOWN))
@@ -489,7 +509,7 @@ namespace keyboard_lib
                     ::SendInput(1, &inputUp, sizeof(INPUT));
                 }
 
-                return 1;
+                return 1; // Return non-zero to block original input
             }
         }
 
@@ -498,6 +518,7 @@ namespace keyboard_lib
 
     void SetupHookInternalNumpad()
     {
+        // Installs a low-level hook to monitor keyboard input system-wide
         keyboardHook = ::SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, ::GetModuleHandle(NULL), 0);
 
         if (!keyboardHook)
@@ -508,11 +529,13 @@ namespace keyboard_lib
 
     void StopHookInternalNumpad()
     {
+        // Removes the previously installed keyboard hook
         ::UnhookWindowsHookEx(keyboardHook);
     }
 
     void ResetAll()
     {
+        // Clears all character buffers and T9 state
         inputChar = 0;
         combineChar = 0;
         buff.clear();

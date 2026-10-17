@@ -7,43 +7,49 @@
 #include "ScreenMapping.h"
 #include "CommonLibrary.h"
 
+// Handles standard click events: removes focus from the target and notifies the ScreenMapping system
 void CommonButtonOnClick(lv_event_t* e)
 {
-    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED);
-    ScreenMapping::GetInstance().SetEvent(*e);
+    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED); // Prevent persistent focus styling
+    ScreenMapping::GetInstance().SetEvent(*e); // Dispatch event for screen-level logic
 }
 
+// Handles long press events: removes focus and notifies the ScreenMapping system
 void CommonButtonOnLongPress(lv_event_t* e)
 {
-    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED);
-    ScreenMapping::GetInstance().SetEvent(*e);
+    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED); // Prevent persistent focus styling
+    ScreenMapping::GetInstance().SetEvent(*e); // Dispatch event for screen-level logic
 }
 
+// Handles button release events: removes focus and notifies the ScreenMapping system
 void CommonButtonOnRelease(lv_event_t* e)
 {
-    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED);
-    ScreenMapping::GetInstance().SetEvent(*e);
+    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED); // Prevent persistent focus styling
+    ScreenMapping::GetInstance().SetEvent(*e); // Dispatch event for screen-level logic
 }
 
+// Handles repeated long press events: removes focus and notifies the ScreenMapping system
 void CommonButtonOnLongPressRepeat(lv_event_t* e)
 {
-    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED);
-    ScreenMapping::GetInstance().SetEvent(*e);
+    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED); // Prevent persistent focus styling
+    ScreenMapping::GetInstance().SetEvent(*e); // Dispatch event for screen-level logic
 }
 
+// Handles generic value changes: removes focus and notifies the ScreenMapping system
 void CommonButtonOnValueChange(lv_event_t* e)
 {
-    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED);
-    ScreenMapping::GetInstance().SetEvent(*e);
+    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED); // Prevent persistent focus styling
+    ScreenMapping::GetInstance().SetEvent(*e); // Dispatch event for screen-level logic
 }
 
 void CommonOnLoaded(lv_event_t* e)
 {
-
+    // Placeholder for initialization logic when a screen/object is loaded
 }
 
+// Specialized handler for dropdown changes: updates shared data and removes focus
 void CommonDropdownOnValueChange(lv_event_t* e)
 {
-    dropdownlist_lib::UpdateDropdownData((lv_obj_t*)(e->current_target));
-    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED);
+    dropdownlist_lib::UpdateDropdownData((lv_obj_t*)(e->current_target)); // Synchronize selection to data model
+    lv_obj_remove_state((lv_obj_t*)(e->current_target), LV_STATE_FOCUSED); // Clear focus visual
 }

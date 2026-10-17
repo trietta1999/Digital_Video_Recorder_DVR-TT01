@@ -9,9 +9,10 @@
 
 namespace network_lib
 {
-    std::vector<lan_info_t> listLanInfo = {};
-    std::vector<wifi_info_t> listWiFiInfo = {};
+    std::vector<lan_info_t> listLanInfo = {}; // Cache for detected LAN/Ethernet adapters
+    std::vector<wifi_info_t> listWiFiInfo = {}; // Cache for scanned WiFi networks
 
+    // Scans the system for all active network adapters (Ethernet and WiFi)
     void GetLANConnections()
     {
         listLanInfo.clear();
@@ -19,19 +20,17 @@ namespace network_lib
         unsigned long outBufLen = 0;
         PIP_ADAPTER_ADDRESSES pAddresses = NULL;
 
-        // Pass NULL to Windows to return the required size to outBufLen
+        // Determine the buffer size required to store adapter information
         DWORD dwRetVal = ::GetAdaptersAddresses(AF_UNSPEC, GAA_FLAG_INCLUDE_PREFIX, NULL, pAddresses, &outBufLen);
 
-        // If the system reports insufficient memory
         if (dwRetVal == ERROR_BUFFER_OVERFLOW)
         {
-            // Allocate the exact number of bytes that Windows requires
-            pAddresses = (IP_ADAPTER_ADDRESSES*)malloc(outBufLen);
+            pAddresses = (IP_ADAPTER_ADDRESSES*)malloc(outBufLen); // Allocate sufficient memory
         }
 
         if (pAddresses != NULL)
         {
-            // The buffer has allocated enough space to retrieve the actual data
+            // Fetch the actual adapter data into the allocated buffer
             dwRetVal = ::GetAdaptersAddresses(AF_UNSPEC, GAA_FLAG_INCLUDE_PREFIX, NULL, pAddresses, &outBufLen);
 
             if (dwRetVal == NO_ERROR)
@@ -40,6 +39,7 @@ namespace network_lib
 
                 while (pCurrAddresses)
                 {
+                    // Filter for common networking interfaces (Ethernet and WiFi)
                     if (pCurrAddresses->IfType == IF_TYPE_ETHERNET_CSMACD || pCurrAddresses->IfType == IF_TYPE_IEEE80211)
                     {
                         lan_info_t info = {
@@ -61,23 +61,24 @@ namespace network_lib
         }
     }
 
+    // Scans surrounding area for available WiFi SSIDs using Windows Native Wifi API
     void GetWiFiSSIDs()
     {
         listWiFiInfo.clear();
 
         HANDLE hClient = NULL;
-        DWORD dwMaxClient = WLAN_UI_API_VERSION; // WLAN_CLIENT_VERSION_2
+        DWORD dwMaxClient = WLAN_UI_API_VERSION; 
         DWORD dwCurVersion = 0;
         DWORD dwResult = 0;
 
-        // Open a connection to the Windows WLAN service
+        // Connect to the WLAN service
         dwResult = ::WlanOpenHandle(dwMaxClient, NULL, &dwCurVersion, &hClient);
         if (dwResult != ERROR_SUCCESS)
         {
             return;
         }
 
-        // List the Wi-Fi cards (interfaces) installed on the computer
+        // List installed WiFi adapters
         PWLAN_INTERFACE_INFO_LIST pIfList = NULL;
         dwResult = ::WlanEnumInterfaces(hClient, NULL, &pIfList);
         if (dwResult != ERROR_SUCCESS)
@@ -86,32 +87,24 @@ namespace network_lib
             return;
         }
 
-        // Browse through each found Wi-Fi card (usually a computer only has one physical Wi-Fi card)
         for (DWORD i = 0; i < pIfList->dwNumberOfItems; i++)
         {
             WLAN_INTERFACE_INFO IfInfo = pIfList->InterfaceInfo[i];
 
-            // Instruct the network card to scan for surrounding Wi-Fi signals
-            // This step sends a request to the hardware; Windows will take some time to update
+            // Request a fresh scan of the radio spectrum
             ::WlanScan(hClient, &IfInfo.InterfaceGuid, NULL, NULL, NULL);
 
-            // Normally, the system needs about 1-2 seconds to receive all signals,
-            // but the WlanGetNetworkBssList function below will retrieve the most recently cached network list from Windows,
-            // so it can be read immediately
-
-            // Get the list of available Wi-Fi networks (Available Network List)
+            // Retrieve the network list (Windows may return cached results immediately)
             PWLAN_AVAILABLE_NETWORK_LIST pBssList = NULL;
             dwResult = ::WlanGetAvailableNetworkList(hClient, &IfInfo.InterfaceGuid, WLAN_AVAILABLE_NETWORK_INCLUDE_ALL_MANUAL_HIDDEN_PROFILES, NULL, &pBssList);
 
             if (dwResult == ERROR_SUCCESS)
             {
-                // Get card info: IfInfo.strInterfaceDescription
-
                 for (DWORD j = 0; j < pBssList->dwNumberOfItems; j++)
                 {
                     WLAN_AVAILABLE_NETWORK network = pBssList->Network[j];
 
-                    // Check if the SSID name is blank (invisible network)
+                    // Skip hidden/unnamed networks
                     if (network.dot11Ssid.uSSIDLength == 0)
                     {
                         continue;
@@ -119,7 +112,7 @@ namespace network_lib
 
                     wifi_info_t info = {
                         std::string((char*)network.dot11Ssid.ucSSID, network.dot11Ssid.uSSIDLength),
-                        "",
+                        "", // Password is not provided by scan
                         GetAuthAlgorithmString(network.dot11DefaultAuthAlgorithm),
                         GetCipherAlgorithmString(network.dot11DefaultCipherAlgorithm),
                         network.wlanSignalQuality,
@@ -145,6 +138,7 @@ namespace network_lib
         ::WlanCloseHandle(hClient, NULL);
     }
 
+    // Resolves IP, Subnet Mask, and Gateway for a specific adapter by its friendly name
     ip_info_t GetNetworkIPByName(std::string targetAdapterName)
     {
         ip_info_t info;
@@ -155,7 +149,7 @@ namespace network_lib
         }
 
         ULONG tableSize = 0;
-        ::GetIpAddrTable(NULL, &tableSize, FALSE);
+        ::GetIpAddrTable(NULL, &tableSize, FALSE); // Query required size
 
         PMIB_IPADDRTABLE pIPAddrTable = (PMIB_IPADDRTABLE)malloc(tableSize);
         if (::GetIpAddrTable(pIPAddrTable, &tableSize, FALSE) != NO_ERROR)
@@ -175,6 +169,7 @@ namespace network_lib
                 {
                     std::string currentName((char*)ifRow.bDescr);
 
+                    // Check if the adapter description matches our target
                     if (currentName.find(targetAdapterName) != std::string::npos)
                     {
                         // Buffers to store IP strings safely (INET_ADDRSTRLEN = 16 bytes for IPv4)
@@ -185,7 +180,7 @@ namespace network_lib
                         ipAddr.S_un.S_addr = pIPAddrTable->table[i].dwAddr;
                         maskAddr.S_un.S_addr = pIPAddrTable->table[i].dwMask;
 
-                        // Modern and thread-safe conversion using inet_ntop
+                        // Convert binary IP to human-readable strings
                         if (inet_ntop(AF_INET, &ipAddr, ipBuffer, sizeof(ipBuffer)) != nullptr)
                         {
                             info.ip = ipBuffer;
@@ -196,7 +191,7 @@ namespace network_lib
                             info.mask = maskBuffer;
                         }
 
-                        // Query Route Table for Gateway
+                        // Determine Gateway by searching the Routing Table for the default route (0.0.0.0) on this interface
                         ULONG routeSize = 0;
                         ::GetIpForwardTable(NULL, &routeSize, FALSE);
                         PMIB_IPFORWARDTABLE pRouteTable = (PMIB_IPFORWARDTABLE)malloc(routeSize);
@@ -235,6 +230,7 @@ namespace network_lib
         return info;
     }
 
+    // Maps DOT11 authentication enum to a simplified string representation
     std::string GetAuthAlgorithmString(DOT11_AUTH_ALGORITHM auth)
     {
         switch (auth)
@@ -262,6 +258,7 @@ namespace network_lib
         }
     }
 
+    // Maps DOT11 cipher enum to a simplified string representation
     std::string GetCipherAlgorithmString(DOT11_CIPHER_ALGORITHM cipher)
     {
         switch (cipher)
@@ -283,6 +280,7 @@ namespace network_lib
         }
     }
 
+    // Retrieves the NetBIOS name of the current machine
     std::string GetLocalHostName()
     {
         char buffer[MAX_PATH];
@@ -293,6 +291,7 @@ namespace network_lib
         return buffer;
     }
 
+    // Generates a list of strings for UI dropdowns from the LAN adapter list
     std::vector<std::string> CreateNetworkTypeDropdownOptions()
     {
         std::vector<std::string> result;
@@ -305,6 +304,7 @@ namespace network_lib
         return result;
     }
 
+    // Generates a list of strings for UI dropdowns from the WiFi scan results
     std::vector<std::string> CreateSSIDDropdownOptions()
     {
         std::vector<std::string> result;
@@ -317,6 +317,7 @@ namespace network_lib
         return result;
     }
 
+    // Connects to a WiFi network by generating and applying a temporary XML profile
     bool ConnectWiFiWithTemplate(const wifi_info_t& info)
     {
         if (info.IsAnyNone())
@@ -324,7 +325,7 @@ namespace network_lib
             return false;
         }
 
-        // Reads the entire contents of an XML template file into a std::string
+        // Load the XML template file
         std::ifstream templateFile(common_lib::ConvertWStringToString(common_lib::GetFullPath(L"wifi_template.xml")));
         if (!templateFile.is_open())
         {
@@ -336,12 +337,10 @@ namespace network_lib
         std::string xmlTemplate = buffer.str();
         templateFile.close();
 
-        // Use snprintf to format the string safely
-        // Calculate the required buffer size (template length + length of the data passed in)
+        // Populate the XML template with network credentials
         size_t targetSize = xmlTemplate.size() + (info.ssid.size() * 2) + info.password.size() + info.auth.size() + info.cipher.size() + 1;
         std::vector<char> formattedXml(targetSize);
 
-        // Match data to the %s positions in the template
         int result = snprintf(formattedXml.data(), targetSize, xmlTemplate.c_str(),
             info.ssid.c_str(), info.ssid.c_str(), info.auth.c_str(), info.cipher.c_str(), info.password.c_str());
 
@@ -350,7 +349,7 @@ namespace network_lib
             return false;
         }
 
-        // Save it as a temporary XML file containing the information
+        // Write the populated XML to a temporary file
         std::string tempFileName = common_lib::ConvertWStringToString(common_lib::GetFullPath(L"wifi_ready.xml"));
         std::ofstream outFile(tempFileName);
         if (!outFile.is_open())
@@ -361,31 +360,30 @@ namespace network_lib
         outFile << formattedXml.data();
         outFile.close();
 
-        // Add profile to system
+        // Use 'netsh' commands to add the profile and initiate connection
         std::string addCmd = "/c netsh wlan add profile filename=\"" + tempFileName + "\" >nul";
-        // Issue command to connect to SSID
         std::string connCmd = "/c netsh wlan connect name=\"" + info.ssid + "\" ssid=\"" + info.ssid + "\"";
 
-        //std::system(addCmd.c_str());
-        //std::system(connCmd.c_str());
         ::ShellExecute(NULL, L"open", L"cmd", common_lib::ConvertStringToWString(addCmd).c_str(), common_lib::GetSystemPath().c_str(), SW_HIDE);
         ::Sleep(TIMECYCLE_100MS);
         ::ShellExecute(NULL, L"open", L"cmd", common_lib::ConvertStringToWString(connCmd).c_str(), common_lib::GetSystemPath().c_str(), SW_HIDE);
         ::Sleep(TIMECYCLE_100MS);
 
-        // Delete the temporary .xml file to protect password information
+        // Security: Delete the temporary XML containing the clear-text password
         std::string deleteCmd = "del " + tempFileName;
         std::system(deleteCmd.c_str());
 
         return true;
     }
 
+    // Verifies WiFi connection status via shell command parsing
     bool IsWiFiConnectedTo(std::string targetSsid)
     {
         std::string output = common_lib::ExecuteCMD("netsh wlan show interfaces");
 
         if (targetSsid == "")
         {
+            // Just check for any active connection
             if ((output.find("connected") != std::string::npos)
                 && (output.find("disconnected") == std::string::npos))
             {
@@ -394,6 +392,7 @@ namespace network_lib
         }
         else
         {
+            // Check for connection to a specific SSID
             if ((output.find("connected") != std::string::npos)
                 && (output.find("disconnected") == std::string::npos)
                 && (output.find(targetSsid) != std::string::npos)
@@ -406,6 +405,7 @@ namespace network_lib
         return false;
     }
 
+    // Splits two short integers into four bytes (Octets) for IP representation
     std::vector<short> CalculateIPFromCombinedNum(short part12, short part34)
     {
         std::vector<short> result = {
@@ -418,6 +418,7 @@ namespace network_lib
         return result;
     }
 
+    // Converts packed IP shorts into a standard dot-separated string
     std::string CalculateIPStrFromCombinedNum(short part12, short part34)
     {
         std::string result =
