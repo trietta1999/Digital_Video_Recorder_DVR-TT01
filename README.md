@@ -2,14 +2,16 @@
 ## 1.1. Digital Video Recorder (DVR-TT01)
 Digital Video Recorder (DVR-TT01) là một hệ thống phần mềm quản lý, ghi hình và phát lại video chuyên dụng được thiết kế tối ưu trên nền tảng Windows Desktop. Khác biệt với các phần mềm media thông thường, DVR-TT01 mang đến một trải nghiệm nguyên khối (all-in-one) từ việc thu phát tín hiệu, biên tập siêu dữ liệu (metadata), cho đến xuất tệp vật lý và truyền tải mạng không dây.
 
-![](Images/cover.jpg)
+> Máy Medical Imaging Recorder - nguồn cảm hứng tạo ra dự án \
+[Tìm hiểu thêm](https://ms.teac.com/products/ur-4md/)
+![](Doc_images/eyecatch-machine.png)
 
 Điểm nhấn cốt lõi của dự án:
 - **Giao diện mượt mà & Hiện đại:** Sử dụng sức mạnh của LVGL (Light and Versatile Graphics Library) để tạo ra một giao diện State-driven UI phản hồi tức thời, loại bỏ sự cồng kềnh của các native UI framework truyền thống.
 - **Tích hợp FFmpeg nguyên bản:** Không cần nhúng các thư viện giải mã khổng lồ làm phình to ứng dụng, DVR-TT01 gọi trực tiếp FFmpeg/FFplay thông qua Shell/PowerShell, sau đó sử dụng kỹ thuật can thiệp Win32 API sâu để "nhúng" luồng video vào thẳng giao diện ứng dụng.
 - **Lưu trữ & Truyền tải thông minh:** Hỗ trợ nhận diện USB tự động, xuất video an toàn, cùng tính năng chia sẻ mạng LAN qua giao thức Dukto (ndrop) đầy mạnh mẽ.
 
-![](Images/app_gameplay.png)
+![](Doc_images/main_screen.png)
 
 ## 1.2. Các tính năng cốt lõi
 Trong hệ thống DVR-TT01, mọi tính năng đều được module hóa và giám sát chặt chẽ thông qua các luồng xử lý ngầm. Dưới đây là kho tính năng cốt lõi tạo nên sức mạnh của hệ thống:
@@ -21,8 +23,6 @@ Trong hệ thống DVR-TT01, mọi tính năng đều được module hóa và g
 - **Truyền tải Không dây (Dukto Network):** Tích hợp công cụ Python nhúng để đóng gói dữ liệu và gửi thẳng qua mạng LAN/WiFi bằng giao thức Dukto, cho phép chia sẻ video mượt mà giữa các thiết bị.
 - **Cấu hình WiFi Tự động:** Tích hợp Native Wifi API (`wlanapi`), cho phép quét SSIDs, và tự động tạo XML Profile để kết nối thiết bị với các mạng WiFi mong muốn ngay trong giao diện ứng dụng.
 
-![](Images/features.jpg)
-
 ## 1.3. Nền tảng Windows Desktop & Tích hợp Hệ thống
 Dự án này là một phiên bản phần mềm độc lập được biên dịch trên kiến trúc x64 dành cho Windows. Thay vì sử dụng phần cứng vi điều khiển, dự án tận dụng tối đa sức mạnh của hệ điều hành Microsoft Windows thông qua các API mức thấp (Low-level Win32 API).
 
@@ -32,18 +32,15 @@ Hệ thống không chỉ điều khiển bằng chuột/cảm ứng mà còn h�
 ### **Xử lý tiến trình ngoại vi (Process Management)**
 Trái tim của hệ thống là khả năng quản lý tiến trình. Ứng dụng tự động khởi chạy và điều phối các tệp tin `record.bat`, `play.bat`, `review.bat`. Bằng cách mô phỏng các phím ảo (như phím 'Q' để tắt luồng ghi an toàn, phím mũi tên để tua video), ứng dụng biến các công cụ dòng lệnh khô khan thành một module media tích hợp hoàn hảo.
 
-![](Images/platform_1.jpg)
-![](Images/platform_2.jpg)
-
 ## 1.4. LVGL & SquareLine Studio
 Giao diện người dùng của dự án được phát triển bằng **LVGL (Light and Versatile Graphics Library)**, kết hợp cùng công cụ thiết kế giao diện trực quan **SquareLine Studio**.
+
+![](Doc_images/lvgl_home_banner.jpg)
 
 Điểm mạnh cốt lõi của giải pháp này:
 - **State-driven UI:** LVGL kết hợp với môi trường Windows tạo ra một Desktop Application siêu nhẹ. Việc hiển thị được cập nhật liên tục qua bộ định thời (`lv_timer_handler`).
 - **Thư viện Widget phong phú:** Hỗ trợ đầy đủ các tính năng như Bàn phím ảo (Keyboard), Danh sách cuộn (Roller/Dropdown), Nút bấm đa trạng thái.
 - **Phát triển trực quan:** SquareLine Studio cho phép thiết kế layout, quản lý assets hình ảnh/font chữ xuất ra file ngôn ngữ C chuẩn mực (`ui.c`, `ui.h`), dễ dàng tích hợp chéo (cross-platform) lên nền tảng C++ Visual Studio của dự án.
-
-![](Images/lvgl_home_banner.jpg)
 
 # 2. Phần mềm & Kiến trúc hệ thống
 Dự án được xây dựng dựa trên kiến trúc **Observer / Singleton Pattern** kết hợp **MVC/Presenter**, thiết kế để tách biệt rõ ràng trách nhiệm giữa việc hiển thị giao diện, quản lý trạng thái, và các luồng xử lý phần mềm ngầm. Cấu trúc mã nguồn được chia thành các tầng lõi sau:
