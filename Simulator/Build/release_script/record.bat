@@ -1,4 +1,4 @@
-echo > record.lock
+echo > ..\record.lock
 start ..\ffmpeg\bin\ffplay -i udp://127.0.0.1:1234 -window_title %1 -fflags nobuffer -flags low_delay -f mpegts -vf scale=iw:ih
 ..\ffmpeg\bin\ffmpeg -y -f dshow -rtbufsize 1G -vsync cfr -async 1 -pix_fmt yuyv422 -i video="USB Video":audio="HDMI CC Digital Audio Interface" -framerate 60 ^
 -filter_complex "[v]split=2[out1][out2]" ^
