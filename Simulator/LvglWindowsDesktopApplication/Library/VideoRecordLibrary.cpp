@@ -167,7 +167,7 @@ namespace videorecord_lib
             // Record: Use PowerShell to launch FFmpeg script and set specific window title
             swprintf_s(outputPath, L"%s\\video_data\\%s", common_lib::GetSystemPath().c_str(), common_lib::ConvertStringToWString(videoID).c_str());
             swprintf_s(param, L"$host.UI.RawUI.WindowTitle = \\\"%s\\\";cd \\\"%s\\\";.\\record.bat \\\"%s\\\" \\\"%s\\\\video.mp4\\\"", RECORD_PROCESSNAME, common_lib::GetFullPath(SCRIPT_DIRECTORY).c_str(), RECORD_SCREENNAME, outputPath);
-            ::ShellExecute(NULL, L"open", L"powershell", param, common_lib::GetFullPath(SCRIPT_DIRECTORY).c_str(), SW_HIDE);
+            ::ShellExecute(NULL, L"open", L"powershell", param, common_lib::GetFullPath(SCRIPT_DIRECTORY).c_str(), SW_SHOW);
         }
         else if (screenName == PLAY_SCREENNAME)
         {
@@ -232,6 +232,7 @@ namespace videorecord_lib
                 {
                     // Special case for FFmpeg recorder: send 'Q' to quit gracefully
                     SetWindowFocus(hwnd);
+                    ::Sleep(TIMECYCLE_500MS);
 
                     BYTE vkey = LOBYTE(VkKeyScan('Q'));
                     BYTE scanCode = (BYTE)MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
@@ -240,6 +241,11 @@ namespace videorecord_lib
                     ::keybd_event(vkey, scanCode, KEYEVENTF_KEYUP, 0);
 
                     SetWindowFocus(system_data::WindowHandle.GetValue());
+
+                    while (::FindWindow(NULL, RECORD_PROCESSNAME))
+                    {
+                        ::Sleep(TIMECYCLE_10MS);
+                    }
                 }
             }
         }
