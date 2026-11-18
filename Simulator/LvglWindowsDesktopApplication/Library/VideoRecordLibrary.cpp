@@ -45,6 +45,7 @@ namespace videorecord_lib
         style &= ~WS_THICKFRAME;
         style |= WS_BORDER;
         ::SetWindowLongPtr(extHwnd, GWL_STYLE, style);
+        ::EnableWindow(extHwnd, FALSE);
 
         // Redraw window and set layering/z-order
 #ifdef _DEBUG

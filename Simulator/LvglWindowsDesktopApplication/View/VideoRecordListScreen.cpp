@@ -684,6 +684,19 @@ void VideoRecordListScreen::UpdateButton()
     lv_obj_remove_state(ui_btnRLTransfer, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_btnRLNetwork, LV_STATE_DISABLED);
     lv_obj_remove_state(ui_btnRLBack, LV_STATE_DISABLED);
+    lv_obj_remove_state(ui_btnRLTopPage, LV_STATE_DISABLED);
+    lv_obj_remove_state(ui_btnRLBottomPage, LV_STATE_DISABLED);
+    lv_obj_remove_state(ui_btnRLPrePage, LV_STATE_DISABLED);
+    lv_obj_remove_state(ui_btnRLNextPage, LV_STATE_DISABLED);
+
+    // Update Page button
+    if (state != STATE_TYPE::S_STOP)
+    {
+        lv_obj_add_state(ui_btnRLTopPage, LV_STATE_DISABLED);
+        lv_obj_add_state(ui_btnRLBottomPage, LV_STATE_DISABLED);
+        lv_obj_add_state(ui_btnRLPrePage, LV_STATE_DISABLED);
+        lv_obj_add_state(ui_btnRLNextPage, LV_STATE_DISABLED);
+    }
 
     // Update Search button and Filter dropdown
     if (state != STATE_TYPE::S_STOP)
@@ -769,7 +782,7 @@ void VideoRecordListScreen::UpdateButton()
     }
 
     // Update Select All button
-    if (!listRowInfo.size())
+    if (!listRowInfo.size() || (state != STATE_TYPE::S_STOP))
     {
         lv_obj_add_state(ui_cbRLItemAll, LV_STATE_DISABLED);
         lv_obj_remove_state(ui_cbRLItemAll, LV_STATE_CHECKED);
